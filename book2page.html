@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>Our Little Love Story</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --cream: #fff9f2;
+        --blush: #f3d5d8;
+        --rose: #dda6ad;
+        --lav: #e8dff0;
+        --butter: #f5e9bb;
+        --wine: #86505b;
+        --brown: #8c7772;
+        --g: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .4 0 0 0 0 .4 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        --ease: cubic-bezier(0.45, 0.05, 0.25, 1);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+      body {
+        background:
+          var(--g),
+          radial-gradient(circle at 18% 12%, var(--blush), transparent 45%),
+          radial-gradient(circle at 85% 88%, var(--lav), transparent 45%),
+          var(--cream);
+        color: var(--wine);
+        font-family: "Cormorant Garamond", Georgia, serif;
+        touch-action: manipulation;
+      }
+      #hearts {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .fh {
+        position: absolute;
+        bottom: -30px;
+        aspect-ratio: 1;
+        height: auto;
+        opacity: 0;
+        animation: fh linear infinite;
+      }
+      @keyframes fh {
+        10% {
+          opacity: 0.7;
+        }
+        to {
+          transform: translateY(-115vh) rotate(25deg);
+          opacity: 0;
+        }
+      }
+      .stage {
+        position: fixed;
+        inset: 40px 0 64px;
+        z-index: 1;
+      }
+      .scaler {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(var(--s, 1));
+      }
+      .book {
+        position: relative;
+        height: 540px;
+        perspective: 2400px;
+        transition: transform 1s var(--ease);
+      }
+      .init,
+      .init .leaf {
+        transition: none !important;
+      }
+      .leaf {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 400px;
+        height: 540px;
+        transform-style: preserve-3d;
+        transform-origin: 0 50%;
+        transition: transform 1s var(--ease);
+      }
+      .m .leaf {
+        left: 0;
+      }
+      .leaf.flipped {
+        transform: rotateY(-180deg);
+      }
+      .gone {
+        visibility: hidden;
+      }
+      .face {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        box-shadow: 0 2px 12px rgba(80, 50, 50, 0.2);
+      }
+      .face.back {
+        transform: rotateY(180deg);
+        --sp: linear-gradient(270deg, rgba(90, 50, 60, 0.16), transparent 10%);
+        border-radius: 16px 3px 3px 16px;
+      }
+      .face.front {
+        --sp: linear-gradient(90deg, rgba(90, 50, 60, 0.16), transparent 10%);
+        border-radius: 3px 16px 16px 3px;
+      }
+      .m .face {
+        --sp: none;
+      }
+      .m .face.front {
+        border-radius: 14px;
+      }
+      .face::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(60, 30, 40, 0.4),
+          transparent 75%
+        );
+      }
+      .face.back::after {
+        background: linear-gradient(
+          270deg,
+          rgba(60, 30, 40, 0.4),
+          transparent 75%
+        );
+      }
+      .flipping .face::after {
+        animation: sh 1s ease-in-out;
+      }
+      @keyframes sh {
+        50% {
+          opacity: 1;
+        }
+      }
+      .spine {
+        display: none;
+      }
+      .pg {
+        background: var(--sp, none), var(--g), var(--bg, #fff9f2);
+        padding: 34px 36px 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 11px;
+        text-align: center;
+        font:
+          500 16px/1.4 "Cormorant Garamond",
+          Georgia,
+          serif;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .pg::before {
+        content: "";
+        position: absolute;
+        inset: 13px;
+        border: 1.5px dashed rgba(134, 80, 91, 0.28);
+        border-radius: 12px;
+        pointer-events: none;
+      }
+      .cov {
+        --bg: linear-gradient(150deg, #dda6ad, #f3d5d8);
+      }
+      .cov::before {
+        border-color: rgba(255, 249, 242, 0.8);
+      }
+      .lv {
+        --bg: #f1eaf6;
+      }
+      .bl {
+        --bg: #fceeef;
+      }
+      .bt {
+        --bg: #fbf3d9;
+      }
+      .pn {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        font:
+          500 15px Caveat,
+          cursive;
+        color: var(--brown);
+      }
+      .dc {
+        position: absolute;
+        pointer-events: none;
+        aspect-ratio: 1;
+        height: auto;
+      }
+      .bow {
+        width: 84px;
+        height: 62px;
+        color: var(--wine);
+      }
+      .cp {
+        width: 130px;
+        height: 152px;
+      }
+      .cp.lg {
+        width: 200px;
+        height: 234px;
+      }
+      .pin {
+        width: 58px;
+        height: 58px;
+        color: var(--wine);
+      }
+      .hw {
+        font:
+          500 21px/1.1 Caveat,
+          cursive;
+        color: var(--brown);
+      }
+      .hw.big {
+        font-size: 32px;
+        color: var(--wine);
+        font-weight: 700;
+      }
+      h1,
+      h2 {
+        margin: 0;
+      }
+      h1 {
+        font:
+          700 42px/1 Caveat,
+          cursive;
+        color: var(--wine);
+      }
+      h2 {
+        font:
+          italic 600 31px/1.1 "Cormorant Garamond",
+          serif;
+      }
+      .lab {
+        background: var(--cream);
+        border: 1.5px solid var(--wine);
+        border-radius: 20px 20px 24px 24px;
+        padding: 10px 22px 12px;
+        transform: rotate(-1.5deg);
+      }
+      .nm {
+        font:
+          italic 600 24px "Cormorant Garamond",
+          serif;
+      }
+      .dt {
+        font:
+          700 22px Caveat,
+          cursive;
+      }
+      .it {
+        font-style: italic;
+        font-size: 22px;
+        margin: 0;
+      }
+      .pg p {
+        margin: 0;
+      }
+      .btn {
+        font:
+          700 20px Caveat,
+          cursive;
+        background: var(--wine);
+        color: var(--cream);
+        border: 0;
+        border-radius: 22px;
+        padding: 7px 24px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 3px 0 rgba(80, 40, 50, 0.35);
+        transition: transform 0.15s;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+      .btn:focus-visible,
+      .nav button:focus-visible,
+      .tools button:focus-visible {
+        outline: 2px solid var(--wine);
+        outline-offset: 2px;
+      }
+      .en {
+        text-align: left;
+        width: 100%;
+      }
+      .en b {
+        display: block;
+        font:
+          700 23px/1 Caveat,
+          cursive;
+        color: var(--brown);
+      }
+      .en p {
+        font-size: 17px;
+      }
+      .pols {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px 10px;
+      }
+      .pol {
+        margin: 0;
+        width: var(--w, 126px);
+        background: #fff;
+        padding: 7px 7px 3px;
+        box-shadow: 0 3px 9px rgba(100, 60, 60, 0.25);
+        transform: rotate(var(--r, 0deg));
+        cursor: zoom-in;
+        transition: transform 0.2s;
+      }
+      .pol:hover {
+        transform: rotate(0) scale(1.05);
+      }
+      .ph {
+        height: calc(var(--w, 126px) * 0.88);
+        background: linear-gradient(135deg, var(--c1), var(--c2));
+        background-size: cover;
+        background-position: center;
+        display: grid;
+        place-items: center;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .ph svg {
+        width: 28px;
+        height: 28px;
+      }
+      .pol figcaption {
+        font:
+          500 18px/1.1 Caveat,
+          cursive;
+        padding: 4px 0 2px;
+        color: var(--brown);
+      }
+      .cal {
+        position: relative;
+        width: 140px;
+        background: #fff;
+        border: 1.5px solid var(--wine);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 3px 4px 0 var(--blush);
+      }
+      .cal i {
+        display: block;
+        background: var(--wine);
+        color: var(--cream);
+        font:
+          700 20px Caveat,
+          cursive;
+        letter-spacing: 2px;
+        padding: 2px;
+      }
+      .cal b {
+        display: block;
+        font:
+          600 58px/1.05 "Cormorant Garamond",
+          serif;
+        padding-top: 4px;
+      }
+      .cal span {
+        display: block;
+        font:
+          700 20px Caveat,
+          cursive;
+        color: var(--brown);
+        padding-bottom: 5px;
+      }
+      .dl {
+        width: 100%;
+        text-align: left;
+        font-size: 17px;
+      }
+      .dl div {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px dotted rgba(134, 80, 91, 0.35);
+        padding: 3px 0;
+      }
+      .dl b {
+        font:
+          700 20px Caveat,
+          cursive;
+        color: var(--brown);
+        flex: none;
+      }
+      .dl span {
+        text-align: right;
+      }
+      .cds {
+        display: flex;
+        gap: 9px;
+      }
+      .cd {
+        width: 72px;
+        padding: 12px 0 8px;
+        background: #fff;
+        border: 1.5px solid var(--rose);
+        border-radius: 14px;
+        box-shadow: 2px 3px 0 var(--blush);
+      }
+      .cd b {
+        display: block;
+        font:
+          600 34px/1 "Cormorant Garamond",
+          serif;
+      }
+      .cd span {
+        font:
+          500 19px Caveat,
+          cursive;
+        color: var(--brown);
+      }
+      .rs {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .rs input[type="text"],
+      .rs select,
+      .rs textarea {
+        width: 100%;
+        font:
+          500 17px "Cormorant Garamond",
+          serif;
+        border: 1.5px solid var(--rose);
+        border-radius: 10px;
+        padding: 7px 10px;
+        background: #fff;
+        color: var(--wine);
+        user-select: text;
+        -webkit-user-select: text;
+      }
+      .rs textarea {
+        resize: none;
+      }
+      .ch {
+        display: flex;
+        gap: 8px;
+      }
+      .ch label {
+        flex: 1;
+        position: relative;
+      }
+      .ch input {
+        position: absolute;
+        opacity: 0;
+      }
+      .ch span {
+        display: block;
+        border: 1.5px solid var(--rose);
+        border-radius: 12px;
+        padding: 6px 4px;
+        font-size: 16px;
+        line-height: 1.15;
+        cursor: pointer;
+        background: #fff;
+      }
+      .ch input:checked + span {
+        background: var(--blush);
+        border-color: var(--wine);
+      }
+      .ch input:focus-visible + span {
+        outline: 2px solid var(--wine);
+      }
+      .msg {
+        min-height: 34px;
+        font-size: 15px;
+        font-style: italic;
+      }
+      .tools {
+        position: fixed;
+        top: max(8px, env(safe-area-inset-top));
+        right: 10px;
+        z-index: 5;
+        display: flex;
+        gap: 6px;
+      }
+      .nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 64px;
+        padding-bottom: env(safe-area-inset-bottom);
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+      }
+      .nav button,
+      .tools button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1.5px solid var(--rose);
+        background: var(--cream);
+        color: var(--wine);
+        font:
+          600 22px/1 "Cormorant Garamond",
+          serif;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        padding: 0;
+      }
+      .tools button {
+        width: 34px;
+        height: 34px;
+        font-size: 15px;
+      }
+      .nav button:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      #lbl {
+        font:
+          500 21px Caveat,
+          cursive;
+        color: var(--brown);
+        min-width: 150px;
+        text-align: center;
+      }
+      .lb {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: none;
+        place-items: center;
+        background: rgba(255, 249, 242, 0.88);
+        backdrop-filter: blur(6px);
+        cursor: zoom-out;
+      }
+      .lb.on {
+        display: grid;
+      }
+      .lb .pol {
+        --w: min(80vw, 400px);
+        --r: -1.5deg;
+        cursor: zoom-out;
+      }
+      .lb .ph {
+        height: min(58vh, 360px);
+      }
+      .lb .ph svg {
+        width: 60px;
+        height: 60px;
+      }
+      .lb figcaption {
+        font-size: 26px;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="h" viewBox="0 0 24 24">
+        <path
+          d="M12 21C5 15.5 2.5 12 2.5 8.5A4.8 4.8 0 0 1 12 6.6a4.8 4.8 0 0 1 9.5 1.9C21.5 12 19 15.5 12 21z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="st" viewBox="0 0 24 24">
+        <path
+          d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="fl" viewBox="0 0 40 40">
+        <g fill="currentColor" stroke="#86505B" stroke-width="1">
+          <ellipse cx="20" cy="10" rx="6" ry="9" />
+          <ellipse cx="20" cy="10" rx="6" ry="9" transform="rotate(72 20 20)" />
+          <ellipse
+            cx="20"
+            cy="10"
+            rx="6"
+            ry="9"
+            transform="rotate(144 20 20)"
+          />
+          <ellipse
+            cx="20"
+            cy="10"
+            rx="6"
+            ry="9"
+            transform="rotate(216 20 20)"
+          />
+          <ellipse
+            cx="20"
+            cy="10"
+            rx="6"
+            ry="9"
+            transform="rotate(288 20 20)"
+          />
+        </g>
+        <circle
+          cx="20"
+          cy="20"
+          r="5"
+          fill="#F5E9BB"
+          stroke="#86505B"
+          stroke-width="1"
+        />
+      </symbol>
+      <symbol id="bow" viewBox="0 0 60 46">
+        <g
+          fill="currentColor"
+          stroke="#FFF9F2"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        >
+          <path d="M30 22C20 5 3 4 5 20s17 19 25 2z" />
+          <path d="M30 22C40 5 57 4 55 20S39 41 30 22z" />
+          <path d="M27 25l-8 19 9-6 3 6 2-19z" />
+          <path d="M33 25l9 19-9-6z" />
+          <circle cx="30" cy="22" r="5" />
+        </g>
+      </symbol>
+      <symbol id="pin" viewBox="0 0 24 24">
+        <path
+          d="M12 23S4 15 4 9.5a8 8 0 0 1 16 0C20 15 12 23 12 23z"
+          fill="currentColor"
+        />
+        <circle cx="12" cy="9.5" r="3.2" fill="#FFF9F2" />
+      </symbol>
+      <symbol id="couple" viewBox="0 0 120 140">
+        <g
+          stroke="#86505B"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M28 56h26l18 76H10z" fill="#FFF9F2" />
+          <path d="M25 32c0-22 34-22 34 0v24c-9 4-25 4-34 0z" fill="#E8DFF0" />
+          <circle cx="42" cy="38" r="13" fill="#F9DFD0" />
+          <path d="M29 36c3-15 23-15 26 0-8-6-18-6-26 0z" fill="#8C7772" />
+          <path d="M70 60h26v48H70z" fill="#86505B" />
+          <path d="M76 108v24M90 108v24" fill="none" />
+          <circle cx="83" cy="42" r="13" fill="#F9DFD0" />
+          <path d="M70 40c0-17 26-17 26 0-6-5-20-5-26 0z" fill="#8C7772" />
+          <path d="M83 60l-5 8 5 4 5-4z" fill="#FFF9F2" />
+          <path d="M54 74l18 6" fill="none" />
+          <circle cx="50" cy="78" r="6" fill="#DDA6AD" />
+          <circle cx="46" cy="74" r="3.5" fill="#F5E9BB" />
+          <g stroke="none">
+            <circle cx="38" cy="39" r="1.3" fill="#86505B" />
+            <circle cx="47" cy="39" r="1.3" fill="#86505B" />
+            <circle cx="79" cy="43" r="1.3" fill="#fff" />
+            <circle cx="88" cy="43" r="1.3" fill="#86505B" />
+            <circle cx="35" cy="44" r="2.6" fill="#F3D5D8" />
+            <circle cx="50" cy="44" r="2.6" fill="#F3D5D8" />
+            <circle cx="76" cy="48" r="2.6" fill="#F3D5D8" />
+            <circle cx="91" cy="48" r="2.6" fill="#F3D5D8" />
+          </g>
+          <path d="M39 44q3.5 3 7 0M80 48q3.5 3 7 0" fill="none" />
+        </g>
+      </symbol>
+    </svg>
+    <div id="hearts"></div>
+    <div class="tools">
+      <button
+        id="mus"
+        title="Play / pause music (choose your own audio file)"
+        aria-label="Music"
+      >
+        ♪</button
+      ><button id="mute" title="Mute all sound" aria-label="Mute">🔊</button>
+    </div>
+    <main class="stage" id="stage">
+      <div class="scaler" id="sc"><div class="book" id="book"></div></div>
+    </main>
+    <nav class="nav">
+      <button id="prev" aria-label="Previous page">‹</button
+      ><span id="lbl"></span><button id="next" aria-label="Next page">›</button>
+    </nav>
+    <div class="lb" id="lb"></div>
+    <audio id="aud" loop></audio
+    ><input type="file" id="file" accept="audio/*" hidden />
+    <script>
+      /* ===== EDIT ME ===== */
+      const CFG = {
+        bride: "[BRIDE NAME]",
+        groom: "[GROOM NAME]",
+        brideFull: "[Bride Full Name]",
+        groomFull: "[Groom Full Name]",
+        brideParents: "Mr. [Father] & Mrs. [Mother]",
+        groomParents: "Mr. [Father] & Mrs. [Mother]",
+        when: "2027-06-12T10:00:00", // drives the date, weekday and countdown
+        ceremony: "10:00 AM",
+        reception: "12:00 PM",
+        venue: "[Venue Name]",
+        address: "[Full Venue Address]",
+        maps: "", // paste a Google Maps link (blank = search by venue + address)
+        photos: [], // up to 7 image URLs, in order: 3 on Little Memories, then 4 in Gallery
+        music: "", // optional audio URL; otherwise guests/you pick a file with the ♪ button
+        rsvpUrl: "", // Google Sheets: deploy an Apps Script web app that appends the posted fields to a sheet, paste its URL here
+      };
+      /* ==================== */
+      const $ = (i) => document.getElementById(i),
+        B = $("book"),
+        S = $("stage"),
+        SC = $("sc"),
+        LB = $("lb");
+      const D = new Date(CFG.when),
+        L = (o) => D.toLocaleDateString("en-GB", o),
+        DS = L({ day: "numeric", month: "long", year: "numeric" }),
+        WD = L({ weekday: "long" }),
+        DN = D.getDate(),
+        MN = L({ month: "long" }).toUpperCase();
+      const MAPS =
+        CFG.maps ||
+        "https://www.google.com/maps/search/?api=1&query=" +
+          encodeURIComponent(CFG.venue + " " + CFG.address);
+      const dc = (s, t, l, w, c = "var(--rose)", r = 0) =>
+        `<svg class="dc" style="top:${t}px;left:${l}px;width:${w}px;color:${c};transform:rotate(${r}deg)"><use href="#${s}"/></svg>`;
+      const u = (id, c) => `<svg class="${c}"><use href="#${id}"/></svg>`;
+      const COL = [
+        ["#F3D5D8", "#E8DFF0"],
+        ["#F5E9BB", "#F3D5D8"],
+        ["#E8DFF0", "#DDA6AD"],
+        ["#F3D5D8", "#F5E9BB"],
+        ["#DDA6AD", "#E8DFF0"],
+        ["#E8DFF0", "#F5E9BB"],
+        ["#F5E9BB", "#E8DFF0"],
+      ];
+      const pol = (i, cap, r, w = 126) => {
+        const s = CFG.photos[i];
+        return `<figure class="pol" style="--r:${r}deg;--w:${w}px"><div class="ph" style="--c1:${COL[i][0]};--c2:${COL[i][1]}${s ? `;background-image:url('${s}')` : ""}">${s ? "" : u("h", "")}</div><figcaption>${cap}</figcaption></figure>`;
+      };
+      const P = [
+        `${dc("st", 34, 40, 16, "#FFF9F2")}${dc("h", 64, 330, 18, "#FFF9F2", 15)}${dc("st", 468, 326, 14, "#FFF9F2")}${dc("fl", 458, 38, 34, "#FFF9F2", -10)}
+${u("bow", "bow")}<div class="lab"><div class="hw">a little journal of</div><h1>Our Little Love Story</h1></div>${u("couple", "cp")}
+<div class="nm">${CFG.bride} &amp; ${CFG.groom}</div><div class="dt">${DS}</div><button class="btn" data-open>Open Our Storybook</button>`,
+        `${dc("fl", 36, 40, 34, "var(--blush)", -12)}${dc("st", 60, 330, 16, "var(--butter)")}
+<p class="hw big">Dear friend,</p><p class="it">Every love story has its own little beginning...</p><p class="hw">and ours is about to become a book.</p>
+${dc("fl", 330, 170, 60, "var(--rose)", 8)}<p class="hw" style="margin-top:78px;transform:rotate(-3deg)">turn the page, we saved you a seat ♡</p>`,
+        `<h2>Our Story</h2>
+<div class="en"><b>how we met</b><p>It began on an ordinary afternoon with a shy hello, and a coffee that went cold because we kept talking.</p></div>
+<div class="en"><b>how it began</b><p>One coffee became many. Slowly, every day felt a little brighter with the other one in it.</p></div>
+<div class="en"><b>and now</b><p>Two people, one small love story, and a home we built out of laughter.</p></div>
+${dc("h", 40, 330, 18, "var(--rose)", 12)}${dc("st", 438, 44, 14, "var(--butter)")}`,
+        `<h2>Little Memories</h2><div class="pols">${pol(0, "our first hello", -4)}${pol(1, "first adventure", 3)}${pol(2, "the big yes", -2)}</div><p class="hw">tiny moments, kept forever ♡</p>`,
+        `${dc("st", 40, 50, 18, "var(--butter)")}${dc("h", 60, 320, 16, "var(--rose)", -10)}<p class="hw big" style="font-size:36px;line-height:1">And then, we knew we wanted forever.</p>${u("couple", "cp lg")}<p class="hw">hand in hand, always</p>`,
+        `${dc("fl", 32, 36, 30, "var(--rose)", 10)}${dc("fl", 32, 334, 30, "var(--rose)", -10)}
+<p class="hw">With joyful hearts,</p><p class="it">we invite you to celebrate our wedding.</p>
+<div class="hw big" style="font-size:38px">${CFG.brideFull}</div><div class="hw">&amp;</div><div class="hw big" style="font-size:38px">${CFG.groomFull}</div>
+<p style="font-size:16px;margin-top:8px">daughter of ${CFG.brideParents}</p><p style="font-size:16px">son of ${CFG.groomParents}</p>`,
+        `<h2>The Wedding Day</h2><div class="cal">${dc("h", 30, 108, 20, "var(--rose)", 12)}<i>${MN}</i><b>${DN}</b><span>${WD}</span></div>
+<div class="dl"><div><b>date</b><span>${WD}, ${DS}</span></div><div><b>ceremony</b><span>${CFG.ceremony}</span></div><div><b>reception</b><span>${CFG.reception}</span></div><div><b>venue</b><span>${CFG.venue}</span></div><div><b>address</b><span>${CFG.address}</span></div></div>${dc("fl", 452, 40, 28, "var(--blush)")}`,
+        `<h2>Counting Down</h2><p class="hw">every second brings us closer</p><div class="cds"><div class="cd"><b data-cd="d">00</b><span>Days</span></div><div class="cd"><b data-cd="h">00</b><span>Hours</span></div><div class="cd"><b data-cd="m">00</b><span>Minutes</span></div><div class="cd"><b data-cd="s">00</b><span>Seconds</span></div></div>
+<p class="hw big" style="font-size:28px">until we say “I do”</p>${dc("h", 70, 40, 16, "var(--rose)", -14)}${dc("st", 430, 330, 16, "var(--butter)")}`,
+        `<h2>Find Our Venue</h2>${u("pin", "pin")}<div class="hw big">${CFG.venue}</div><p class="it" style="font-size:19px">${CFG.address}</p>
+<a class="btn" href="${MAPS}" target="_blank" rel="noopener">Find Our Venue</a><a class="hw" href="${MAPS}" target="_blank" rel="noopener" style="color:var(--wine)">open in Google Maps ↗</a>${dc("fl", 44, 40, 28, "var(--blush)")}${dc("fl", 44, 332, 28, "var(--blush)")}`,
+        `<h2>Our Gallery</h2><div class="pols" style="gap:12px 8px">${pol(3, "together", -3, 138)}${pol(4, "adventures", 4, 138)}${pol(5, "quiet days", 3, 138)}${pol(6, "us, always", -4, 138)}</div><p class="hw">tap a photo to enlarge</p>`,
+        `<h2>RSVP</h2><p class="hw">will you celebrate with us?</p>
+<form class="rs" novalidate><input type="text" name="name" placeholder="Your name" autocomplete="name" required>
+<div class="ch"><label><input type="radio" name="attendance" value="Joyfully accepts" checked><span>Joyfully accepting</span></label><label><input type="radio" name="attendance" value="Regretfully declines"><span>Regretfully declining</span></label></div>
+<select name="guests" aria-label="Number of guests"><option>1 guest</option><option>2 guests</option><option>3 guests</option><option>4 guests</option><option>5 guests</option></select>
+<textarea name="wishes" rows="3" placeholder="Wishes &amp; prayers for us"></textarea><button class="btn" type="submit">Send RSVP</button><p class="msg" role="status"></p></form>`,
+        `${dc("st", 36, 40, 16, "#FFF9F2")}${dc("h", 62, 332, 18, "#FFF9F2", 14)}${dc("fl", 452, 44, 32, "#FFF9F2", -8)}${dc("fl", 452, 326, 32, "#FFF9F2", 8)}
+${u("bow", "bow")}<p class="hw big" style="color:var(--cream);font-size:36px;line-height:1">And so, our forever begins.</p>${u("couple", "cp")}
+<div class="nm">${CFG.bride} &amp; ${CFG.groom}</div><div class="dt">${DS}</div><p class="hw" style="color:var(--wine)">Thank you for being part of our story. With all our love ♡</p>`,
+      ];
+      const CL = [
+        "cov",
+        "",
+        "",
+        "bt",
+        "bl",
+        "lv",
+        "",
+        "",
+        "bl",
+        "bt",
+        "",
+        "cov",
+      ];
+      let mobile,
+        f = 0,
+        busy = false,
+        leaves = [];
+      const face = (p, side) =>
+        `<div class="face ${side} pg ${CL[p]}">${P[p]}${CL[p] == "cov" ? "" : `<i class="pn">${p + 1}</i>`}</div>`;
+      function build(p) {
+        mobile = innerWidth < 800;
+        f = mobile ? p : Math.ceil(p / 2);
+        B.className = "book init" + (mobile ? " m" : "");
+        B.innerHTML = "";
+        leaves = [];
+        for (let i = 0; i < (mobile ? 12 : 6); i++) {
+          const e = document.createElement("div");
+          e.className = "leaf";
+          e.innerHTML = mobile
+            ? face(i, "front") + '<div class="face back pg"></div>'
+            : face(2 * i, "front") + face(2 * i + 1, "back");
+          if (i < f) {
+            e.classList.add("flipped");
+            if (mobile) e.classList.add("gone");
+          }
+          B.appendChild(e);
+          leaves.push(e);
+        }
+        z();
+        ui();
+        tick();
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => B.classList.remove("init")),
+        );
+      }
+      const z = () =>
+        leaves.forEach(
+          (e, i) => (e.style.zIndex = i < f ? i + 1 : leaves.length - i),
+        );
+      function ui() {
+        const mx = mobile ? 11 : 6;
+        B.style.transform = mobile
+          ? ""
+          : `translateX(${f == 0 ? -25 : f == 6 ? 25 : 0}%)`;
+        $("lbl").textContent = mobile
+          ? `${f + 1} / 12`
+          : f == 0
+            ? "Cover"
+            : f == 6
+              ? "Back cover"
+              : `Pages ${2 * f}–${2 * f + 1} / 12`;
+        $("prev").disabled = f <= 0;
+        $("next").disabled = f >= mx;
+      }
+      function go(d) {
+        const mx = mobile ? 11 : 6,
+          t = f + d;
+        if (busy || LB.classList.contains("on") || t < 0 || t > mx) return;
+        busy = true;
+        swish();
+        const e = leaves[d > 0 ? f : t];
+        e.classList.remove("gone");
+        void e.offsetWidth;
+        e.style.zIndex = 99;
+        e.classList.add("flipping");
+        e.classList.toggle("flipped", d > 0);
+        f = t;
+        ui();
+        setTimeout(() => {
+          e.classList.remove("flipping");
+          if (mobile && d > 0) e.classList.add("gone");
+          z();
+          busy = false;
+        }, 1020);
+      }
+      function layout() {
+        if (innerWidth < 800 !== mobile || !leaves.length)
+          build(leaves.length ? (mobile ? f : f ? 2 * f - 1 : 0) : 0);
+        const bw = mobile ? 400 : 800,
+          s = Math.min(
+            (S.clientWidth - 16) / bw,
+            (S.clientHeight - 8) / 540,
+            1.5,
+          );
+        SC.style.cssText = `width:${bw}px;height:540px;--s:${s}`;
+        B.style.width = bw + "px";
+      }
+      /* interactions */
+      B.addEventListener("click", (e) => {
+        const p = e.target.closest(".pol");
+        if (p) {
+          LB.innerHTML = `<figure class="pol">${p.querySelector(".ph").outerHTML}<figcaption>${p.querySelector("figcaption").textContent}</figcaption></figure>`;
+          LB.classList.add("on");
+          return;
+        }
+        if (e.target.closest("[data-open]")) return go(1);
+        if (e.target.closest("a,button,input,select,textarea,label")) return;
+        const r = B.getBoundingClientRect(),
+          x = (e.clientX - r.left) / r.width;
+        go(mobile ? (x < 0.3 ? -1 : 1) : x < 0.5 ? -1 : 1);
+      });
+      B.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const F = e.target,
+          m = F.querySelector(".msg"),
+          d = new FormData(F);
+        if (!String(d.get("name")).trim()) {
+          m.textContent = "Please tell us your name.";
+          return;
+        }
+        if (!CFG.rsvpUrl) {
+          m.textContent =
+            "Demo mode: no backend is connected, so this RSVP was not saved.";
+          return;
+        }
+        try {
+          await fetch(CFG.rsvpUrl, {
+            method: "POST",
+            mode: "no-cors",
+            body: new URLSearchParams(d),
+          });
+          m.textContent = "Thank you! Your RSVP has been sent.";
+          F.reset();
+        } catch (_) {
+          m.textContent = "Could not send your RSVP. Please try again.";
+        }
+      });
+      LB.onclick = () => LB.classList.remove("on");
+      $("prev").onclick = () => go(-1);
+      $("next").onclick = () => go(1);
+      addEventListener("keydown", (e) => {
+        if (e.key == "Escape") LB.classList.remove("on");
+        if (/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+        if (e.key == "ArrowRight") go(1);
+        if (e.key == "ArrowLeft") go(-1);
+      });
+      let tx, ty;
+      S.addEventListener(
+        "touchstart",
+        (e) => {
+          if (/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) {
+            tx = null;
+            return;
+          }
+          tx = e.touches[0].clientX;
+          ty = e.touches[0].clientY;
+        },
+        { passive: true },
+      );
+      S.addEventListener("touchend", (e) => {
+        if (tx == null) return;
+        const dx = e.changedTouches[0].clientX - tx,
+          dy = e.changedTouches[0].clientY - ty;
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+          go(dx < 0 ? 1 : -1);
+          e.preventDefault();
+        }
+        tx = null;
+      });
+      addEventListener("resize", layout);
+      /* countdown */
+      function tick() {
+        const t = Math.max(0, D - Date.now()),
+          v = {
+            d: (t / 864e5) | 0,
+            h: ((t / 36e5) % 24) | 0,
+            m: ((t / 6e4) % 60) | 0,
+            s: ((t / 1e3) % 60) | 0,
+          };
+        document
+          .querySelectorAll("[data-cd]")
+          .forEach(
+            (e) => (e.textContent = String(v[e.dataset.cd]).padStart(2, "0")),
+          );
+      }
+      setInterval(tick, 1000);
+      /* sound: synthesized page swish + optional music */
+      let ac,
+        muted = false;
+      function swish() {
+        if (muted) return;
+        try {
+          ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+          const n = (ac.sampleRate * 0.4) | 0,
+            b = ac.createBuffer(1, n, ac.sampleRate),
+            d = b.getChannelData(0);
+          for (let i = 0; i < n; i++)
+            d[i] =
+              (Math.random() * 2 - 1) *
+              Math.pow(1 - i / n, 2) *
+              Math.sin((i / n) * Math.PI);
+          const s = ac.createBufferSource(),
+            fl = ac.createBiquadFilter(),
+            g = ac.createGain();
+          fl.type = "bandpass";
+          fl.frequency.value = 2200;
+          fl.Q.value = 0.6;
+          g.gain.value = 0.22;
+          s.buffer = b;
+          s.connect(fl);
+          fl.connect(g);
+          g.connect(ac.destination);
+          s.start();
+        } catch (_) {}
+      }
+      const aud = $("aud"),
+        mus = $("mus");
+      mus.onclick = () => {
+        if (!aud.getAttribute("src")) {
+          if (CFG.music) aud.src = CFG.music;
+          else return $("file").click();
+        }
+        aud.paused ? aud.play().catch(() => {}) : aud.pause();
+      };
+      $("file").onchange = (e) => {
+        const x = e.target.files[0];
+        if (x) {
+          aud.src = URL.createObjectURL(x);
+          aud.play().catch(() => {});
+        }
+      };
+      aud.onplay = aud.onpause = () =>
+        (mus.textContent = aud.paused ? "♪" : "❚❚");
+      $("mute").onclick = (e) => {
+        muted = !muted;
+        aud.muted = muted;
+        e.currentTarget.textContent = muted ? "🔇" : "🔊";
+      };
+      /* floating hearts */
+      for (let i = 0; i < 14; i++) {
+        const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        s.innerHTML = '<use href="#h"/>';
+        s.setAttribute("class", "fh");
+        s.style.cssText = `left:${Math.random() * 100}%;width:${10 + Math.random() * 14}px;animation-duration:${14 + Math.random() * 16}s;animation-delay:-${Math.random() * 25}s;color:${["#F3D5D8", "#DDA6AD", "#E8DFF0", "#F5E9BB"][i % 4]}`;
+        $("hearts").appendChild(s);
+      }
+      layout();
+    </script>
+  </body>
+</html>

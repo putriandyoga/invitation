@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wedding of Amara &amp; Julian</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Homemade+Apple&display=swap" rel="stylesheet">
+<style>
+/* ===== EDIT ME: names/date live in the CONFIG object in the script ===== */
+:root{
+  --pink:#f6d3dc; --rose:#c98a9b; --cream:#fbf3e6; --lav:#d9cce8;
+  --butter:#f8ebb4; --burg:#7a2a41; --ink:#4a2a35;
+  --hand:'Caveat',cursive; --script:'Homemade Apple',cursive;
+  --serif:'Cormorant Garamond',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);font-size:1.25rem;line-height:1.6;color:var(--ink);background:var(--cream);overflow-x:hidden}
+body.locked{overflow:hidden;height:100vh}
+/* paper grain overlay */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.16;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+section{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5rem 1.2rem;overflow:hidden}
+.bg-pink{background:linear-gradient(170deg,var(--pink),#f9e2e6)}
+.bg-cream{background:var(--cream)}
+.bg-lav{background:linear-gradient(180deg,#e7ddf1,var(--lav))}
+.bg-butter{background:#fbf1c9}
+h1,h2,h3{font-weight:500;font-style:italic}
+h2{font-family:var(--script);font-size:clamp(1.6rem,6vw,2.6rem);color:var(--burg);margin-bottom:1.6rem;font-weight:400}
+.hand{font-family:var(--hand);font-size:1.5rem;color:var(--burg)}
+.wrap{max-width:720px;width:100%;position:relative;z-index:2}
+
+/* word-by-word lyric reveal */
+.lyric .w{display:inline-block;opacity:0;transform:translateY(8px);filter:blur(4px);transition:opacity .7s,transform .7s,filter .7s}
+.lyric.in .w{opacity:1;transform:none;filter:none}
+.fade{opacity:0;transition:opacity 1.2s ease}
+.fade.in{opacity:1}
+
+/* buttons */
+.btn{font-family:var(--hand);font-size:1.5rem;background:var(--burg);color:var(--cream);border:0;padding:.6rem 1.8rem;border-radius:3px 12px 4px 10px;cursor:pointer;box-shadow:3px 4px 0 var(--rose);transition:transform .25s,box-shadow .25s;text-decoration:none;display:inline-block}
+.btn:hover{transform:translate(-1px,-2px) rotate(-1deg);box-shadow:5px 7px 0 var(--rose)}
+:focus-visible{outline:3px dashed var(--burg);outline-offset:3px}
+
+/* floating decorations */
+.float{position:absolute;pointer-events:none;z-index:1;animation:drift linear infinite;opacity:.75}
+@keyframes drift{0%{transform:translateY(105vh) rotate(0)}100%{transform:translateY(-15vh) rotate(40deg)}}
+.sway{animation:sway 6s ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
+
+/* 1. opening */
+#open{z-index:50;transition:opacity 1.2s,transform 1.2s}
+#open.gone{opacity:0;transform:scale(1.08);pointer-events:none}
+#open h1{font-family:var(--script);font-size:clamp(1.7rem,7vw,3.2rem);color:var(--burg);line-height:1.5;margin-bottom:2rem}
+.envelope{width:min(260px,70vw);margin:0 auto 2rem;filter:drop-shadow(4px 8px 0 rgba(122,42,65,.18))}
+.flap{transform-origin:130px 40px;transition:transform 1s}
+#open.opening .flap{transform:rotateX(180deg) scaleY(-1)}
+
+/* 2. title */
+#title .of{letter-spacing:.35em;font-size:1rem;color:var(--burg);text-transform:uppercase}
+.name{font-family:var(--script);font-size:clamp(2.6rem,13vw,6rem);color:var(--burg);line-height:1.2;margin:.4rem 0}
+.amp{font-family:var(--hand);font-size:3rem;color:var(--rose)}
+.sticker{position:absolute;font-size:2rem}
+
+/* 3. story */
+.diary{background:#fffaf0;padding:1.6rem 1.4rem;box-shadow:2px 3px 12px rgba(74,42,53,.2);border-radius:2px 8px 3px 6px;
+  background-image:repeating-linear-gradient(transparent 0 31px,rgba(201,138,155,.3) 31px 32px);position:relative}
+.tape{position:absolute;top:-14px;left:50%;width:90px;height:26px;background:rgba(248,235,180,.8);transform:translateX(-50%) rotate(-3deg)}
+.timeline{display:grid;gap:1.6rem;margin-top:2rem;text-align:left}
+.entry{display:flex;gap:1rem;align-items:center}
+.entry:nth-child(even){flex-direction:row-reverse;text-align:right}
+.entry p{flex:1;font-size:1.15rem}
+.entry b{font-family:var(--hand);font-size:1.7rem;color:var(--burg);display:block;line-height:1.1}
+
+/* polaroids */
+.polaroid{background:#fff;padding:.5rem .5rem 0;width:150px;flex:none;box-shadow:2px 4px 10px rgba(74,42,53,.25);transition:transform .4s;cursor:zoom-in;border:0;font:inherit}
+.polaroid img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--lav)}
+.polaroid span{display:block;font-family:var(--hand);font-size:1.25rem;padding:.3rem 0 .4rem;color:var(--ink)}
+.polaroid:hover{transform:rotate(0) scale(1.05)!important}
+
+/* 4. invitation */
+.card{background:#fffaf0;padding:2.4rem 1.4rem;max-width:560px;box-shadow:3px 5px 0 var(--rose),6px 10px 24px rgba(74,42,53,.2);border-radius:4px 14px 6px 12px;position:relative}
+.card .big{font-family:var(--script);font-size:clamp(1.5rem,6vw,2.2rem);color:var(--burg);line-height:1.5}
+.date{font-family:var(--hand);font-size:clamp(2.2rem,10vw,3.6rem);color:var(--burg);line-height:1.1;margin:1.2rem 0 .2rem}
+.detail{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0;border-block:2px dotted var(--rose);padding:1rem 0}
+.detail b{font-family:var(--hand);font-size:1.7rem;color:var(--burg);display:block;line-height:1}
+
+/* 5. countdown */
+.count{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+.tick{background:#fffaf0;width:clamp(70px,20vw,110px);padding:.8rem .2rem;border:2px dashed var(--rose);border-radius:50% 50% 8px 8px;box-shadow:2px 3px 0 var(--lav)}
+.tick strong{font-family:var(--script);font-size:clamp(1.5rem,7vw,2.4rem);color:var(--burg);display:block;font-weight:400;animation:pulse 1s ease-in-out infinite alternate}
+@keyframes pulse{to{transform:scale(1.06)}}
+
+/* 6. gallery */
+.grid{display:flex;flex-wrap:wrap;gap:1.6rem 1.2rem;justify-content:center}
+#lightbox{position:fixed;inset:0;background:rgba(74,42,53,.88);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s;padding:1rem}
+#lightbox.show{opacity:1;pointer-events:auto}
+#lightbox figure{background:#fff;padding:.8rem .8rem 0;max-width:min(92vw,520px);transform:scale(.9) rotate(-2deg);transition:transform .4s}
+#lightbox.show figure{transform:none}
+#lightbox img{width:100%;max-height:70vh;object-fit:contain;display:block}
+#lightbox figcaption{font-family:var(--hand);font-size:1.6rem;padding:.4rem}
+#lightbox button{position:absolute;top:1rem;right:1rem;font-size:2rem;background:none;border:0;color:#fff;cursor:pointer}
+
+/* 7-8 */
+.map{width:100%;height:260px;border:8px solid #fff;box-shadow:2px 4px 12px rgba(74,42,53,.25);transform:rotate(-1deg);margin:1.2rem 0}
+form{display:grid;gap:1.1rem;text-align:left}
+label{font-family:var(--hand);font-size:1.5rem;color:var(--burg)}
+input[type=text],input[type=number],textarea{width:100%;font:inherit;font-size:1.2rem;padding:.5rem .7rem;background:#fffdf7;border:0;border-bottom:2px solid var(--rose);color:var(--ink)}
+.choice{display:flex;gap:.6rem;flex-wrap:wrap}
+.choice label{font-size:1.25rem;cursor:pointer;border:2px solid var(--rose);padding:.3rem 1rem;border-radius:20px;background:#fffdf7;color:var(--ink);font-family:var(--serif);font-style:italic}
+.choice input{position:absolute;opacity:0}
+.choice input:checked+label,.choice label:has(input:checked){background:var(--burg);color:var(--cream);border-color:var(--burg)}
+.note{font-size:.95rem;background:var(--butter);padding:.7rem;border-radius:4px;margin-top:1rem;text-align:left}
+#status{font-family:var(--hand);font-size:1.5rem;color:var(--burg);min-height:2rem;text-align:center}
+
+/* 9 closing */
+#end h2{font-size:clamp(1.8rem,7vw,3rem)}
+
+/* music + nav */
+#music{position:fixed;right:.8rem;bottom:.8rem;z-index:95;background:var(--burg);color:var(--cream);border:0;border-radius:30px;padding:.5rem 1rem;font-family:var(--hand);font-size:1.25rem;cursor:pointer;box-shadow:2px 3px 0 var(--rose);display:none}
+#music.on{display:block}
+nav{position:fixed;top:.6rem;left:50%;transform:translateX(-50%);z-index:95;display:none;gap:.2rem;background:rgba(251,243,230,.9);padding:.2rem .6rem;border-radius:20px;box-shadow:1px 2px 6px rgba(74,42,53,.2)}
+nav.on{display:flex}
+nav a{font-family:var(--hand);font-size:1.2rem;color:var(--burg);text-decoration:none;padding:.1rem .5rem}
+@media(max-width:480px){nav a:nth-child(n+5){display:none}.entry,.entry:nth-child(even){flex-direction:column;text-align:center}}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01s!important}
+  html{scroll-behavior:auto}.lyric .w,.fade{opacity:1;transform:none;filter:none}.float{display:none}
+}
+</style>
+</head>
+<body class="locked">
+
+<!-- Music: put your own licensed file next to this page and set CONFIG.music -->
+<audio id="audio" loop preload="none"></audio>
+<button id="music" aria-label="Play or pause music">♪ play music</button>
+<nav id="nav" aria-label="Sections">
+  <a href="#title">us</a><a href="#story">story</a><a href="#invite">date</a><a href="#countdown">soon</a><a href="#gallery">photos</a><a href="#where">where</a><a href="#rsvp">rsvp</a>
+</nav>
+
+<!-- 1. OPENING -->
+<section id="open" class="bg-pink">
+  <div class="wrap">
+    <h1 class="lyric" data-text="A little story about forever..."></h1>
+    <svg class="envelope sway" viewBox="0 0 260 180" aria-hidden="true">
+      <rect x="6" y="40" width="248" height="134" rx="4" fill="#fffaf0" stroke="#c98a9b" stroke-width="3"/>
+      <path d="M6 174 L130 100 L254 174" fill="none" stroke="#c98a9b" stroke-width="3"/>
+      <g class="flap"><path d="M6 40 L130 120 L254 40 Z" fill="#f6d3dc" stroke="#c98a9b" stroke-width="3"/></g>
+      <path d="M130 96 c-14-16-30 0-14 14 l14 12 l14-12 c16-14 0-30-14-14z" fill="#7a2a41"/>
+    </svg>
+    <button class="btn" id="openBtn">Open Our Invitation</button>
+  </div>
+</section>
+
+<!-- 2. TITLE -->
+<section id="title" class="bg-lav">
+  <div class="wrap">
+    <p class="of lyric" data-text="The wedding of"></p>
+    <div class="name" data-key="bride">Bride</div>
+    <div class="amp sway">&amp;</div>
+    <div class="name" data-key="groom">Groom</div>
+    <p class="hand fade" style="margin-top:1rem">scroll gently ↓</p>
+  </div>
+  <span class="sticker sway" style="top:14%;left:10%">🌸</span>
+  <span class="sticker sway" style="top:22%;right:10%">✦</span>
+  <span class="sticker sway" style="bottom:16%;left:14%">♡</span>
+  <span class="sticker sway" style="bottom:22%;right:12%">🌷</span>
+</section>
+
+<!-- 3. STORY -->
+<section id="story" class="bg-cream">
+  <div class="wrap">
+    <h2>Our love story</h2>
+    <div class="diary">
+      <span class="tape"></span>
+      <p class="hand" style="font-size:1.7rem">Dear future us,</p>
+      <p>It started with an ordinary day and a small hello. Somewhere between late-night talks and shared playlists, it became the best chapter we have ever written.</p>
+      <div class="timeline">
+        <div class="entry"><button class="polaroid" data-cap="First meeting" style="transform:rotate(-4deg)"><img alt="Photo placeholder" src=""><span>first hello</span></button><p><b>First meeting</b>A rainy afternoon, two umbrellas, one very long conversation.</p></div>
+        <div class="entry"><button class="polaroid" data-cap="First date" style="transform:rotate(3deg)"><img alt="Photo placeholder" src=""><span>first date</span></button><p><b>First date</b>Too nervous to eat, too happy to leave.</p></div>
+        <div class="entry"><button class="polaroid" data-cap="Forever" style="transform:rotate(-2deg)"><img alt="Photo placeholder" src=""><span>yes!</span></button><p><b>The beginning of forever</b>One question, one yes, and a whole life to look forward to.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. INVITATION -->
+<section id="invite" class="bg-butter">
+  <div class="card fade">
+    <p class="big lyric" data-text="Together with our beloved families, we joyfully invite you to celebrate the beginning of our forever."></p>
+    <p class="hand" style="margin-top:1.4rem;font-size:1.9rem" data-key="brideFull"></p>
+    <p class="hand">&amp;</p>
+    <p class="hand" style="font-size:1.9rem" data-key="groomFull"></p>
+    <div class="date" id="dateBig"></div>
+    <p id="dayName" style="font-style:italic"></p>
+    <div class="detail">
+      <div><b>Ceremony</b><span data-key="ceremony"></span></div>
+      <div><b>Reception</b><span data-key="reception"></span></div>
+    </div>
+    <p class="hand" style="font-size:1.8rem" data-key="venue"></p>
+    <p data-key="address"></p>
+  </div>
+</section>
+
+<!-- 5. COUNTDOWN -->
+<section id="countdown" class="bg-pink">
+  <div class="wrap">
+    <h2>Until forever begins</h2>
+    <div class="count" role="timer" aria-live="off">
+      <div class="tick"><strong id="cd-d">0</strong>days</div>
+      <div class="tick"><strong id="cd-h">0</strong>hours</div>
+      <div class="tick"><strong id="cd-m">0</strong>minutes</div>
+      <div class="tick"><strong id="cd-s">0</strong>seconds</div>
+    </div>
+    <p class="hand" id="cdMsg" style="margin-top:1.5rem"></p>
+  </div>
+</section>
+
+<!-- 6. GALLERY -->
+<section id="gallery" class="bg-cream">
+  <div class="wrap">
+    <h2>Little moments</h2>
+    <!-- Replace each src with your own photo path or URL -->
+    <div class="grid" id="grid"></div>
+    <p class="hand" style="margin-top:1.5rem">tap a photo to look closer</p>
+  </div>
+</section>
+
+<!-- 7. LOCATION -->
+<section id="where" class="bg-lav">
+  <div class="wrap">
+    <h2>Where we'll be</h2>
+    <p class="hand" style="font-size:2rem" data-key="venue"></p>
+    <p data-key="address"></p>
+    <iframe class="map" id="map" title="Map of the venue" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <a class="btn" id="mapBtn" target="_blank" rel="noopener">View Location</a>
+  </div>
+</section>
+
+<!-- 8. RSVP -->
+<section id="rsvp" class="bg-butter">
+  <div class="wrap card">
+    <h2>Will you be there?</h2>
+    <form id="form">
+      <div><label for="name">Your name</label><input type="text" id="name" required autocomplete="name"></div>
+      <div><label id="attL">Your reply</label>
+        <div class="choice" role="radiogroup" aria-labelledby="attL">
+          <label><input type="radio" name="attend" value="Joyfully Accept" required> Joyfully Accept</label>
+          <label><input type="radio" name="attend" value="Regretfully Decline"> Regretfully Decline</label>
+        </div></div>
+      <div><label for="guests">Number of guests</label><input type="number" id="guests" min="1" max="10" value="1"></div>
+      <div><label for="wish">Wishes &amp; prayers (optional)</label><textarea id="wish" rows="3"></textarea></div>
+      <button class="btn" type="submit">Send Our Reply</button>
+      <div id="status" role="status"></div>
+    </form>
+    <p class="note"><b>Backend not connected.</b> Until you set <code>CONFIG.rsvpEndpoint</code>, replies are NOT saved anywhere. To collect them in Google Sheets: create a sheet, open Extensions › Apps Script, add a <code>doPost(e)</code> that appends <code>e.parameter</code> fields as a row, deploy as a Web App (anyone can access), then paste its URL into <code>CONFIG.rsvpEndpoint</code>.</p>
+  </div>
+</section>
+
+<!-- 9. CLOSING -->
+<section id="end" class="bg-pink">
+  <div class="wrap">
+    <h2 class="lyric" data-text="And so, our forever begins."></h2>
+    <div class="name" style="font-size:clamp(2rem,9vw,3.6rem)" id="endNames"></div>
+    <p class="hand" id="endDate" style="font-size:2rem"></p>
+  </div>
+</section>
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button aria-label="Close">×</button>
+  <figure><img alt=""><figcaption></figcaption></figure>
+</div>
+
+<script>
+/* ================= CONFIG: edit your details here ================= */
+const CONFIG = {
+  bride:"Amara", groom:"Julian",
+  brideFull:"Amara Grace Whitfield", groomFull:"Julian Alexander Reyes",
+  date:"2027-06-12T16:00:00",        // local time of the ceremony
+  ceremony:"4:00 PM", reception:"6:30 PM",
+  venue:"The Rose Garden Pavilion",
+  address:"123 Blossom Lane, Your City, Country",
+  music:"",                           // e.g. "our-song.mp3" (use music you have rights to)
+  rsvpEndpoint:""                     // Google Apps Script Web App URL
+};
+const $ = (s,c=document)=>c.querySelector(s), $$ = (s,c=document)=>[...c.querySelectorAll(s)];
+const D = new Date(CONFIG.date);
+
+/* ---- fill text from config ---- */
+$$('[data-key]').forEach(el=>el.textContent=CONFIG[el.dataset.key]);
+$('#dateBig').textContent = D.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+$('#dayName').textContent = D.toLocaleDateString('en-US',{weekday:'long'});
+$('#endNames').textContent = CONFIG.bride+' & '+CONFIG.groom;
+$('#endDate').textContent = $('#dateBig').textContent;
+const q = encodeURIComponent(CONFIG.venue+' '+CONFIG.address);
+$('#map').src = 'https://www.google.com/maps?q='+q+'&output=embed';
+$('#mapBtn').href = 'https://www.google.com/maps/search/?api=1&query='+q;
+
+/* ---- word-by-word lyric text ---- */
+$$('.lyric').forEach(el=>{
+  const t = el.dataset.text || el.textContent;
+  el.setAttribute('aria-label',t);
+  el.innerHTML = t.split(' ').map((w,i)=>`<span class="w" aria-hidden="true" style="transition-delay:${i*.22}s">${w}&nbsp;</span>`).join('');
+});
+
+/* ---- gallery: swap these placeholder URLs for your own photos ---- */
+const photos = ['Together','Adventures','Quiet days','Celebrations','Home','Always'].map((cap,i)=>
+  ({cap, src:`https://picsum.photos/seed/forever${i}/600/600`}));
+$('#grid').innerHTML = photos.map((p,i)=>`<button class="polaroid" data-cap="${p.cap}" style="transform:rotate(${[-4,3,-2,5,-5,2][i]}deg)"><img loading="lazy" alt="${p.cap}" src="${p.src}"><span>${p.cap}</span></button>`).join('');
+$$('.timeline .polaroid img').forEach((im,i)=>im.src=`https://picsum.photos/seed/story${i}/400/400`);
+
+/* ---- lightbox ---- */
+const lb = $('#lightbox');
+document.addEventListener('click',e=>{
+  const p = e.target.closest('.polaroid');
+  if(p){ $('img',lb).src=$('img',p).src; $('figcaption',lb).textContent=p.dataset.cap; lb.classList.add('show'); }
+  else if(e.target===lb || e.target.closest('#lightbox button')) lb.classList.remove('show');
+});
+addEventListener('keydown',e=>{ if(e.key==='Escape') lb.classList.remove('show'); });
+
+/* ---- scroll reveal ---- */
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }),{threshold:.35});
+$$('.lyric,.fade').forEach(el=>{ if(el.closest('#open')) return; io.observe(el); });
+setTimeout(()=>$('#open .lyric').classList.add('in'),400);
+
+/* ---- opening transition ---- */
+$('#openBtn').onclick = ()=>{
+  const o = $('#open'); o.classList.add('opening');
+  setTimeout(()=>{ o.classList.add('gone'); document.body.classList.remove('locked');
+    $('#nav').classList.add('on'); $('#music').classList.add('on');
+    $('#title').scrollIntoView(); $$('#title .lyric').forEach(l=>l.classList.add('in'));
+    setTimeout(()=>{o.style.display='none';},1300);
+  },900);
+};
+
+/* ---- floating hearts & flowers ---- */
+const icons=['♡','♥','✿','❀','✦','🌸'], cols=['#c98a9b','#7a2a41','#d9cce8','#f6d3dc'];
+if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
+  $$('section').forEach(s=>{
+    for(let i=0;i<5;i++){
+      const f=document.createElement('span'); f.className='float'; f.textContent=icons[(Math.random()*icons.length)|0];
+      f.style.cssText=`left:${Math.random()*95}%;font-size:${14+Math.random()*22}px;color:${cols[(Math.random()*4)|0]};animation-duration:${22+Math.random()*20}s;animation-delay:-${Math.random()*30}s`;
+      s.prepend(f);
+    }
+  });
+}
+
+/* ---- parallax (light touch) ---- */
+let tick=false;
+addEventListener('scroll',()=>{ if(tick) return; tick=true; requestAnimationFrame(()=>{
+  if(!matchMedia('(prefers-reduced-motion:reduce)').matches)
+    $$('.sticker').forEach((s,i)=>s.style.translate=`0 ${(scrollY*(.03+i*.01))%40}px`);
+  tick=false; }); },{passive:true});
+
+/* ---- countdown ---- */
+function updateCount(){
+  let ms = D - new Date();
+  if(ms<=0){ ['d','h','m','s'].forEach(k=>$('#cd-'+k).textContent=0); $('#cdMsg').textContent='Today is the day!'; return; }
+  const s=Math.floor(ms/1000);
+  $('#cd-d').textContent=Math.floor(s/86400);
+  $('#cd-h').textContent=Math.floor(s%86400/3600);
+  $('#cd-m').textContent=Math.floor(s%3600/60);
+  $('#cd-s').textContent=s%60;
+  $('#cdMsg').textContent='Counting every little moment.';
+}
+updateCount(); setInterval(updateCount,1000);
+
+/* ---- music player ---- */
+const audio=$('#audio'), mbtn=$('#music');
+mbtn.onclick=()=>{
+  if(!CONFIG.music){ mbtn.textContent='add CONFIG.music'; setTimeout(()=>mbtn.textContent='♪ play music',2000); return; }
+  if(!audio.src) audio.src=CONFIG.music;
+  if(audio.paused){ audio.play().then(()=>mbtn.textContent='❚❚ pause music').catch(()=>{}); }
+  else { audio.pause(); mbtn.textContent='♪ play music'; }
+};
+
+/* ---- RSVP ---- */
+$('#form').onsubmit = async e=>{
+  e.preventDefault();
+  const st=$('#status'), data={name:$('#name').value, attendance:$('input[name=attend]:checked').value, guests:$('#guests').value, wishes:$('#wish').value};
+  if(!CONFIG.rsvpEndpoint){
+    st.textContent='Preview only: no backend is connected, so this reply was not saved.'; return;
+  }
+  st.textContent='Sending...';
+  try{
+    await fetch(CONFIG.rsvpEndpoint,{method:'POST',mode:'no-cors',body:new URLSearchParams(data)});
+    st.textContent='Thank you! Your reply was sent.'; e.target.reset();
+  }catch(err){ st.textContent='Could not send. Please check your connection and try again.'; }
+};
+</script>
+</body>
+</html>
