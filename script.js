@@ -6,8 +6,8 @@ const CONFIG = {
   groom: "Yoga",
   brideFull: "Putri Nabella",
   groomFull: "Muhammad Yoga Adha Pratama",
-  brideParents: "Putri Sulung dari Samsi dan Rusinah",
-  groomParents: "Putra Bungsu dari Priyo Gunawan dan Nani Elliawati",
+  brideParents: "Putri Sulung dari Bapak Samsi dan Ibu Rusinah",
+  groomParents: "Putra Bungsu dari Bapak Priyo Gunawan dan Ibu Nani Elliawati",
 
   date: "2027-01-17", // YYYY-MM-DD
   time: "08:00", // ceremony start, 24h, used for the countdown
@@ -21,7 +21,8 @@ const CONFIG = {
   mapQuery: "Komplek Rumbian Mas 2", // optional: exact text to search on Google Maps (defaults to venue + address)
   mapLink: "https://maps.app.goo.gl/AVx4ErswcTkPjEbaA", // optional: paste a Google Maps share link to use for the button
   musicSrc: "music/goddess.mp3", // your own licensed audio file, e.g. "music/our-song.mp3"
-  couplePortraitSrc: "picture/ilustration.png", // your own illustration/photo for the cover, e.g. "img/couple.png"
+  // couplePortraitSrc: "picture/ilustration.png", // your own illustration/photo for the cover, e.g. "img/couple.png"
+  couplePortraitSrc: "gallery/our-akad.png", // your own illustration/photo for the cover, e.g. "img/couple.png"
   groomGlasses: false, // quick character tweak for the drawn groom
 
   rsvpEndpoint:
@@ -76,7 +77,7 @@ V.dateFull = V.weekday + ", " + V.dateLong;
 $$("[data-cfg]").forEach((el) => {
   el.textContent = V[el.dataset.cfg] ?? "";
 });
-document.title = `The Wedding of ${CONFIG.bride} & ${CONFIG.groom}`;
+document.title = `${CONFIG.bride} & ${CONFIG.groom} Wedding \u2665`;
 if (CONFIG.groomGlasses) $$(".glasses").forEach((g) => (g.style.display = ""));
 
 /* optional replacement of the drawn portrait with your own image */
@@ -335,9 +336,23 @@ lb.addEventListener("touchend", (e) => {
   if (Math.abs(dx) > 50) showPhoto(lbIndex + (dx < 0 ? 1 : -1));
 });
 
-/* ---- music (never autoplays; the guest taps the button) ---- */
+/* ---- music (autoplays when invitation is opened) ---- */
 const bgm = $("#bgm"),
   mbtn = $("#music");
+
+async function playMusic() {
+  if (!CONFIG.musicSrc) return;
+  if (!bgm.src) bgm.src = CONFIG.musicSrc;
+  try {
+    await bgm.play();
+    mbtn.classList.add("playing");
+    mbtn.setAttribute("aria-pressed", "true");
+    mbtn.setAttribute("aria-label", "Pause background music");
+  } catch {
+    console.log("Autoplay ditolak oleh browser, menunggu interaksi pengguna.");
+  }
+}
+
 mbtn.addEventListener("click", async () => {
   if (!CONFIG.musicSrc) {
     toast("No music yet. Add your audio file to CONFIG.musicSrc.");
@@ -447,6 +462,34 @@ requestAnimationFrame(() =>
     $("#introTitle").classList.add("in");
   }, 300),
 );
+// $("#openBtn").addEventListener("click", async function () {
+//   this.disabled = true;
+//   intro.classList.add("opening"); // flap swings open
+//   await wait(450);
+//   intro.classList.add("flap-back");
+//   await wait(350);
+//   intro.classList.add("rise"); // couple pops out
+//   const stage = $("#stage");
+//   if (!RM)
+//     for (let i = 0; i < 9; i++) {
+//       const h = icon("i-heart", "burst");
+//       const a = (i / 9) * Math.PI * 2,
+//         r = 90 + Math.random() * 70;
+//       h.style.setProperty("--dx", Math.cos(a) * r + "px");
+//       h.style.setProperty("--dy", Math.sin(a) * r - 40 + "px");
+//       stage.appendChild(h);
+//     }
+//   await wait(1500);
+//   intro.classList.add("leaving"); // iris closes on the heart
+//   document.body.classList.remove("locked");
+//   scrollTo(0, 0);
+//   playMusic();
+//   startSite();
+//   await wait(1500);
+//   intro.style.display = "none";
+//   mbtn.classList.add("show");
+// });
+
 $("#openBtn").addEventListener("click", async function () {
   this.disabled = true;
   intro.classList.add("opening"); // flap swings open
@@ -454,22 +497,49 @@ $("#openBtn").addEventListener("click", async function () {
   intro.classList.add("flap-back");
   await wait(350);
   intro.classList.add("rise"); // couple pops out
-  const stage = $("#stage");
-  if (!RM)
-    for (let i = 0; i < 9; i++) {
-      const h = icon("i-heart", "burst");
-      const a = (i / 9) * Math.PI * 2,
-        r = 90 + Math.random() * 70;
-      h.style.setProperty("--dx", Math.cos(a) * r + "px");
-      h.style.setProperty("--dy", Math.sin(a) * r - 40 + "px");
-      stage.appendChild(h);
-    }
+
+  // Efek burst love-love sudah dihapus bersih dari sini
+
   await wait(1500);
-  intro.classList.add("leaving"); // iris closes on the heart
+  intro.classList.add("leaving"); // iris closes
   document.body.classList.remove("locked");
   scrollTo(0, 0);
+  playMusic();
   startSite();
   await wait(1500);
   intro.style.display = "none";
   mbtn.classList.add("show");
 });
+
+function copyToClipboard(button) {
+  const textToCopy = button.getAttribute("data-clipboard");
+
+  navigator.clipboard
+    .writeText(textToCopy)
+    .then(() => {
+      const originalText = button.textContent;
+      button.textContent = "Copied!";
+      button.style.background = "#d4edda"; // Warna hijau lembut penanda sukses
+      button.style.borderColor = "#c3e6cb";
+
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.style.background = "";
+        button.style.borderColor = "";
+      }, 2000); // Tombol akan kembali normal setelah 2 detik
+    })
+    .catch((err) => {
+      console.error("Gagal menyalin teks: ", err);
+    });
+}
+// Menangkap nama tamu dari URL (contoh: ?to=Putri+dan+Partner)
+const urlParams = new URLSearchParams(window.location.search);
+const guestParam = urlParams.get("to");
+
+if (guestParam) {
+  const decodedName = guestParam.replace(/\+/g, " ");
+  const guestElement = document.getElementById("guestName");
+  if (guestElement) {
+    guestElement.textContent = decodedName;
+  }
+}

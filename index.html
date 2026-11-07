@@ -6,13 +6,19 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <title>The Wedding of Putri &amp; Yoga</title>
+    <!-- Judul tab dibuat lebih ringkas dan compact -->
+    <title>Putri &amp; Yoga Wedding</title>
+
+    <!-- Favicon menggunakan gambar dari folder gallery -->
+    <link rel="icon" type="image/png" href="gallery/icon.png" />
+    <link rel="apple-touch-icon" href="gallery/icon.png" />
+
     <meta
       name="description"
       content="A little story, a lifetime of love. You are invited to our wedding."
     />
-    <!-- WhatsApp / social preview: host the page, then set og:image to an absolute URL of a nice cover picture -->
-    <meta property="og:title" content="The Wedding of Putri &amp; Yoga" />
+    <!-- WhatsApp / social preview -->
+    <meta property="og:title" content="Putri &amp; Yoga Wedding" />
     <meta
       property="og:description"
       content="A little story, a lifetime of love. Open our invitation."
@@ -314,59 +320,8 @@
     <!-- =====================================================================
      SECTION 1 — OPENING ENVELOPE
      ===================================================================== -->
-    <!-- <section id="intro" aria-label="Opening">
-      <svg
-        class="intro-corner"
-        style="left: -14px; bottom: 8%; transform: rotate(-10deg)"
-        viewBox="0 0 120 220"
-        aria-hidden="true"
-      >
-        <use href="#i-branch" />
-      </svg>
-      <svg
-        class="intro-corner"
-        style="right: -18px; top: -34px; transform: scaleX(-1) rotate(160deg)"
-        viewBox="0 0 120 220"
-        aria-hidden="true"
-      >
-        <use href="#i-branch" />
-      </svg>
-      <svg
-        class="twinkle"
-        style="left: 16%; top: 12%; width: 18px; height: 18px"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
-        <use href="#i-sparkle" />
-      </svg>
-      <svg
-        class="twinkle"
-        style="right: 18%; bottom: 20%; width: 14px; height: 14px; --dl: 1.2s"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
-        <use href="#i-sparkle" />
-      </svg>
-
-      <h2
-        class="intro-title"
-        id="introTitle"
-        data-words="A little story, a lifetime of love."
-      ></h2>
-
-      <div class="stage" id="stage">
-        <p class="intro-names">
-          <span data-cfg="bride"></span
-          ><svg class="ic" viewBox="0 0 24 24" aria-label="and">
-            <use href="#i-heart" /></svg
-          ><span data-cfg="groom"></span>
-        </p>
-        <button id="openBtn" class="btn intro-btn" type="button">
-          Open Our Invitation
-        </button>
-      </div>
-    </section> -->
     <section id="intro" aria-label="Opening">
+      <!-- Bunga Pojok (Fixed di ujung layar) -->
       <svg
         class="intro-corner"
         style="
@@ -393,6 +348,7 @@
       >
         <use href="#i-branch" />
       </svg>
+
       <svg
         class="twinkle"
         style="left: 16%; top: 12%; width: 18px; height: 18px"
@@ -410,22 +366,44 @@
         <use href="#i-sparkle" />
       </svg>
 
-      <h2
-        class="intro-title"
-        id="introTitle"
-        data-words="A little story, a lifetime of love."
-      ></h2>
+      <!-- SEMUA KONTEN DIKUMPULKAN DI DALAM 1 GRUP TENGAH -->
+      <div class="intro-top-group">
+        <h2
+          class="intro-title"
+          id="introTitle"
+          data-words="A little story, a lifetime of love."
+        ></h2>
 
-      <div class="stage" id="stage">
-        <p class="intro-names">
-          <span data-cfg="bride"></span
-          ><svg class="ic" viewBox="0 0 24 24" aria-label="and">
-            <use href="#i-heart" /></svg
-          ><span data-cfg="groom"></span>
-        </p>
-        <button id="openBtn" class="btn intro-btn" type="button">
-          Open Our Invitation
-        </button>
+        <div class="stage" id="stage">
+          <p class="intro-couple-names">
+            <span data-cfg="bride"></span>
+            <svg
+              class="ic"
+              viewBox="0 0 24 24"
+              aria-label="and"
+              style="
+                width: 1.1em;
+                height: 1.1em;
+                vertical-align: middle;
+                color: var(--rose);
+                margin: 0 0.35em;
+              "
+            >
+              <use href="#i-heart" />
+            </svg>
+            <span data-cfg="groom"></span>
+          </p>
+        </div>
+
+        <div class="intro-bottom-wrap">
+          <div class="intro-guest-box">
+            <p class="intro-to">Special Invitation for</p>
+            <h3 id="guestName" class="intro-guest-name">Our Beloved Guest</h3>
+          </div>
+          <button id="openBtn" class="btn intro-btn" type="button">
+            Open Invitation
+          </button>
+        </div>
       </div>
     </section>
     <main id="site">
@@ -514,14 +492,12 @@
             Dear friends and family, here are a few pages from our diary. Every
             page is a small moment that led us to this one.
           </p>
-
-          <!-- EDIT: change the text, dates and photos (data-src) for each page of the diary -->
           <ol class="timeline">
             <li class="entry">
               <figure
                 class="polaroid pop tape"
                 data-cap="our first hello"
-                data-src=""
+                data-src="gallery/our-first-meet.png"
                 style="--r: -4deg"
               ></figure>
               <div class="note rv">
@@ -529,10 +505,13 @@
                   <use href="#s-umbrella" />
                 </svg>
                 <h3>First meeting</h3>
-                <span class="when">SPRING 2019</span>
+                <span class="when">DECEMBER 27, 2020</span>
                 <p>
-                  A rainy afternoon, two umbrellas and one very long
-                  conversation. We both said we would only stay five minutes.
+                  New to college and completely lost, I called out to him after
+                  seeing him pass by. Confused, he stopped a few meters away,
+                  only to completely walk away when I tried to approach. I was
+                  left halfway there and quite annoyed. We recreated this photo
+                  two years later wearing the exact same outfits.
                 </p>
               </div>
             </li>
@@ -540,7 +519,7 @@
               <figure
                 class="polaroid pop tape"
                 data-cap="coffee, nerves, smiles"
-                data-src=""
+                data-src="gallery/our-date.png"
                 style="--r: 3deg"
               ></figure>
               <div class="note rv">
@@ -548,10 +527,12 @@
                   <use href="#s-cups" />
                 </svg>
                 <h3>First date</h3>
-                <span class="when">SUMMER 2019</span>
+                <span class="when">FEBRUARY 20, 2022</span>
                 <p>
-                  Two cups of coffee gone cold. We were too nervous to finish
-                  them and too happy to leave.
+                  On my birthday, just 15 days after we started dating, we
+                  grabbed a bite at the mall. Running short on time with a
+                  massive portion of fries left, I kept quickly feeding them to
+                  him so we could finish up and head home.
                 </p>
               </div>
             </li>
@@ -559,7 +540,7 @@
               <figure
                 class="polaroid pop tape"
                 data-cap="our first trip"
-                data-src=""
+                data-src="gallery/our-graduation.png"
                 style="--r: -2deg"
               ></figure>
               <div class="note rv">
@@ -567,18 +548,19 @@
                   <use href="#s-plane" />
                 </svg>
                 <h3>Little adventures</h3>
-                <span class="when">2020 TO 2025</span>
+                <span class="when">JULY 3, 2024</span>
                 <p>
-                  Road trips, silly songs and long walks home. Slowly, home
-                  started to mean the person next to us.
+                  After overcoming a whole lot of drama and hurdles, we finally
+                  succeeded in graduating together on the same day, just as we
+                  had always hoped.
                 </p>
               </div>
             </li>
             <li class="entry">
               <figure
                 class="polaroid pop tape"
-                data-cap="she said yes!"
-                data-src=""
+                data-cap="building our future"
+                data-src="gallery/blue-bg.png"
                 style="--r: 4deg"
               ></figure>
               <div class="note rv">
@@ -588,8 +570,10 @@
                 <h3>The beginning of forever</h3>
                 <span class="when">2026</span>
                 <p>
-                  One question, one happy yes, and a whole lifetime of mornings
-                  to look forward to.
+                  We have been serious about each other right from the very
+                  beginning. Since early 2026, we have been building our future
+                  together step by step, looking forward to a whole lifetime of
+                  mornings side by side.
                 </p>
               </div>
             </li>
@@ -715,79 +699,12 @@
       </section>
 
       <!-- =====================================================================
-     SECTION 6 — GALLERY
-     ===================================================================== -->
-      <section
-        id="gallery"
-        class="sec bg-cream scallop"
-        style="--prev: var(--blush)"
-        aria-labelledby="galH"
-      >
-        <div class="wrap">
-          <header class="sec-head">
-            <h2 id="galH" class="script rv-words">Our little gallery</h2>
-            <svg class="scribble rv" viewBox="0 0 220 16" aria-hidden="true">
-              <path pathLength="1" d="M4 10C34 2 62 16 96 8S160 4 216 9" />
-            </svg>
-          </header>
-          <!-- EDIT: set data-src="photos/your-image.jpg" on each button (square photos look best) -->
-          <div class="grid" id="grid">
-            <button
-              type="button"
-              class="polaroid pop"
-              data-cap="together"
-              data-src=""
-              style="--r: -3deg"
-            ></button>
-            <button
-              type="button"
-              class="polaroid pop"
-              data-cap="adventure time"
-              data-src=""
-              style="--r: 2.5deg"
-            ></button>
-            <button
-              type="button"
-              class="polaroid pop"
-              data-cap="quiet days"
-              data-src=""
-              style="--r: -1.5deg"
-            ></button>
-            <button
-              type="button"
-              class="polaroid pop"
-              data-cap="our people"
-              data-src=""
-              style="--r: 3.5deg"
-            ></button>
-            <button
-              type="button"
-              class="polaroid pop"
-              data-cap="silly us"
-              data-src=""
-              style="--r: -3.5deg"
-            ></button>
-            <button
-              type="button"
-              class="polaroid pop"
-              data-cap="always"
-              data-src=""
-              style="--r: 2deg"
-            ></button>
-          </div>
-          <p class="caption" style="margin-top: 2rem">
-            tap a photo to look closer
-          </p>
-        </div>
-      </section>
-
-      <!-- =====================================================================
-     SECTION 7 — LOCATION
+     SECTION 6 — LOCATION
      ===================================================================== -->
       <section
         id="location"
-        class="sec bg-butter scallop"
-        style="--prev: var(--cream)"
+        class="sec bg-cream scallop"
+        style="--prev: var(--blush)"
         aria-labelledby="locH"
       >
         <div class="wrap">
@@ -821,12 +738,12 @@
       </section>
 
       <!-- =====================================================================
-     SECTION 8 — RSVP
+     SECTION 7 — RSVP
      ===================================================================== -->
       <section
         id="rsvp"
-        class="sec bg-cream scallop"
-        style="--prev: var(--butter-soft)"
+        class="sec bg-butter scallop"
+        style="--prev: var(--cream)"
         aria-labelledby="rsvpH"
       >
         <div class="wrap">
@@ -869,13 +786,15 @@
                 >
               </div>
             </fieldset>
+
             <div class="field">
               <label for="gCount">Number of guests</label>
               <div class="stepper">
                 <button type="button" id="gMinus" aria-label="One fewer guest">
-                  &minus;</button
-                ><output id="gCount" aria-live="polite">1</output
-                ><button type="button" id="gPlus" aria-label="One more guest">
+                  &minus;
+                </button>
+                <output id="gCount" aria-live="polite">1</output>
+                <button type="button" id="gPlus" aria-label="One more guest">
                   +
                 </button>
               </div>
@@ -894,8 +813,8 @@
               <button class="btn ghost" type="button" id="waBtn" hidden>
                 Reply on WhatsApp
               </button>
-              <div id="status" role="status" aria-live="polite"></div>
             </div>
+            <div id="status" role="status" aria-live="polite"></div>
           </form>
 
           <!-- Setup notes: removed automatically once CONFIG.rsvpEndpoint is filled in -->
@@ -935,6 +854,162 @@ function doPost(e) {
               with no backend.
             </p>
           </details>
+        </div>
+      </section>
+      <!-- =====================================================================
+      SECTION 8 — WEDDING GIFT / KADO
+      ===================================================================== -->
+      <section
+        id="gift"
+        class="sec bg-cream scallop"
+        style="--prev: var(--butter-soft)"
+        aria-labelledby="giftH"
+      >
+        <div
+          class="wrap"
+          style="max-width: 32rem; margin: 0 auto; text-align: center"
+        >
+          <header class="sec-head">
+            <h2 id="giftH" class="script rv-words">
+              A little note about gifts
+            </h2>
+            <svg class="scribble rv" viewBox="0 0 220 16" aria-hidden="true">
+              <path pathLength="1" d="M4 10C34 2 62 16 96 8S160 4 216 9" />
+            </svg>
+          </header>
+
+          <p class="invite-lead rv" style="margin-bottom: 2rem">
+            Your presence is already the greatest gift. If you would still like
+            to give something as a token of love, here is how:
+          </p>
+
+          <!-- Gift Container dengan Gaya Amplop/Card yang Lebih Manis -->
+          <div
+            class="gift-grid"
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 1.5rem;
+              text-align: left;
+            "
+          >
+            <!-- Bank Putri -->
+            <div
+              style="
+                background: var(--cream, #fff);
+                padding: 1.5rem;
+                border-radius: 20px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+                border: 1px solid rgba(0, 0, 0, 0.06);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0.8rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                <div>
+                  <p
+                    class="copy-text"
+                    style="
+                      font-size: 1.25rem;
+                      letter-spacing: 1.5px;
+                      font-weight: 700;
+                      margin-bottom: 0.2rem;
+                    "
+                  >
+                    310020447523
+                  </p>
+                  <p style="font-size: 0.9rem; opacity: 0.8">
+                    a.n. Putri Nabella
+                  </p>
+                </div>
+                <!-- Tombol disesuaikan persis dengan style button RSVP (.btn.ghost) -->
+                <button
+                  type="button"
+                  class="btn ghost copy-btn"
+                  data-clipboard="310020447523"
+                  style="
+                    width: 100%;
+                    padding: 0.6rem 1rem;
+                    font-size: 0.9rem;
+                    border-radius: 999px;
+                    cursor: pointer;
+                    text-align: center;
+                    justify-content: center;
+                  "
+                  onclick="copyToClipboard(this)"
+                >
+                  Copy Account Number
+                </button>
+              </div>
+            </div>
+
+            <!-- Bank Yoga -->
+            <div
+              style="
+                background: var(--cream, #fff);
+                padding: 1.5rem;
+                border-radius: 20px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+                border: 1px solid rgba(0, 0, 0, 0.06);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0.8rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                <div>
+                  <p
+                    class="copy-text"
+                    style="
+                      font-size: 1.25rem;
+                      letter-spacing: 1.5px;
+                      font-weight: 700;
+                      margin-bottom: 0.2rem;
+                    "
+                  >
+                    7285928097
+                  </p>
+                  <p style="font-size: 0.9rem; opacity: 0.8">
+                    a.n. Muhammad Yoga Adha Pratama
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="btn ghost copy-btn"
+                  data-clipboard="7285928097"
+                  style="
+                    width: 100%;
+                    padding: 0.6rem 1rem;
+                    font-size: 0.9rem;
+                    border-radius: 999px;
+                    cursor: pointer;
+                    text-align: center;
+                    justify-content: center;
+                  "
+                  onclick="copyToClipboard(this)"
+                >
+                  Copy Account Number
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <svg
+            style="width: 50px; margin: 2.5rem auto 0; display: block"
+            viewBox="0 0 60 40"
+            aria-hidden="true"
+          >
+            <use href="#i-bow" />
+          </svg>
         </div>
       </section>
 

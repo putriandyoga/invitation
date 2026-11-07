@@ -315,22 +315,35 @@ svg.ic {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1.2rem;
-  padding: 1.5rem;
+  justify-content: center; /* Memusatkan seluruh isi tepat di tengah layar */
+  padding: 2.5rem 1.5rem;
   overflow: hidden;
   text-align: center;
   clip-path: circle(150% at 50% 50%);
   transition: clip-path 1.5s cubic-bezier(0.7, 0, 0.25, 1);
 }
+
 #intro.leaving {
   clip-path: circle(0% at 50% 50%);
 }
+
+/* Membungkus seluruh konten agar tersusun di tengah dengan jarak rapat */
+.intro-top-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 420px;
+  gap: 1.2rem; /* Mengatur jarak antar elemen (judul, nama couple, tamu, tombol) */
+  margin: auto;
+}
+
 .intro-title {
   font-family: var(--hand);
   font-weight: 700;
   color: var(--burg);
-  font-size: clamp(2.4rem, 9vw, 3.8rem);
+  font-size: clamp(2.2rem, 8vw, 3.4rem);
   line-height: 1.1;
   max-width: 12em;
   position: relative;
@@ -346,8 +359,12 @@ svg.ic {
   opacity: 1;
   transform: none;
 }
-.intro-names {
-  font: italic 400 clamp(1.4rem, 5vw, 1.9rem)/1.2 var(--serif);
+
+/* Nama Couple (Dibuat Lebih Besar) */
+.intro-couple-names {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 9vw, 3.6rem); /* Diperbesar dari ukuran sebelumnya */
   color: var(--burg);
   position: relative;
   z-index: 2;
@@ -356,21 +373,31 @@ svg.ic {
   transition:
     opacity 1s ease 0.4s,
     transform 1s ease 0.4s;
+  letter-spacing: 0.02em;
 }
-#intro.ready .intro-names {
+
+#intro.ready .intro-couple-names {
   opacity: 1;
   transform: none;
 }
-.intro-names .ic {
+
+.intro-couple-names .ic {
   color: var(--rose);
-  margin: 0 0.3em;
+  margin: 0 0.35em;
+  vertical-align: middle;
+  width: 1.25em; /* Ikon love ikut diperbesar agar seimbang */
+  height: 1.25em;
 }
+
+/* Memaksa sudut bunga selalu menempel presisi di pojok layar HP */
 .intro-corner {
-  position: absolute;
+  position: fixed !important;
   opacity: 0.9;
   pointer-events: none;
   z-index: 1;
 }
+
+/* Tombol Open Invitation (Ukuran menyesuaikan panjang teks, tidak full width) */
 .intro-btn {
   opacity: 0;
   transform: translateY(16px);
@@ -381,34 +408,75 @@ svg.ic {
     box-shadow 0.2s;
   position: relative;
   z-index: 2;
-  margin-top: 0.6rem;
+  width: auto; /* Mengikuti ukuran teks */
+  padding: 0.75rem 2rem; /* Menambahkan ruang di kiri-kanan tombol */
+  margin-top: 0.3rem;
 }
 #intro.ready .intro-btn {
   opacity: 1;
   transform: none;
 }
-.burst {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 18px;
-  height: 18px;
-  margin: -9px;
-  color: var(--rose);
-  pointer-events: none;
-  z-index: 6;
-  animation: burst 1.6s ease-out forwards;
+
+/* Grup Bawah (Nama Tamu & Tombol) */
+.intro-bottom-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  position: relative;
+  z-index: 2;
 }
-@keyframes burst {
-  0% {
-    transform: translate(0, 0) scale(0.3);
+
+.intro-guest-box {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeInGuest 1s ease 0.5s forwards;
+}
+
+.intro-to {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  opacity: 0.75;
+  margin-bottom: 0.2rem;
+  text-transform: uppercase;
+}
+
+.intro-guest-name {
+  font-family: var(--hand);
+  font-weight: 700;
+  color: var(--burg);
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
+  line-height: 1.2;
+}
+
+@keyframes fadeInGuest {
+  to {
     opacity: 1;
-  }
-  100% {
-    transform: translate(var(--dx), var(--dy)) scale(1.2) rotate(40deg);
-    opacity: 0;
+    transform: translateY(0);
   }
 }
+/* Nama Couple (Tepat di tengah, animasi muncul bersamaan dengan mulus) */
+/* .intro-couple-names {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: clamp(2rem, 7vw, 2.8rem);
+  color: var(--burg);
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 1s ease 0.4s,
+    transform 1s ease 0.4s;
+  letter-spacing: 0.02em;
+}
+
+#intro.ready .intro-couple-names {
+  opacity: 1;
+  transform: none;
+} */
 
 /* =====================================================================
    5. COVER
@@ -965,7 +1033,7 @@ button.polaroid {
 /* =====================================================================
    12. RSVP
    ===================================================================== */
-form {
+/* form {
   max-width: 480px;
   margin: 0 auto;
   display: grid;
@@ -1113,7 +1181,241 @@ textarea:focus {
   margin: 0.6rem 0;
   overflow-x: auto;
 }
+*/
+/* =====================================================================
+   12. RSVP (Khusus Section Ini Saja)
+   ===================================================================== */
+#rsvp form {
+  max-width: 480px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.5rem;
+  text-align: left;
+}
+#rsvp .field > label,
+#rsvp .field legend {
+  display: block;
+  font: 700 1.55rem/1.1 var(--hand);
+  color: var(--burg);
+  margin-bottom: 0.2rem;
+}
+#rsvp fieldset {
+  border: 0;
+}
+#rsvp input[type="text"],
+#rsvp textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 1.05rem;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid var(--rose);
+  border-radius: 0;
+  padding: 0.55rem 0.1rem;
+  transition: border-color 0.2s;
+}
+#rsvp textarea {
+  resize: vertical;
+  min-height: 84px;
+  background: linear-gradient(
+      transparent 0 30px,
+      rgba(221, 166, 173, 0.35) 30px 31px
+    )
+    0 0/100% 31px;
+  line-height: 31px;
+  padding: 0 0.2rem;
+}
+#rsvp input:focus,
+#rsvp textarea:focus {
+  outline: 0;
+  border-color: var(--burg);
+}
 
+/* Tombol Pilihan Kehadiran Bersampingan Kiri-Kanan khusus di RSVP */
+#rsvp .choices {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+#rsvp .choice {
+  flex: 1;
+}
+#rsvp .choice input {
+  position: absolute;
+  opacity: 0;
+}
+#rsvp .choice span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 48px;
+  padding: 0.4rem 0.5rem;
+  border: 2px solid var(--rose);
+  border-radius: 999px;
+  background: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: center;
+  transition: 0.2s;
+  cursor: pointer;
+  color: var(--text);
+  white-space: nowrap;
+}
+#rsvp .choice input:checked + span {
+  background: var(--burg);
+  border-color: var(--burg);
+  color: var(--cream);
+}
+#rsvp .choice input:focus-visible + span {
+  outline: 3px dashed var(--burg);
+  outline-offset: 3px;
+}
+
+#rsvp .stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+  margin-top: 0.4rem;
+}
+
+#rsvp .stepper button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--burg);
+  background: #fff;
+  color: var(--burg);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#rsvp .stepper output {
+  flex: 1; /* Membuat bagian angka melebar memenuhi ruang di antara tombol */
+  text-align: center;
+  font: 800 1.6rem var(--sans);
+  color: var(--burg);
+  background: rgba(
+    221,
+    166,
+    173,
+    0.15
+  ); /* Opsional: memberikan background lembut agar terlihat seperti kotak input */
+  padding: 0.4rem;
+  border-radius: 12px;
+}
+
+/* Tombol Aksi RSVP & WhatsApp Bersampingan Kiri-Kanan */
+#rsvp .form-actions {
+  display: flex;
+  flex-direction: column; /* Default untuk mobile: bertumpuk atas-bawah */
+  gap: 0.8rem;
+  align-items: stretch;
+  width: 100%;
+}
+#rsvp .form-actions .btn,
+#rsvp #waBtn {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  justify-content: center;
+}
+#rsvp #waBtn[hidden] {
+  display: none; /* Supaya tersembunyi sempurna saat belum aktif */
+}
+
+/* Ketika dibuka di layar lebih besar (tablet/desktop, misal min-width 480px ke atas) */
+@media (min-width: 480px) {
+  #rsvp .form-actions {
+    flex-direction: row; /* Berjajar kiri-kanan */
+  }
+  #rsvp .form-actions .btn,
+  #rsvp #waBtn {
+    flex: 1; /* Lebar dibagi rata dua tombol */
+  }
+}
+
+#rsvp #status {
+  width: 100%;
+  min-height: auto;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--burg);
+  transition: all 0.3s ease;
+}
+
+/* Ketika status aktif / muncul pesan */
+#rsvp #status:not(:empty) {
+  padding: 0.9rem 1.2rem;
+  margin-top: 0.5rem;
+  border-radius: 16px;
+  background: var(--lav-soft, #f4f1fa);
+  border: 1px dashed var(--rose);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Gaya khusus untuk peringatan (warn) atau error */
+#rsvp #status.warn,
+#rsvp #status.error {
+  background: var(--butter, #fef6e0);
+  border: 1px solid var(--rose);
+  color: var(--burg);
+}
+
+/* Gaya khusus untuk pesan sukses (jika pakai class success) */
+#rsvp #status.success {
+  background: #eaf4ed;
+  border: 1px solid #b8e0c2;
+  color: #2d6a4f;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+#rsvp .dev-note {
+  max-width: 480px;
+  margin: 2rem auto 0;
+  text-align: left;
+  font-size: 0.9rem;
+  background: var(--butter-soft);
+  border: 1.5px dashed var(--rose);
+  border-radius: 16px;
+  padding: 0.9rem 1rem;
+}
+#rsvp .dev-note summary {
+  cursor: pointer;
+  font-weight: 800;
+  color: var(--burg);
+}
+#rsvp .dev-note pre {
+  white-space: pre-wrap;
+  font:
+    0.78rem/1.5 ui-monospace,
+    Menlo,
+    monospace;
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.7rem;
+  margin: 0.6rem 0;
+  overflow-x: auto;
+}
 /* =====================================================================
    13. CLOSING
    ===================================================================== */
