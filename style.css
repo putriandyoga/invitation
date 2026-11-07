@@ -1352,69 +1352,133 @@ textarea:focus {
   color: var(--burg);
   transition: all 0.3s ease;
 }
-
-/* Ketika status aktif / muncul pesan */
+/* Kotak Status Pesan (Sukses/Error) dengan Border Dashed yang Senada */
 #rsvp #status:not(:empty) {
   padding: 0.9rem 1.2rem;
-  margin-top: 0.5rem;
+  margin-top: 0.8rem;
   border-radius: 16px;
   background: var(--lav-soft, #f4f1fa);
-  border: 1px dashed var(--rose);
+  border: 1.5px dashed var(--rose); /* Menggunakan garis putus-putus */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   animation: fadeIn 0.4s ease-out forwards;
 }
 
-/* Gaya khusus untuk peringatan (warn) atau error */
 #rsvp #status.warn,
 #rsvp #status.error {
-  background: var(--butter, #fef6e0);
-  border: 1px solid var(--rose);
+  background: #fdf2f2;
+  border: 1.5px dashed var(--rose); /* Garis putus-putus */
   color: var(--burg);
 }
 
-/* Gaya khusus untuk pesan sukses (jika pakai class success) */
 #rsvp #status.success {
   background: #eaf4ed;
-  border: 1px solid #b8e0c2;
+  border: 1.5px dashed var(--rose); /* Garis putus-putus */
   color: #2d6a4f;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-#rsvp .dev-note {
+/* Container List Ucapan (Guest Book Box) */
+#rsvp-list-container {
   max-width: 480px;
-  margin: 2rem auto 0;
+  margin: 2.5rem auto 0;
   text-align: left;
-  font-size: 0.9rem;
-  background: var(--butter-soft);
-  border: 1.5px dashed var(--rose);
-  border-radius: 16px;
-  padding: 0.9rem 1rem;
 }
-#rsvp .dev-note summary {
-  cursor: pointer;
-  font-weight: 800;
+
+/* Container utama: Border solid (tidak dashed), rapi, dan overflow hidden agar scrollbar tidak keluar sudut */
+.rsvp-entries-box {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden; /* Mencegah geser horizontal */
+  padding: 0.8rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1.5px solid var(--rose); /* Diubah jadi garis biasa (solid), tidak dashed */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  position: relative; /* Membantu mengunci posisi scrollbar di dalam container */
+}
+
+/* Scrollbar kustom yang lembut & aman di dalam border radius */
+.rsvp-entries-box::-webkit-scrollbar {
+  width: 6px;
+}
+.rsvp-entries-box::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px 0; /* Memberi jarak atas-bawah agar scrollbar tidak menempel mentok di ujung */
+}
+.rsvp-entries-box::-webkit-scrollbar-thumb {
+  background: var(--rose);
+  border-radius: 10px;
+}
+
+/* Kartu Item Ucapan di dalam (Hanya card-nya saja yang pakai dashed border) */
+.rsvp-card {
+  background: #fff;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1px dashed var(--rose); /* Hanya card di dalam yang pakai garis putus-putus */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease;
+}
+
+.rsvp-card:hover {
+  transform: translateY(-1px);
+}
+
+.rsvp-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.rsvp-card-name {
+  font-weight: 700;
+  font-size: 0.95rem;
   color: var(--burg);
 }
-#rsvp .dev-note pre {
-  white-space: pre-wrap;
-  font:
-    0.78rem/1.5 ui-monospace,
-    Menlo,
-    monospace;
-  background: #fff;
-  border-radius: 10px;
-  padding: 0.7rem;
-  margin: 0.6rem 0;
-  overflow-x: auto;
+
+.rsvp-card-badge {
+  font-family: var(--hand);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.2rem 0.8rem;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+/* Badge untuk yang Hadir (Attending) */
+.badge-accept {
+  background: linear-gradient(135deg, #f0f7f2 0%, #e1edf4 100%);
+  color: #2d6a4f;
+}
+.badge-accept::before {
+  content: "♥";
+  font-size: 0.8rem;
+  color: #2d6a4f;
+}
+
+/* Badge untuk yang Berhalangan (Declined) */
+.badge-decline {
+  background: linear-gradient(135deg, #fdf5f5 0%, #fae8e8 100%);
+  color: #a33333;
+}
+.badge-decline::before {
+  content: "♥";
+  font-size: 1rem;
+  color: #a33333;
+}
+.rsvp-card-wish {
+  margin: 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text);
+  line-height: 1.4;
 }
 /* =====================================================================
    13. CLOSING

@@ -377,84 +377,157 @@ mbtn.addEventListener("click", async () => {
 });
 
 /* ---- RSVP ---- */
+/* =====================================================================
+   RSVP & GUEST BOOK SCRIPT (ENGLISH)
+   ================================================================     */
+
 let guests = 1;
 const gCount = $("#gCount");
-$("#gMinus").onclick = () => {
-  guests = Math.max(1, guests - 1);
-  gCount.textContent = guests;
-};
-$("#gPlus").onclick = () => {
-  guests = Math.min(10, guests + 1);
-  gCount.textContent = guests;
-};
+if ($("#gMinus")) {
+  $("#gMinus").onclick = () => {
+    guests = Math.max(1, guests - 1);
+    gCount.textContent = guests;
+  };
+}
+if ($("#gPlus")) {
+  $("#gPlus").onclick = () => {
+    guests = Math.min(10, guests + 1);
+    gCount.textContent = guests;
+  };
+}
+
 const form = $("#rsvpForm"),
   status = $("#status");
-if (CONFIG.rsvpEndpoint) $("#devNote").remove();
-if (CONFIG.whatsapp) $("#waBtn").hidden = false;
+
+if (CONFIG.rsvpEndpoint && $("#devNote")) $("#devNote").remove();
+if (CONFIG.whatsapp && $("#waBtn")) $("#waBtn").hidden = false;
+
 function readForm() {
-  const name = $("#gName").value.trim(),
-    att = form.querySelector("input[name=attendance]:checked");
+  const nameField = $("#gName"),
+    att = form.querySelector("input[name=attendance]:checked"),
+    wishesField = $("#gWish");
+
+  const name = nameField ? nameField.value.trim() : "";
+  const wishes = wishesField ? wishesField.value.trim() : "";
+
   if (!name) {
-    status.className = "";
-    status.textContent = "Please tell us your name.";
-    $("#gName").focus();
+    status.className = "error"; // Beri kelas error agar stylenya ikut cantik
+    status.textContent = "Please provide your guest name.";
+    if (nameField) nameField.focus();
     return null;
   }
   if (!att) {
-    status.className = "";
+    status.className = "error"; // Beri kelas error agar stylenya ikut cantik
     status.textContent =
       "Please choose Joyfully Accept or Regretfully Decline.";
     return null;
   }
+  if (!wishes) {
+    status.className = "error"; // Beri kelas error agar stylenya ikut cantik
+    status.textContent = "Please leave your sweet wishes for us.";
+    if (wishesField) wishesField.focus();
+    return null;
+  }
+
   return {
     name,
     attendance: att.value,
     guests: att.value === "Joyfully Accept" ? guests : 0,
-    wishes: $("#gWish").value.trim(),
+    wishes: wishes,
   };
 }
+// Event listener saat form dikirim
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = readForm();
   if (!data) return;
+
   if (!CONFIG.rsvpEndpoint) {
     status.className = "warn";
     status.textContent =
-      "This form is not connected to a backend yet, so your reply was NOT saved. Please contact the couple directly for now.";
+      "This form is not connected to a backend yet, so your reply was NOT saved.";
     return;
   }
+
   status.className = "";
   status.textContent = "Sending...";
+
   try {
-    // Apps Script web apps do not return CORS headers, so "no-cors" is used and the response cannot be read.
     await fetch(CONFIG.rsvpEndpoint, {
       method: "POST",
       mode: "no-cors",
       body: new URLSearchParams(data),
     });
+
+    status.className = "success";
     status.textContent = "Thank you! Your reply has been sent.";
+
+    // 1. Amankan nama dari URL, lalu reset form
+    const currentName = $("#gName").value;
     form.reset();
+    $("#gName").value = currentName;
+
+    // Reset stepper kembali ke angka 1
     guests = 1;
     gCount.textContent = 1;
-  } catch {
+
+    // 2. SOLUSI: Langsung muat ulang daftar ucapan dari Google Sheet secara otomatis!
+    // Ini membuat list-nya terupdate real-time tanpa perlu refresh halaman atau kehilangan list lama.
+    await loadRsvpEntries();
+  } catch (err) {
+    status.className = "error";
     status.textContent =
       "Something went wrong while sending. Please check your connection and try again.";
   }
 });
-$("#waBtn").addEventListener("click", () => {
-  const d = readForm();
-  if (!d) return;
-  const msg = `Hello! RSVP for ${CONFIG.bride} & ${CONFIG.groom}'s wedding.\nName: ${d.name}\nReply: ${d.attendance}\nGuests: ${d.guests}${d.wishes ? "\nWishes: " + d.wishes : ""}`;
-  open(
-    `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`,
-    "_blank",
-    "noopener",
-  );
-});
+
+if ($("#waBtn")) {
+  $("#waBtn").addEventListener("click", () => {
+    const d = readForm();
+    if (!d) return;
+    const msg = `Hello! RSVP for ${CONFIG.bride} & ${CONFIG.groom}'s wedding.\nName: ${d.name}\nReply: ${d.attendance}\nGuests: ${d.guests}${d.wishes ? "\nWishes: " + d.wishes : ""}`;
+    open(
+      `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`,
+      "_blank",
+      "noopener",
+    );
+  });
+}
+
+// Fungsi pembantu untuk langsung menampilkan kartu ucapan baru secara instan di atas/bawah list
+function appendNewEntryToDOM(data) {
+  const container = document.getElementById("rsvpEntries");
+  if (!container) return;
+
+  // Jika sebelumnya ada teks "Loading..." atau "No RSVPs...", hapus dulu
+  const placeholderText = container.querySelector("p");
+  if (placeholderText) {
+    container.innerHTML = "";
+  }
+
+  const card = document.createElement("div");
+  card.className = "rsvp-card";
+  card.style.animation = "fadeIn 0.5s ease-out"; // Efek animasi muncul
+
+  const isAccept = data.attendance === "Joyfully Accept";
+  const badgeClass = isAccept ? "badge-accept" : "badge-decline";
+  const badgeText = isAccept ? "Attending" : "Declined";
+
+  card.innerHTML = `
+    <div class="rsvp-card-header">
+      <span class="rsvp-card-name">${escapeHtml(data.name)}</span>
+      <span class="rsvp-card-badge ${badgeClass}">${badgeText}</span>
+    </div>
+    ${data.wishes ? `<p class="rsvp-card-wish">"${escapeHtml(data.wishes)}"</p>` : ""}
+  `;
+
+  // Masukkan ke urutan paling atas dari daftar ucapan
+  container.prepend(card);
+}
 
 /* =====================================================================
-   INTRO SEQUENCE: words appear -> button -> envelope opens -> couple hops up -> iris reveals the site
-   ===================================================================== */
+   INTRO SEQUENCE
+   ================================================================     */
 const intro = $("#intro");
 requestAnimationFrame(() =>
   setTimeout(() => {
@@ -462,33 +535,6 @@ requestAnimationFrame(() =>
     $("#introTitle").classList.add("in");
   }, 300),
 );
-// $("#openBtn").addEventListener("click", async function () {
-//   this.disabled = true;
-//   intro.classList.add("opening"); // flap swings open
-//   await wait(450);
-//   intro.classList.add("flap-back");
-//   await wait(350);
-//   intro.classList.add("rise"); // couple pops out
-//   const stage = $("#stage");
-//   if (!RM)
-//     for (let i = 0; i < 9; i++) {
-//       const h = icon("i-heart", "burst");
-//       const a = (i / 9) * Math.PI * 2,
-//         r = 90 + Math.random() * 70;
-//       h.style.setProperty("--dx", Math.cos(a) * r + "px");
-//       h.style.setProperty("--dy", Math.sin(a) * r - 40 + "px");
-//       stage.appendChild(h);
-//     }
-//   await wait(1500);
-//   intro.classList.add("leaving"); // iris closes on the heart
-//   document.body.classList.remove("locked");
-//   scrollTo(0, 0);
-//   playMusic();
-//   startSite();
-//   await wait(1500);
-//   intro.style.display = "none";
-//   mbtn.classList.add("show");
-// });
 
 $("#openBtn").addEventListener("click", async function () {
   this.disabled = true;
@@ -497,8 +543,6 @@ $("#openBtn").addEventListener("click", async function () {
   intro.classList.add("flap-back");
   await wait(350);
   intro.classList.add("rise"); // couple pops out
-
-  // Efek burst love-love sudah dihapus bersih dari sini
 
   await wait(1500);
   intro.classList.add("leaving"); // iris closes
@@ -519,27 +563,100 @@ function copyToClipboard(button) {
     .then(() => {
       const originalText = button.textContent;
       button.textContent = "Copied!";
-      button.style.background = "#d4edda"; // Warna hijau lembut penanda sukses
+      button.style.background = "#d4edda";
       button.style.borderColor = "#c3e6cb";
 
       setTimeout(() => {
         button.textContent = originalText;
         button.style.background = "";
         button.style.borderColor = "";
-      }, 2000); // Tombol akan kembali normal setelah 2 detik
+      }, 2000);
     })
     .catch((err) => {
-      console.error("Gagal menyalin teks: ", err);
+      console.error("Failed to copy text: ", err);
     });
 }
-// Menangkap nama tamu dari URL (contoh: ?to=Putri+dan+Partner)
-const urlParams = new URLSearchParams(window.location.search);
-const guestParam = urlParams.get("to");
 
-if (guestParam) {
-  const decodedName = guestParam.replace(/\+/g, " ");
-  const guestElement = document.getElementById("guestName");
-  if (guestElement) {
-    guestElement.textContent = decodedName;
+// Fungsi pengaman kecil untuk mencegah karakter HTML asing
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/* =====================================================================
+   LOAD RSVP ENTRIES & LOCKED URL NAME ON STARTUP
+   ================================================================     */
+async function loadRsvpEntries() {
+  const container = document.getElementById("rsvpEntries");
+  if (!CONFIG.rsvpEndpoint || !container) return;
+
+  try {
+    const response = await fetch(CONFIG.rsvpEndpoint);
+    const result = await response.json();
+
+    if (result && result.length > 0) {
+      container.innerHTML = "";
+      // Urutkan dari yang terbaru dan ambil maksimal 30 data teratas
+      result
+        .reverse()
+        .slice(0, 30)
+        .forEach((item) => {
+          if (!item.name) return; // Lewatkan jika data kosong
+
+          const card = document.createElement("div");
+          card.className = "rsvp-card";
+
+          const isAccept = item.attendance === "Joyfully Accept";
+          const badgeClass = isAccept ? "badge-accept" : "badge-decline";
+          const badgeText = isAccept ? "Attending" : "Declined";
+
+          card.innerHTML = `
+          <div class="rsvp-card-header">
+            <span class="rsvp-card-name">${escapeHtml(item.name)}</span>
+            <span class="rsvp-card-badge ${badgeClass}">${badgeText}</span>
+          </div>
+          ${item.wishes ? `<p class="rsvp-card-wish">"${escapeHtml(item.wishes)}"</p>` : ""}
+        `;
+          container.appendChild(card);
+        });
+    } else {
+      container.innerHTML =
+        "<p style='text-align: center; color: var(--text-light); font-style: italic;'>No RSVPs or wishes yet. Be the first!</p>";
+    }
+  } catch (err) {
+    console.error("Failed to load RSVP entries:", err);
+    container.innerHTML =
+      "<p style='text-align: center; color: var(--text-light); font-style: italic;'>Failed to load wishes.</p>";
   }
 }
+
+// Gabungkan penangkapan URL & pemuatan data saat halaman dimuat
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Menangkap nama tamu dari URL (contoh: ?to=Dinda+dan+Partner)
+  const urlParams = new URLSearchParams(window.location.search);
+  let guestParam = urlParams.get("to");
+
+  if (!guestParam) {
+    const queryString = window.location.search.substring(1);
+    if (queryString) {
+      guestParam = decodeURIComponent(queryString.replace(/\+/g, " "));
+    }
+  } else {
+    guestParam = guestParam.replace(/\+/g, " ");
+  }
+
+  const gNameInput = document.getElementById("gName");
+  const guestElement = document.getElementById("guestName");
+
+  if (guestParam) {
+    if (guestElement) guestElement.textContent = guestParam;
+    if (gNameInput) gNameInput.value = guestParam;
+  } else {
+    if (gNameInput) {
+      gNameInput.value = "Valued Guest";
+      gNameInput.removeAttribute("readonly");
+    }
+  }
+
+  // 2. Memuat daftar ucapan dari Google Sheet
+  loadRsvpEntries();
+});

@@ -762,12 +762,17 @@
           </header>
           <form id="rsvpForm" novalidate>
             <div class="field">
-              <label for="gName">Your name</label
-              ><input
+              <label for="gName">Your name</label>
+              <input
                 type="text"
                 id="gName"
                 name="name"
                 autocomplete="name"
+                readonly
+                style="
+                  background: rgba(221, 166, 173, 0.15);
+                  cursor: not-allowed;
+                "
                 required
               />
             </div>
@@ -810,7 +815,8 @@
                 id="gWish"
                 name="wishes"
                 rows="3"
-                placeholder="Optional, but we would love to read them"
+                placeholder="Leave your sweet wishes for us..."
+                required
               ></textarea>
             </div>
             <div class="form-actions">
@@ -821,6 +827,32 @@
             </div>
             <div id="status" role="status" aria-live="polite"></div>
           </form>
+
+          <!-- Kotak Daftar Ucapan (Guest Book / Live RSVP List) -->
+          <div id="rsvp-list-container" style="margin-top: 2.5rem">
+            <h3
+              class="script"
+              style="
+                text-align: center;
+                font-size: 1.8rem;
+                color: var(--burg);
+                margin-bottom: 1rem;
+              "
+            >
+              Wishes from Loved Ones
+            </h3>
+            <div id="rsvpEntries" class="rsvp-entries-box">
+              <p
+                style="
+                  text-align: center;
+                  font-style: italic;
+                  color: var(--text-light, #666);
+                "
+              >
+                Loading wishes...
+              </p>
+            </div>
+          </div>
 
           <!-- Setup notes: removed automatically once CONFIG.rsvpEndpoint is filled in -->
           <details class="dev-note" id="devNote">
@@ -851,13 +883,17 @@ function doPost(e) {
   var p = e.parameter;
   sh.appendRow([new Date(), p.name, p.attendance, p.guests, p.wishes]);
   return ContentService.createTextOutput('ok');
+}
+function doGet(e) {
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var rows = sh.getDataRange().getValues();
+  var data = [];
+  for (var i = 1; i < rows.length; i++) {
+    data.push({ date: rows[i][0], name: rows[i][1], attendance: rows[i][2], guests: rows[i][3], wishes: rows[i][4] });
+  }
+  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
 }</pre
             >
-            <p>
-              Optional: set <code>CONFIG.whatsapp</code> (digits only, with
-              country code) to also show a "Reply on WhatsApp" button that works
-              with no backend.
-            </p>
           </details>
         </div>
       </section>
