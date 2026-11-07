@@ -22,7 +22,7 @@ const CONFIG = {
   mapLink: "https://maps.app.goo.gl/AVx4ErswcTkPjEbaA", // optional: paste a Google Maps share link to use for the button
   musicSrc: "music/goddess.mp3", // your own licensed audio file, e.g. "music/our-song.mp3"
   // couplePortraitSrc: "picture/ilustration.png", // your own illustration/photo for the cover, e.g. "img/couple.png"
-  couplePortraitSrc: "gallery/our-akad.png", // your own illustration/photo for the cover, e.g. "img/couple.png"
+  couplePortraitSrc: "gallery/our-akad.webp", // your own illustration/photo for the cover, e.g. "img/couple.png"
   groomGlasses: false, // quick character tweak for the drawn groom
 
   rsvpEndpoint:
