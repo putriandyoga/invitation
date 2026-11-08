@@ -656,38 +656,6 @@ async function loadRsvpEntries() {
   }
 }
 
-// Gabungkan penangkapan URL & pemuatan data saat halaman dimuat
-// document.addEventListener("DOMContentLoaded", () => {
-//   // 1. Menangkap nama tamu dari URL (contoh: ?to=Dinda+dan+Partner)
-//   const urlParams = new URLSearchParams(window.location.search);
-//   let guestParam = urlParams.get("to");
-
-//   if (!guestParam) {
-//     const queryString = window.location.search.substring(1);
-//     if (queryString) {
-//       guestParam = decodeURIComponent(queryString.replace(/\+/g, " "));
-//     }
-//   } else {
-//     guestParam = guestParam.replace(/\+/g, " ");
-//   }
-
-//   const gNameInput = document.getElementById("gName");
-//   const guestElement = document.getElementById("guestName");
-
-//   if (guestParam) {
-//     if (guestElement) guestElement.textContent = guestParam;
-//     if (gNameInput) gNameInput.value = guestParam;
-//   } else {
-//     if (gNameInput) {
-//       gNameInput.value = "Our Beloved Guest";
-//       gNameInput.removeAttribute("readonly");
-//     }
-//   }
-
-//   // 2. Memuat daftar ucapan dari Google Sheet
-//   loadRsvpEntries();
-// });
-// Gabungkan penangkapan URL, validasi anti-forward, & pemuatan data saat halaman dimuat
 // Gabungkan penangkapan URL, validasi keamanan ketat & anti-forward, serta pemuatan data
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -758,7 +726,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (result.reason === "unregistered") {
           errorTitle = "Tamu Tidak Terdaftar";
-          errorMsg = `Maaf, nama <strong>${escapeHtml(guestParam)}</strong> tidak terdaftar di dalam daftar tamu undangan kami.`;
+          errorMsg = `Mohon maaf nama anda tidak terdaftar pada daftar undangan kami.`;
         }
 
         document.body.innerHTML = `
@@ -785,4 +753,56 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   loadRsvpEntries();
+});
+/* =====================================================================
+   AUTO PAUSE & RESUME MUSIC ON APP/BROWSER VISIBILITY
+   ===================================================================== */
+document.addEventListener("visibilitychange", async () => {
+  const bgm = $("#bgm");
+  const mbtn = $("#music");
+
+  if (document.hidden) {
+    // Saat pengguna menekan tombol Home / pindah aplikasi -> Pause lagu
+    if (bgm && !bgm.paused) {
+      bgm.pause();
+      if (mbtn) {
+        mbtn.classList.remove("playing");
+        mbtn.setAttribute("aria-pressed", "false");
+        mbtn.setAttribute("aria-label", "Play background music");
+      }
+    }
+  } else {
+    // Saat pengguna KEMBALI MASUK ke halaman undangan -> Auto play lagi
+    // (Selama intro amplop sudah pernah dibuka sebelumnya)
+    const introEl = document.getElementById("intro");
+    // Cek apakah intro sudah disembunyikan (artinya undangan sudah dibuka)
+    if (
+      introEl &&
+      getComputedStyle(introEl).display === "none" &&
+      bgm &&
+      CONFIG.musicSrc
+    ) {
+      if (!bgm.src) bgm.src = CONFIG.musicSrc;
+      try {
+        await bgm.play();
+        if (mbtn) {
+          mbtn.classList.add("playing");
+          mbtn.setAttribute("aria-pressed", "true");
+          mbtn.setAttribute("aria-label", "Pause background music");
+        }
+      } catch (err) {
+        console.log(
+          "Auto-play lanjutan diblokir oleh browser sampai ada interaksi sentuhan.",
+        );
+      }
+    }
+  }
+});
+
+// Event tambahan untuk pengaman saat halaman disembunyikan
+window.addEventListener("pagehide", () => {
+  const bgm = $("#bgm");
+  if (bgm && !bgm.paused) {
+    bgm.pause();
+  }
 });
