@@ -273,14 +273,20 @@ function setNum(el, val) {
 }
 function updateCountdown() {
   const left = Math.max(0, Math.floor((target - Date.now()) / 1000));
-  setNum(cdEls.d, Math.floor(left / 86400));
-  setNum(cdEls.h, Math.floor((left % 86400) / 3600));
-  setNum(cdEls.m, Math.floor((left % 3600) / 60));
-  setNum(cdEls.s, left % 60);
-  $("#cdMsg").textContent =
-    left > 0
-      ? "every little moment brings us closer"
-      : "today is the day. We said I do!";
+
+  // Berikan pengecekan elemen (?) agar tidak error jika elemen belum siap/ada
+  if (cdEls.d) setNum(cdEls.d, Math.floor(left / 86400));
+  if (cdEls.h) setNum(cdEls.h, Math.floor((left % 86400) / 3600));
+  if (cdEls.m) setNum(cdEls.m, Math.floor((left % 3600) / 60));
+  if (cdEls.s) setNum(cdEls.s, left % 60);
+
+  const msgEl = $("#cdMsg");
+  if (msgEl) {
+    msgEl.textContent =
+      left > 0
+        ? "every little moment brings us closer"
+        : "today is the day. We said I do!";
+  }
 }
 updateCountdown();
 setInterval(updateCountdown, 1000);
@@ -630,8 +636,39 @@ async function loadRsvpEntries() {
 }
 
 // Gabungkan penangkapan URL & pemuatan data saat halaman dimuat
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. Menangkap nama tamu dari URL (contoh: ?to=Dinda+dan+Partner)
+// document.addEventListener("DOMContentLoaded", () => {
+//   // 1. Menangkap nama tamu dari URL (contoh: ?to=Dinda+dan+Partner)
+//   const urlParams = new URLSearchParams(window.location.search);
+//   let guestParam = urlParams.get("to");
+
+//   if (!guestParam) {
+//     const queryString = window.location.search.substring(1);
+//     if (queryString) {
+//       guestParam = decodeURIComponent(queryString.replace(/\+/g, " "));
+//     }
+//   } else {
+//     guestParam = guestParam.replace(/\+/g, " ");
+//   }
+
+//   const gNameInput = document.getElementById("gName");
+//   const guestElement = document.getElementById("guestName");
+
+//   if (guestParam) {
+//     if (guestElement) guestElement.textContent = guestParam;
+//     if (gNameInput) gNameInput.value = guestParam;
+//   } else {
+//     if (gNameInput) {
+//       gNameInput.value = "Our Beloved Guest";
+//       gNameInput.removeAttribute("readonly");
+//     }
+//   }
+
+//   // 2. Memuat daftar ucapan dari Google Sheet
+//   loadRsvpEntries();
+// });
+// Gabungkan penangkapan URL, validasi anti-forward, & pemuatan data saat halaman dimuat
+// Gabungkan penangkapan URL, validasi keamanan ketat & anti-forward, serta pemuatan data
+document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
   let guestParam = urlParams.get("to");
 
@@ -647,6 +684,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const gNameInput = document.getElementById("gName");
   const guestElement = document.getElementById("guestName");
 
+  // --- SAKLAR KEAMANAN DI FRONTEND ---
+  // Ubah konstanta ini menjadi FALSE jika ingin mengizinkan orang buka undangan tanpa parameter ?to=...
+  const REQUIRE_GUEST_NAME = true;
+
+  if (REQUIRE_GUEST_NAME && !guestParam) {
+    // BLOKIR: Jika dibuka tanpa parameter sama sekali
+    document.body.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: 'Poppins', sans-serif; text-align: center; padding: 24px; background: #fdfbf7; color: #333; position: fixed; top: 0; left: 0; width: 100%; z-index: 99999;">
+            <div style="background: white; padding: 32px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 400px; width: 100%; border: 1px solid #eae5de;">
+                <div style="font-size: 40px; margin-bottom: 16px;">⚠️</div>
+                <h2 style="color: #8c2f39; margin-bottom: 12px; font-size: 20px; font-weight: 600;">Tautan Tidak Valid</h2>
+                <p style="font-size: 14px; line-height: 1.6; color: #666; margin-bottom: 0;">
+                    Maaf, tautan undangan yang Anda akses tidak lengkap atau tidak memiliki identitas tamu. Silakan gunakan tautan resmi yang dikirimkan kepada Anda.
+                </p>
+            </div>
+        </div>
+    `;
+    return;
+  }
+
   if (guestParam) {
     if (guestElement) guestElement.textContent = guestParam;
     if (gNameInput) gNameInput.value = guestParam;
@@ -657,6 +714,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // 2. Memuat daftar ucapan dari Google Sheet
+  // --- VALIDASI KE GUEST LIST & ANTI-FORWARD KE APPS SCRIPT ---
+  if (guestParam && CONFIG.rsvpEndpoint) {
+    let deviceId = localStorage.getItem("invitation_device_id");
+    if (!deviceId) {
+      deviceId =
+        "dev_" + Math.random().toString(36).substring(2, 9) + Date.now();
+      localStorage.setItem("invitation_device_id", deviceId);
+    }
+
+    try {
+      const response = await fetch(
+        `${CONFIG.rsvpEndpoint}?to=${encodeURIComponent(guestParam)}&device_id=${deviceId}`,
+      );
+      const result = await response.json();
+
+      if (result.access === "denied") {
+        let errorTitle = "Akses Undangan Terbatas";
+        let errorMsg = `Maaf, tautan undangan atas nama <strong>${escapeHtml(guestParam)}</strong> ini sudah dibuka dan terkunci di perangkat lain. Setiap undangan personal hanya dapat diakses dari satu perangkat.`;
+
+        // Jika ditolak karena namanya diubah-ubah / tidak terdaftar di Guess List
+        if (result.reason === "unregistered") {
+          errorTitle = "Tamu Tidak Terdaftar";
+          errorMsg = `Maaf, nama <strong>${escapeHtml(guestParam)}</strong> tidak terdaftar di dalam daftar tamu undangan kami.`;
+        }
+
+        document.body.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: 'Poppins', sans-serif; text-align: center; padding: 24px; background: #fdfbf7; color: #333; position: fixed; top: 0; left: 0; width: 100%; z-index: 99999;">
+                    <div style="background: white; padding: 32px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 400px; width: 100%; border: 1px solid #eae5de;">
+                        <div style="font-size: 40px; margin-bottom: 16px;">🔒</div>
+                        <h2 style="color: #8c2f39; margin-bottom: 12px; font-size: 20px; font-weight: 600;">${errorTitle}</h2>
+                        <p style="font-size: 14px; line-height: 1.6; color: #666; margin-bottom: 0;">
+                            ${errorMsg}
+                        </p>
+                    </div>
+                </div>
+            `;
+        return;
+      }
+    } catch (err) {
+      console.warn("Gagal memvalidasi perangkat:", err);
+    }
+  }
+
+  // Memuat daftar ucapan RSVP
   loadRsvpEntries();
 });
