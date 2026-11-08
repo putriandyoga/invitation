@@ -442,6 +442,27 @@ function readForm() {
     wishes: wishes,
   };
 }
+
+// --- FITUR DINAMIS: Sembunyikan jumlah tamu jika memilih Decline ---
+const attendanceRadios = document.querySelectorAll('input[name="attendance"]');
+const guestWrapper = document.getElementById("guestFieldWrapper");
+
+attendanceRadios.forEach((radio) => {
+  radio.addEventListener("change", (e) => {
+    if (e.target.value === "Regretfully Decline") {
+      // Sembunyikan field jumlah tamu dan set nilainya jadi 0 di memori logika
+      guestWrapper.style.display = "none";
+      guests = 0;
+      if ($("#gCount")) $("#gCount").textContent = 0;
+    } else {
+      // Munculkan kembali jika memilih Accept
+      guestWrapper.style.display = "block";
+      guests = 1;
+      if ($("#gCount")) $("#gCount").textContent = 1;
+    }
+  });
+});
+
 // Event listener saat form dikirim
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -684,18 +705,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   const gNameInput = document.getElementById("gName");
   const guestElement = document.getElementById("guestName");
 
-  // --- SAKLAR KEAMANAN DI FRONTEND ---
-  // Ubah konstanta ini menjadi FALSE jika ingin mengizinkan orang buka undangan tanpa parameter ?to=...
   const REQUIRE_GUEST_NAME = true;
 
   if (REQUIRE_GUEST_NAME && !guestParam) {
-    // BLOKIR: Jika dibuka tanpa parameter sama sekali
     document.body.innerHTML = `
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: 'Poppins', sans-serif; text-align: center; padding: 24px; background: #fdfbf7; color: #333; position: fixed; top: 0; left: 0; width: 100%; z-index: 99999;">
-            <div style="background: white; padding: 32px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 400px; width: 100%; border: 1px solid #eae5de;">
-                <div style="font-size: 40px; margin-bottom: 16px;">⚠️</div>
-                <h2 style="color: #8c2f39; margin-bottom: 12px; font-size: 20px; font-weight: 600;">Tautan Tidak Valid</h2>
-                <p style="font-size: 14px; line-height: 1.6; color: #666; margin-bottom: 0;">
+        <div style="display: flex; align-items: center; justify-content: center; height: 100vh; padding: 1.25rem; background: var(--cream);">
+            <div class="card" style="text-align: center; width: 100%;">
+                <div style="width: 48px; height: 48px; margin: 0 auto 1rem; color: var(--burg);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:100%; height:100%;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <h2 class="script" style="color: var(--burg); margin-bottom: 1rem; font-size: 2.2rem;">Tautan Tidak Valid</h2>
+                <p style="color: var(--text); font-size: 1.05rem; line-height: 1.6;">
                     Maaf, tautan undangan yang Anda akses tidak lengkap atau tidak memiliki identitas tamu. Silakan gunakan tautan resmi yang dikirimkan kepada Anda.
                 </p>
             </div>
@@ -714,7 +738,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // --- VALIDASI KE GUEST LIST & ANTI-FORWARD KE APPS SCRIPT ---
   if (guestParam && CONFIG.rsvpEndpoint) {
     let deviceId = localStorage.getItem("invitation_device_id");
     if (!deviceId) {
@@ -733,23 +756,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         let errorTitle = "Akses Undangan Terbatas";
         let errorMsg = `Maaf, tautan undangan atas nama <strong>${escapeHtml(guestParam)}</strong> ini sudah dibuka dan terkunci di perangkat lain. Setiap undangan personal hanya dapat diakses dari satu perangkat.`;
 
-        // Jika ditolak karena namanya diubah-ubah / tidak terdaftar di Guess List
         if (result.reason === "unregistered") {
           errorTitle = "Tamu Tidak Terdaftar";
           errorMsg = `Maaf, nama <strong>${escapeHtml(guestParam)}</strong> tidak terdaftar di dalam daftar tamu undangan kami.`;
         }
 
         document.body.innerHTML = `
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: 'Poppins', sans-serif; text-align: center; padding: 24px; background: #fdfbf7; color: #333; position: fixed; top: 0; left: 0; width: 100%; z-index: 99999;">
-                    <div style="background: white; padding: 32px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 400px; width: 100%; border: 1px solid #eae5de;">
-                        <div style="font-size: 40px; margin-bottom: 16px;">🔒</div>
-                        <h2 style="color: #8c2f39; margin-bottom: 12px; font-size: 20px; font-weight: 600;">${errorTitle}</h2>
-                        <p style="font-size: 14px; line-height: 1.6; color: #666; margin-bottom: 0;">
-                            ${errorMsg}
-                        </p>
+            <div style="display: flex; align-items: center; justify-content: center; height: 100vh; padding: 1.25rem; background: var(--cream);">
+                <div class="card" style="text-align: center; width: 100%;">
+                    <div style="width: 48px; height: 48px; margin: 0 auto 1rem; color: var(--burg);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:100%; height:100%;">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
                     </div>
+                    <h2 class="script" style="color: var(--burg); margin-bottom: 1rem; font-size: 2.2rem;">${errorTitle}</h2>
+                    <p style="color: var(--text); font-size: 1.05rem; line-height: 1.6;">
+                        ${errorMsg}
+                    </p>
                 </div>
-            `;
+            </div>
+        `;
         return;
       }
     } catch (err) {
@@ -757,6 +784,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Memuat daftar ucapan RSVP
   loadRsvpEntries();
 });
