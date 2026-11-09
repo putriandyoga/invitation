@@ -1646,3 +1646,14 @@ textarea:focus {
     stroke-dashoffset: 0;
   }
 }
+
+.intro-corner,
+.branch-l,
+.branch-r,
+.corner {
+  display: block;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
