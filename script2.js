@@ -1114,42 +1114,198 @@ Code below: you normally don't need to edit it.
   // Jalankan class ini sedini mungkin, idealnya di <head>
   // agar isi undangan tidak sempat terlihat sebelum pemeriksaan selesai.
 
+  // async function initGuestUrlAndSecurity() {
+  //   const params = new URLSearchParams(window.location.search);
+  //   const guestParam = (params.get("to") || "").trim();
+
+  //   // Elemen untuk menampilkan pesan akses ditolak
+  //   let accessDeniedShown = false;
+
+  //   function denyAccess(message) {
+  //     // Cegah tampilan dibuat berulang kali.
+  //     if (accessDeniedShown) return;
+
+  //     accessDeniedShown = true;
+
+  //     document.body.innerHTML = `
+  //   <main class="access-screen">
+  //     <section class="access-card" role="alert" aria-live="assertive">
+
+  //       <div class="access-ornament" aria-hidden="true">✿</div>
+
+  //       <p class="access-eyebrow">A Little Note for You</p>
+
+  //       <h1 class="access-title">
+  //         Invitation<br>
+  //         Access Restricted
+  //       </h1>
+
+  //       <div class="access-divider" aria-hidden="true">
+  //         <span>✦</span>
+  //       </div>
+
+  //       <p class="access-message" id="accessMessage"></p>
+
+  //       <p class="access-note">
+  //         Please contact the couple to receive your personal
+  //         invitation link. We would love to have you with us.
+  //       </p>
+
+  //       <div class="access-footer">With love</div>
+
+  //     </section>
+  //   </main>
+  // `;
+
+  //     document.getElementById("accessMessage").textContent =
+  //       message || "This invitation link is unavailable.";
+
+  //     document.title = "Invitation Access Restricted";
+  //   }
+
+  //   // Tidak ada parameter ?to= berarti langsung ditolak
+  //   if (!guestParam) {
+  //     denyAccess("This invitation link is invalid or incomplete.");
+  //     return false;
+  //   }
+
+  //   if (!CONFIG.rsvp || !CONFIG.rsvp.endpoint) {
+  //     denyAccess(
+  //       "The invitation could not be verified. Please try again later.",
+  //     );
+  //     return false;
+  //   }
+
+  //   // Buat ID perangkat yang disimpan di browser
+  //   let deviceId = localStorage.getItem("wedding_device_id");
+
+  //   if (!deviceId) {
+  //     deviceId =
+  //       window.crypto && typeof window.crypto.randomUUID === "function"
+  //         ? window.crypto.randomUUID()
+  //         : "device-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+
+  //     localStorage.setItem("wedding_device_id", deviceId);
+  //   }
+
+  //   try {
+  //     const verifyUrl = new URL(CONFIG.rsvp.endpoint);
+
+  //     verifyUrl.searchParams.set("to", guestParam);
+  //     verifyUrl.searchParams.set("device_id", deviceId);
+
+  //     const response = await fetch(verifyUrl.toString(), {
+  //       method: "GET",
+  //       redirect: "follow",
+  //       cache: "no-store",
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Verification request failed");
+  //     }
+
+  //     const result = await response.json();
+
+  //     if (result.status !== "success" || result.access !== "granted") {
+  //       const messages = {
+  //         unregistered: "This guest name is not registered in our guest list.",
+  //         forwarded:
+  //           "This invitation has already been registered on another device.",
+  //         missing_parameters: "The invitation link is incomplete.",
+  //         noguestsheet: "The guest list could not be found.",
+  //       };
+
+  //       denyAccess(
+  //         messages[result.reason] ||
+  //           "You do not have permission to access this invitation.",
+  //       );
+
+  //       return false;
+  //     }
+
+  //     // Akses berhasil
+  //     const gNameInput = $("#gName");
+  //     const guestElement =
+  //       document.getElementById("targetGuestName") ||
+  //       document.getElementById("guestName");
+
+  //     if (guestElement) guestElement.textContent = guestParam;
+  //     if (gNameInput) gNameInput.value = guestParam;
+
+  //     await loadRsvpEntries();
+
+  //     return true;
+  //   } catch (error) {
+  //     console.error("Invitation verification failed:", error);
+
+  //     denyAccess(
+  //       "We could not verify your invitation. Please check your connection and try again.",
+  //     );
+
+  //     return false;
+  //   }
+  // }
   async function initGuestUrlAndSecurity() {
     const params = new URLSearchParams(window.location.search);
     const guestParam = (params.get("to") || "").trim();
-
+    const introGuestElement = document.getElementById("introGuestName");
+    if (introGuestElement && guestParam) {
+      introGuestElement.textContent = decodeURIComponent(guestParam);
+    }
     // Elemen untuk menampilkan pesan akses ditolak
+    let accessDeniedShown = false;
+
     function denyAccess(message) {
+      // Cegah tampilan dibuat berulang kali.
+      if (accessDeniedShown) return;
+
+      accessDeniedShown = true;
+
       document.body.innerHTML = `
-      <main style="
-        min-height:100vh;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        text-align:center;
-        padding:24px;
-        font-family:Arial,sans-serif;
-        background:#faf7f2;
-        color:#493b3b;
-      ">
-        <div>
-          <h2>Invitation Access Restricted</h2>
-          <p>${message}</p>
-          <p>Please contact the couple for your invitation link.</p>
+    <main class="access-screen">
+      <section class="access-card" role="alert" aria-live="assertive">
+
+        <div class="access-ornament" aria-hidden="true">✿</div>
+
+        <p class="access-eyebrow">Catatan Khusus untuk Anda</p>
+
+        <h1 class="access-title">
+          Akses Undangan<br>
+          Dibatasi
+        </h1>
+
+        <div class="access-divider" aria-hidden="true">
+          <span>✦</span>
         </div>
-      </main>
-    `;
+
+        <p class="access-message" id="accessMessage"></p>
+
+        <p class="access-note">
+          Silakan hubungi calon pengantin untuk mendapatkan tautan
+          undangan pribadi Anda.
+        </p>
+
+        <div class="access-footer">Dengan kasih sayang</div>
+
+      </section>
+    </main>
+  `;
+
+      document.getElementById("accessMessage").textContent =
+        message || "Tautan undangan ini tidak dapat diakses.";
+
+      document.title = "Akses Undangan Dibatasi";
     }
 
     // Tidak ada parameter ?to= berarti langsung ditolak
     if (!guestParam) {
-      denyAccess("This invitation link is invalid or incomplete.");
+      denyAccess("Tautan undangan ini tidak valid atau tidak lengkap.");
       return false;
     }
 
     if (!CONFIG.rsvp || !CONFIG.rsvp.endpoint) {
       denyAccess(
-        "The invitation could not be verified. Please try again later.",
+        "Undangan tidak dapat diverifikasi. Silakan coba beberapa saat lagi.",
       );
       return false;
     }
@@ -1186,16 +1342,16 @@ Code below: you normally don't need to edit it.
 
       if (result.status !== "success" || result.access !== "granted") {
         const messages = {
-          unregistered: "This guest name is not registered in our guest list.",
+          unregistered: "Nama tamu ini tidak terdaftar di daftar tamu kami.",
           forwarded:
-            "This invitation has already been registered on another device.",
-          missing_parameters: "The invitation link is incomplete.",
-          noguestsheet: "The guest list could not be found.",
+            "Undangan ini telah dibuka atau terdaftar di perangkat lain.",
+          missing_parameters: "Tautan undangan tidak lengkap.",
+          noguestsheet: "Daftar tamu tidak dapat ditemukan.",
         };
 
         denyAccess(
           messages[result.reason] ||
-            "You do not have permission to access this invitation.",
+            "Anda tidak memiliki izin untuk mengakses undangan ini.",
         );
 
         return false;
@@ -1217,13 +1373,12 @@ Code below: you normally don't need to edit it.
       console.error("Invitation verification failed:", error);
 
       denyAccess(
-        "We could not verify your invitation. Please check your connection and try again.",
+        "Kami tidak dapat memverifikasi undangan Anda. Periksa koneksi internet Anda lalu coba lagi.",
       );
 
       return false;
     }
   }
-
   // Fungsi Memuat Daftar RSVP untuk Tes Koneksi Google Sheet
   async function loadRsvpEntries() {
     const container = document.getElementById("rsvpEntries");

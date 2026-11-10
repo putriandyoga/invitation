@@ -142,7 +142,31 @@
           Somewhere under the sunshine, two hearts found each other...
         </p>
 
-        <!-- The envelope wrapper was deleted from here -->
+        <!-- Kotak nama tamu disesuaikan stylenya agar senada -->
+        <div class="intro-guest-box" style="margin: 4px 0">
+          <p
+            style="
+              font-size: clamp(0.9rem, 3vw, 1.1rem);
+              margin-bottom: 2px;
+              opacity: 0.85;
+              font-family: var(--f-ui, sans-serif);
+            "
+          >
+            Special Invitation for
+          </p>
+          <h2
+            id="introGuestName"
+            class="intro-line hand"
+            style="
+              font-size: clamp(1.6rem, 6vw, 2.5rem);
+              color: var(--brown);
+              font-weight: 700;
+              line-height: 1.2;
+            "
+          >
+            Beloved Guest
+          </h2>
+        </div>
 
         <p class="intro-line l2 script words" id="introL2">
           And now, we're growing into forever.
@@ -504,125 +528,6 @@
       <!-- =====================================================================
      SECTION 8 — RSVP
      ===================================================================== -->
-      <!-- <section class="sec scallop rsvp" id="rsvp">
-        <div class="cluster tr sm" data-cluster></div>
-        <div class="cluster bl sm" data-cluster></div>
-        <div class="sticky s3 reveal">Love grows here.</div>
-        <div class="wrap">
-          <span class="kicker reveal">kindly reply</span>
-          <h2 class="h2 words" data-words>Will you celebrate with us?</h2>
-
-          <div class="rsvp-card reveal">
-            <span class="tape"></span>
-
-            <div class="dev-note" id="devNote">
-              <b>Heads up (couple only):</b> this form is a
-              <b>frontend placeholder</b>. Nothing is saved or sent anywhere
-              until you connect a backend such as Google Sheets via Google Apps
-              Script. Setup steps are in the comments at the top of the
-              &lt;script&gt; in this file. This note disappears automatically
-              once connected.
-            </div>
-
-            <form id="rsvpForm" novalidate>
-              <div class="field">
-                <label for="gName">Your name</label>
-                <input
-                  class="input"
-                  id="gName"
-                  name="guestName"
-                  type="text"
-                  autocomplete="name"
-                  placeholder="Full name"
-                  required
-                />
-                <span class="err" id="errName" role="alert"></span>
-              </div>
-
-              <fieldset class="field">
-                <legend>Will you be there?</legend>
-                <div class="choices">
-                  <label class="choice"
-                    ><input
-                      type="radio"
-                      name="attendance"
-                      value="accept"
-                    /><span>Joyfully Accept </span></label
-                  >
-                  <label class="choice"
-                    ><input
-                      type="radio"
-                      name="attendance"
-                      value="decline"
-                    /><span>Regretfully Decline</span></label
-                  >
-                </div>
-                <span class="err" id="errAtt" role="alert"></span>
-              </fieldset>
-
-              <div class="field" id="guestsField">
-                <label for="gCount">Number of guests</label>
-                <div class="stepper">
-                  <button
-                    type="button"
-                    id="gMinus"
-                    aria-label="One fewer guest"
-                  >
-                    −
-                  </button>
-                  <input
-                    class="input"
-                    id="gCount"
-                    name="guests"
-                    type="number"
-                    inputmode="numeric"
-                    min="1"
-                    max="10"
-                    value="1"
-                  />
-                  <button type="button" id="gPlus" aria-label="One more guest">
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div class="field">
-                <label for="gWishes">Wishes &amp; prayers (optional)</label>
-                <textarea
-                  class="input"
-                  id="gWishes"
-                  name="wishes"
-                  placeholder="Leave us a little note..."
-                ></textarea>
-              </div>
-
-              <div class="form-actions">
-                <button class="btn" id="rsvpBtn" type="submit">
-                  Send My RSVP
-                </button>
-              </div>
-              <span
-                class="err"
-                id="errSend"
-                role="alert"
-                style="text-align: center; margin-top: 10px"
-              ></span>
-            </form>
-
-            <div class="rsvp-done" id="rsvpDone" hidden tabindex="-1">
-              <div class="bloom">
-                <svg class="ic"><use href="#sf" /></svg>
-              </div>
-              <h3 id="doneTitle">Thank you!</h3>
-              <p id="doneText"></p>
-              <span class="demo" id="doneDemo" hidden
-                >Preview mode: this response was not actually saved or
-                sent.</span
-              >
-            </div>
-          </div>
-        </div>
-      </section> -->
       <section class="sec scallop rsvp" id="rsvp">
         <div class="cluster tr sm" data-cluster></div>
         <div class="cluster bl sm" data-cluster></div>
@@ -641,7 +546,6 @@
               until you connect a backend such as Google Sheets via Google Apps
               Script.
             </div>
-
             <form id="rsvpForm" novalidate>
               <!-- Nama Tamu (Read Only & Otomatis dari URL ?to=...) -->
               <div class="field">
@@ -653,6 +557,7 @@
                   type="text"
                   readonly
                   style="
+                    width: 100%;
                     background-color: rgba(0, 0, 0, 0.03);
                     cursor: not-allowed;
                   "
@@ -663,10 +568,13 @@
               </div>
 
               <!-- Kehadiran -->
-              <fieldset class="field">
+              <fieldset class="field" style="width: 100%">
                 <legend>Will you be there?</legend>
-                <div class="choices">
-                  <label class="choice">
+                <div
+                  class="choices"
+                  style="display: flex; gap: 10px; width: 100%"
+                >
+                  <label class="choice" style="flex: 1">
                     <input
                       type="radio"
                       name="attendance"
@@ -674,7 +582,7 @@
                     />
                     <span>Joyfully Accept</span>
                   </label>
-                  <label class="choice">
+                  <label class="choice" style="flex: 1">
                     <input
                       type="radio"
                       name="attendance"
@@ -686,10 +594,13 @@
                 <span class="err" id="errAtt" role="alert"></span>
               </fieldset>
 
-              <!-- Jumlah Tamu -->
-              <div class="field" id="guestsField">
+              <!-- Jumlah Tamu (Full Lebar Container) -->
+              <div class="field" id="guestsField" style="width: 100%">
                 <label for="gCount">Number of guests</label>
-                <div class="stepper">
+                <div
+                  class="stepper"
+                  style="display: flex; width: 100%; align-items: stretch"
+                >
                   <button
                     type="button"
                     id="gMinus"
@@ -706,6 +617,7 @@
                     min="1"
                     max="10"
                     value="1"
+                    style="flex: 1; text-align: center"
                   />
                   <button type="button" id="gPlus" aria-label="One more guest">
                     +
@@ -714,16 +626,19 @@
               </div>
 
               <!-- Catatan / Wishes (Wajib Diisi) -->
-              <div class="field">
+              <div class="field" style="width: 100%">
                 <label for="gWishes"
                   >Wishes &amp; prayers
-                  <span style="color: var(--burg, #8b3a3a)">*</span></label
+                  <style style="color: var(--burg, #8b3a3a)">
+                    *
+                  </style></label
                 >
                 <textarea
                   class="input"
                   id="gWishes"
                   name="wishes"
                   placeholder="Leave us a little note (required)..."
+                  style="width: 100%"
                   required
                 ></textarea>
                 <span class="err" id="errWishes" role="alert"></span>
@@ -731,8 +646,13 @@
 
               <!-- Live Preview Box -->
 
-              <div class="form-actions">
-                <button class="btn" id="rsvpBtn" type="submit">
+              <div class="form-actions" style="width: 100%">
+                <button
+                  class="btn"
+                  id="rsvpBtn"
+                  type="submit"
+                  style="width: 100%"
+                >
                   Send My RSVP
                 </button>
               </div>
@@ -740,7 +660,12 @@
                 class="err"
                 id="errSend"
                 role="alert"
-                style="text-align: center; margin-top: 10px; display: block"
+                style="
+                  text-align: center;
+                  margin-top: 10px;
+                  display: block;
+                  width: 100%;
+                "
               ></span>
             </form>
 
@@ -818,29 +743,6 @@
       </section>
     </main>
 
-    <!-- Music widget -->
-    <!-- <div class="music" id="music">
-      <button
-        type="button"
-        id="musicBtn"
-        aria-label="Play music"
-        aria-pressed="false"
-      >
-        <svg id="icPlay" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M7 4.5v15l13-7.5z" />
-        </svg>
-        <svg id="icPause" viewBox="0 0 24 24" fill="currentColor" hidden>
-          <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
-        </svg>
-      </button>
-      <div class="meta">
-        <small>Our song</small><b id="songTitle">[SONG TITLE]</b>
-      </div>
-      <div class="wave" aria-hidden="true">
-        <i></i><i></i><i></i><i></i><i></i>
-      </div>
-    </div> -->
-    <!-- Streamlined Music Button Widget -->
     <button
       class="music"
       id="music"

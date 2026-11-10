@@ -828,7 +828,18 @@ body::after {
 #intro.open .envelope {
   animation: none;
 }
+.intro-guest-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
 
+#introGuestName {
+  /* Menjaga konsistensi gaya teks tulisan tangan */
+  font-family: var(--f-hand);
+  text-shadow: 0 2px 4px rgba(118, 84, 58, 0.08);
+}
 /* ---------- 5. Title scene ---------- */
 .title {
   min-height: 100svh;
@@ -1827,12 +1838,15 @@ textarea.input {
 .stepper {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px; /* Memberikan jarak (berjarak) antar elemen */
+  width: 100%;
 }
+
 .stepper button {
   width: 52px;
   height: 52px;
-  border-radius: 50%;
+  flex-shrink: 0;
+  border-radius: 14px; /* Dibuat sedikit melengkung agar senada dengan input */
   border: 2px solid var(--brown);
   background: var(--sun);
   font-size: 1.6rem;
@@ -1840,17 +1854,30 @@ textarea.input {
   color: var(--brown);
   line-height: 1;
   box-shadow: 2px 3px 0 var(--brown);
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
 }
+
+.stepper button:hover {
+  transform: translateY(-2px);
+}
+
 .stepper button:active {
   transform: translate(2px, 3px);
   box-shadow: none;
 }
+
+/* Input angka di tengah dibuat fleksibel mengisi ruang */
 .stepper .input {
   text-align: center;
-  width: 90px;
+  flex: 1; /* Lebar penuh di antara kedua tombol */
+  width: auto;
   font-weight: 700;
   font-size: 1.3rem;
   padding: 8px;
+  border-radius: 12px; /* Menyamakan lengkungan */
 }
 .err {
   display: block;
@@ -1919,7 +1946,7 @@ textarea.input {
   font-size: 1.2rem;
   z-index: 3;
 }
-/* Styling untuk Daftar Ucapan / Wishes agar senada dengan RSVP Card */
+/* Styling untuk Daftar Ucapan / Wishes agar senada dengan RSVP Card */ /* Styling untuk Daftar Ucapan / Wishes agar senada dengan RSVP Card */
 .rsvp-list-wrap {
   max-width: 600px;
   margin: 40px auto 0;
@@ -1932,47 +1959,58 @@ textarea.input {
       rgba(168, 181, 138, 0.25) 33px 34px
     );
   border: 2px solid var(--brown);
-  border-radius: 6px;
+  border-radius: 12px;
   padding: 20px;
-  box-shadow: 4px 6px 0 var(--honey);
-  max-height: 400px;
+  box-shadow: 5px 7px 0 var(--honey);
+  max-height: 420px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
-/* Desain Kartu Individual di dalam List */
+/* Desain Kartu Individual di dalam List ala Catatan Kertas */
 .rsvp-card-item {
-  background: var(--paper, #fffdf6);
-  border: 1.5px solid var(--brown);
-  border-radius: 8px;
-  padding: 12px 16px;
-  box-shadow: 0 3px 6px rgba(118, 84, 58, 0.1);
+  background: #ffffff;
+  border: 2px solid var(--brown);
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: 3px 4px 0 rgba(118, 84, 58, 0.15);
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.rsvp-card-item:hover {
+  transform: translateY(-2px);
 }
 
 .rsvp-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  border-bottom: 1px dashed rgba(118, 84, 58, 0.2);
+  padding-bottom: 6px;
 }
 
+/* Menggunakan font tulisan tangan (handwritten) atau display agar unik */
 .rsvp-card-name {
-  font-family: var(--f-display);
+  font-family: var(--f-hand);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.35rem; /* Dibuat lebih menonjol */
   color: var(--brown);
 }
 
 .rsvp-card-badge {
-  font-size: 0.75rem;
-  font-family: var(--f-ui);
+  font-size: 0.7rem;
+  font-family: var(--f-ui, sans-serif);
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 20px; /* Dibuat melengkung penuh (pill shape) */
   color: #fff;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
 
 .badge-accept {
@@ -1983,14 +2021,53 @@ textarea.input {
   background: var(--burg, #b2533e);
 }
 
+/* Font ucapan diubah menggunakan gaya tulisan tangan yang manis atau serif lembut */
 .rsvp-card-wish {
-  font-family: var(--f-serif);
-  font-size: 1rem;
-  line-height: 1.4;
+  font-family: var(--f-hand); /* Mengikuti gaya font tangan agar senada */
+  font-size: 1.15rem; /* Ukuran diperbesar sedikit agar lebih mudah dibaca */
+  line-height: 1.5;
   color: var(--ink, #333);
   margin: 0;
-  font-style: italic;
+  padding-top: 2px;
 }
+/* Styling Scrollbar kustom untuk elemen #rsvpEntries (dan bisa diterapkan secara global) */
+#rsvpEntries::-webkit-scrollbar {
+  width: 8px; /* Lebar scrollbar lebih langsing dan rapi */
+}
+
+#rsvpEntries::-webkit-scrollbar-track {
+  background: rgba(
+    168,
+    181,
+    138,
+    0.15
+  ); /* Warna jalur track senada dengan background */
+  border-radius: 8px;
+  margin: 4px;
+}
+
+#rsvpEntries::-webkit-scrollbar-thumb {
+  background: var(
+    --brown,
+    #76543a
+  ); /* Warna batang scrollbar mengikuti tema cokelat */
+  border-radius: 8px; /* Membuat sudutnya melengkung halus */
+  border: 2px solid #fffef8; /* Memberikan efek ruang/border tipis di dalam track */
+}
+
+#rsvpEntries::-webkit-scrollbar-thumb:hover {
+  background: var(
+    --honey,
+    #e9a88a
+  ); /* Berubah warna sedikit saat kursor menyentuhnya */
+}
+
+/* Dukungan untuk browser Firefox */
+#rsvpEntries {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brown, #76543a) rgba(168, 181, 138, 0.15);
+}
+
 /* ---------- 11. Closing ---------- */
 .closing {
   min-height: 100svh;
@@ -2364,5 +2441,213 @@ textarea.input {
   .ambient,
   #cursor {
     display: none !important;
+  }
+}
+/* =========================================================
+   INVITATION ACCESS — Restricted / Verification Error
+   Uses the existing wedding design tokens from :root
+   ========================================================= */
+
+.access-screen {
+  --access-ink: var(--ink, #514638);
+  --access-muted: #887c6c;
+  --access-line: rgba(128, 102, 83, 0.2);
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: clamp(24px, 5vw, 64px) 20px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse at 12% 12%,
+      rgba(185, 201, 168, 0.2),
+      transparent 34%
+    ),
+    radial-gradient(
+      ellipse at 88% 88%,
+      rgba(239, 210, 189, 0.28),
+      transparent 36%
+    ),
+    var(--cream, #fffdf6);
+  color: var(--access-ink);
+  font-family: var(--f-ui, sans-serif);
+  text-align: center;
+}
+
+/* Soft decorative circles */
+.access-screen::before,
+.access-screen::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: clamp(180px, 32vw, 380px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(217, 164, 65, 0.22);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.access-screen::before {
+  top: -160px;
+  left: -130px;
+  box-shadow:
+    0 0 0 16px rgba(217, 164, 65, 0.035),
+    0 0 0 32px rgba(217, 164, 65, 0.025);
+}
+
+.access-screen::after {
+  right: -150px;
+  bottom: -180px;
+  box-shadow:
+    0 0 0 16px rgba(185, 201, 168, 0.06),
+    0 0 0 32px rgba(185, 201, 168, 0.035);
+}
+
+.access-card {
+  position: relative;
+  width: min(100%, 520px);
+  padding: clamp(38px, 7vw, 64px) clamp(24px, 6vw, 54px);
+  background: rgba(255, 253, 249, 0.94);
+  border: 1px solid rgba(217, 164, 65, 0.55);
+  box-shadow:
+    0 24px 60px rgba(80, 61, 43, 0.08),
+    0 5px 16px rgba(80, 61, 43, 0.04);
+  /* animation: access-appear 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both; */
+}
+
+/* Inner ornamental frame */
+.access-card::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(217, 164, 65, 0.3);
+  pointer-events: none;
+}
+
+/* Small floral ornament */
+.access-ornament {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 24px;
+  border: 1px solid rgba(217, 164, 65, 0.42);
+  border-radius: 50%;
+  background: var(--vanilla, #f8f5e9);
+  color: var(--olive, #68794d);
+  font-family: var(--f-script, cursive);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.access-eyebrow {
+  margin-bottom: 12px;
+  color: var(--olive, #68794d);
+  font-family: var(--f-ui, sans-serif);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.access-title {
+  max-width: 390px;
+  margin: 0 auto;
+  color: var(--brown, #806653);
+  font-family: var(--f-display, Georgia, serif);
+  font-size: clamp(2rem, 7vw, 3rem);
+  font-weight: 500;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.access-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: min(220px, 70%);
+  margin: 24px auto;
+  color: var(--honey, #d9a441);
+}
+
+.access-divider::before,
+.access-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.65));
+}
+
+.access-divider::after {
+  transform: rotate(180deg);
+}
+
+.access-message {
+  max-width: 360px;
+  margin: 0 auto;
+  color: var(--access-ink);
+  font-family: var(--f-serif, Georgia, serif);
+  font-size: clamp(1.15rem, 3.8vw, 1.35rem);
+  line-height: 1.5;
+}
+
+.access-note {
+  max-width: 340px;
+  margin: 14px auto 0;
+  color: var(--access-muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.access-footer {
+  margin-top: 34px;
+  color: var(--olive, #68794d);
+  font-family: var(--f-hand, cursive);
+  font-size: 1.35rem;
+}
+
+.access-footer::before {
+  content: "✿";
+  display: block;
+  margin-bottom: 8px;
+  color: var(--honey, #d9a441);
+  font-family: var(--f-ui, sans-serif);
+  font-size: 1rem;
+}
+
+@keyframes access-appear {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .access-card {
+    padding: 42px 25px;
+  }
+
+  .access-card::before {
+    inset: 8px;
+  }
+
+  .access-ornament {
+    width: 58px;
+    height: 58px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .access-card {
+    animation: none;
   }
 }
