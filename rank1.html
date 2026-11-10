@@ -142,35 +142,26 @@
           Somewhere under the sunshine, two hearts found each other...
         </p>
 
-        <!-- Kotak nama tamu disesuaikan stylenya agar senada -->
-        <div class="intro-guest-box" style="margin: 4px 0">
-          <p
-            style="
-              font-size: clamp(0.9rem, 3vw, 1.1rem);
-              margin-bottom: 2px;
-              opacity: 0.85;
-              font-family: var(--f-ui, sans-serif);
-            "
-          >
+        <!-- The envelope wrapper was deleted from here -->
+
+        <p class="intro-line l2 script words" id="introL2">
+          And now, we warmly invite you to witness our next chapter.
+        </p>
+        <div class="intro-guest-box" style="margin: 15px 0">
+          <p style="font-size: 0.95rem; margin-bottom: 4px; opacity: 0.8">
             Special Invitation for
           </p>
           <h2
             id="introGuestName"
-            class="intro-line hand"
             style="
-              font-size: clamp(1.6rem, 6vw, 2.5rem);
+              font-family: var(--f-hand);
+              font-size: 1.8rem;
               color: var(--brown);
-              font-weight: 700;
-              line-height: 1.2;
             "
           >
             Beloved Guest
           </h2>
         </div>
-
-        <p class="intro-line l2 script words" id="introL2">
-          And now, we're growing into forever.
-        </p>
         <button class="btn" id="openBtn" type="button">Open Invitation</button>
       </div>
     </div>
@@ -185,12 +176,12 @@
     >
       <svg class="ic spin"><use href="#sf" /></svg>
     </button>
-    <nav class="menu-panel" id="menuPanel" aria-label="Sections">
+    <!-- <nav class="menu-panel" id="menuPanel" aria-label="Sections">
       <a href="#title">Welcome</a><a href="#story">Our Story</a
       ><a href="#invite">The Invitation</a><a href="#count">Countdown</a>
       <a href="#gallery">Gallery</a><a href="#location">Location</a
       ><a href="#rsvp">RSVP</a>
-    </nav>
+    </nav> -->
 
     <main id="main">
       <!-- =====================================================================
@@ -637,7 +628,7 @@
                   class="input"
                   id="gWishes"
                   name="wishes"
-                  placeholder="Leave us a little note (required)..."
+                  placeholder="Leave us a little note"
                   style="width: 100%"
                   required
                 ></textarea>
@@ -713,6 +704,24 @@
           </div>
         </div>
       </section>
+
+      <!-- =====================================================================
+     VIRTUAL GIFT (bank / e-wallet details come from CONFIG.gift)
+     ===================================================================== -->
+      <section class="sec scallop gift" id="gift">
+        <div class="cluster tl sm" data-cluster></div>
+        <div class="cluster br sm" data-cluster></div>
+        <div class="wrap">
+          <span class="kicker reveal">virtual gift</span>
+          <h2 class="h2 words" data-words>A Little Sunshine, Sent With Love</h2>
+          <p class="lead words" data-words data-bind="gift.intro">
+            [GIFT MESSAGE]
+          </p>
+          <div class="gift-grid" id="giftGrid"></div>
+          <p class="gift-note hand reveal" data-bind="gift.note"></p>
+        </div>
+      </section>
+
       <!-- =====================================================================
      SECTION 9 — CLOSING SCREEN
      ===================================================================== -->

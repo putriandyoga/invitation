@@ -107,7 +107,7 @@ const CONFIG = {
   ],
 
   /* --- Music: use YOUR OWN licensed/royalty-free audio file. --- */
-  audio: { src: "music/goddess.mp3", title: "[SONG TITLE]" },
+  audio: { src: "music/still-into-you.mp3", title: "[SONG TITLE]" },
 
   /* --- RSVP --- */
   rsvp: {
@@ -1267,7 +1267,6 @@ Code below: you normally don't need to edit it.
 
         <div class="access-ornament" aria-hidden="true">✿</div>
 
-        <p class="access-eyebrow">Catatan Khusus untuk Anda</p>
 
         <h1 class="access-title">
           Akses Undangan<br>
@@ -1285,7 +1284,7 @@ Code below: you normally don't need to edit it.
           undangan pribadi Anda.
         </p>
 
-        <div class="access-footer">Dengan kasih sayang</div>
+        <div class="access-footer">With Love</div>
 
       </section>
     </main>
