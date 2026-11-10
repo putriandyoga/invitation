@@ -2,19 +2,24 @@
    0. DESIGN TOKENS
    ===================================================================== */
 :root {
-  --blush: #f3d5d8;
-  --rose: #dda6ad;
-  --cream: #fff9f2;
-  --lav: #e8dff0;
-  --butter: #f5e9bb;
-  --burg: #86505b;
-  --brown: #8c7772;
+  --blush: #f5e8b5;
+  --rose: #e8c84a;
+  --cream: #fffef5;
+  --lav: #e5eedb;
+  --butter: #f9e58a;
+  --burg: #657b45;
+  --brown: #7d8064;
+
   /* tints derived from the palette for large background areas */
-  --lav-soft: #f3edf8;
-  --butter-soft: #fcf5dc;
-  --blush-soft: #fae8ea;
-  --text: #6b5652; /* darker warm brown so body copy stays readable */
-  --sage: #bfd3b4;
+  --lav-soft: #f1f6eb;
+  --butter-soft: #fff9df;
+  --blush-soft: #faf3d9;
+
+  /* darker warm green-brown so body copy stays readable */
+  --text: #536347;
+
+  --sage: #bfd5a8;
+
   --serif: "Fraunces", Georgia, serif;
   --hand: "Caveat", "Segoe Script", cursive;
   --sans: "Nunito", system-ui, sans-serif;
