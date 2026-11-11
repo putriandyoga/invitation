@@ -6,20 +6,31 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <title>You Are My Sunshine — Wedding Invitation</title>
+    <!-- Judul tab dibuat lebih ringkas dan compact -->
+    <title>Putri &amp; Yoga Wedding</title>
+
+    <!-- Favicon menggunakan gambar dari folder gallery -->
+    <link rel="icon" type="image/x-icon" href="gallery/logo.ico" />
+    <link rel="apple-touch-icon" href="gallery/logo.ico" />
+
     <meta
       name="description"
-      content="You are my sunshine, my forever. Join us as we celebrate the beginning of our forever."
+      content="A little story, a lifetime of love. You are invited to our wedding."
     />
     <meta name="theme-color" content="#FBE8A6" />
     <!-- Link-preview tags (WhatsApp, iMessage, etc.). Replace with your own text, and add og:image with a public photo URL. -->
-    <meta property="og:title" content="You are invited " />
+    <meta property="og:title" content="Putri &amp; Yoga Wedding" />
     <meta
       property="og:description"
       content="Together with our families, we joyfully invite you to celebrate the beginning of our forever."
     />
     <meta property="og:type" content="website" />
-
+    <meta
+      property="og:image"
+      content="https://putriandyoga.github.io/picture/preview.webp"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -51,10 +62,6 @@
   </head>
 
   <body class="locked">
-    <!-- =====================================================================
-     Hidden SVG library (sunflower, daisy, leaf, heart, star, pin, sun face)
-     Sunflower/daisy/sun-rays are drawn by JavaScript (see buildSymbols()).
-     ===================================================================== -->
     <svg
       width="0"
       height="0"
@@ -106,6 +113,9 @@
         </symbol>
         <symbol id="sunface" viewBox="-60 -60 120 120">
           <circle r="27" fill="#F6C945" stroke="#D9A441" stroke-width="3" />
+        </symbol>
+        <!-- <symbol id="sunface" viewBox="-60 -60 120 120">
+          <circle r="27" fill="#F6C945" stroke="#D9A441" stroke-width="3" />
           <circle cx="-12" cy="6" r="4.5" fill="#F5C6A5" opacity=".9" />
           <circle cx="12" cy="6" r="4.5" fill="#F5C6A5" opacity=".9" />
           <path
@@ -115,7 +125,7 @@
             stroke-width="2.2"
             stroke-linecap="round"
           />
-        </symbol>
+        </symbol> -->
       </defs>
     </svg>
 
@@ -166,22 +176,6 @@
       </div>
     </div>
     <!-- Menu (simple + unobtrusive) -->
-    <button
-      class="menu-btn"
-      id="menuBtn"
-      type="button"
-      aria-label="Open menu"
-      aria-expanded="false"
-      aria-controls="menuPanel"
-    >
-      <svg class="ic spin"><use href="#sf" /></svg>
-    </button>
-    <!-- <nav class="menu-panel" id="menuPanel" aria-label="Sections">
-      <a href="#title">Welcome</a><a href="#story">Our Story</a
-      ><a href="#invite">The Invitation</a><a href="#count">Countdown</a>
-      <a href="#gallery">Gallery</a><a href="#location">Location</a
-      ><a href="#rsvp">RSVP</a>
-    </nav> -->
 
     <main id="main">
       <!-- =====================================================================
