@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -10,52 +10,58 @@
     <title>Putri &amp; Yoga Wedding</title>
 
     <!-- Favicon menggunakan gambar dari folder gallery -->
-    <link rel="icon" type="image/x-icon" href="gallery/icon.ico" />
-    <link rel="apple-touch-icon" href="gallery/icon.ico" />
+    <link rel="icon" type="image/x-icon" href="gallery/logo.ico" />
+    <link rel="apple-touch-icon" href="gallery/logo.ico" />
 
     <meta
       name="description"
       content="A little story, a lifetime of love. You are invited to our wedding."
     />
-    <!-- WhatsApp / social preview -->
+    <meta name="theme-color" content="#FBE8A6" />
+    <!-- Link-preview tags (WhatsApp, iMessage, etc.). Replace with your own text, and add og:image with a public photo URL. -->
     <meta property="og:title" content="Putri &amp; Yoga Wedding" />
     <meta
       property="og:description"
-      content="A little story, a lifetime of love. Open our invitation."
+      content="Together with our families, we joyfully invite you to celebrate the beginning of our forever."
     />
     <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#FFF9F2" />
     <meta
       property="og:image"
-      content="https://putriandyoga.github.io/picture/ilustration.webp"
+      content="https://putriandyoga.github.io/picture/preview.webp"
     />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Nunito:wght@400;600;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;700&family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
     <noscript
       ><style>
+        .reveal,
+        .w {
+          opacity: 1 !important;
+          transform: none !important;
+          translate: none !important;
+          filter: none !important;
+        }
+        .write {
+          clip-path: none !important;
+        }
         #intro {
           display: none;
         }
-        .w,
-        .rv,
-        .pop {
-          opacity: 1 !important;
-          transform: none !important;
-          filter: none !important;
+        body.locked {
+          overflow: auto;
+          height: auto;
         }
       </style></noscript
     >
   </head>
+
   <body class="locked">
-    <!-- =====================================================================
-     SVG LIBRARY — every illustration is drawn once here and reused.
-     Same pencil outline (#86505B), same pastel fills, same hatch shading.
-     ===================================================================== -->
     <svg
       width="0"
       height="0"
@@ -64,696 +70,253 @@
       focusable="false"
     >
       <defs>
-        <filter id="wobble" x="-5%" y="-5%" width="110%" height="110%">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.035"
-            numOctaves="2"
-            seed="7"
-            result="n"
-          />
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="n"
-            scale="2.6"
-            xChannelSelector="R"
-            yChannelSelector="G"
-          />
-        </filter>
-        <!-- colored-pencil hatching used for soft shading -->
-        <pattern
-          id="hatch"
-          width="4"
-          height="4"
-          patternUnits="userSpaceOnUse"
-          patternTransform="rotate(35)"
-        >
-          <line
-            x1="0"
-            y1="0"
-            x2="0"
-            y2="4"
-            stroke="#86505B"
-            stroke-width="1"
-            stroke-opacity=".22"
-          />
-        </pattern>
-
-        <!-- small decorations -->
-        <symbol id="i-sunflower" viewBox="0 0 24 24">
-          <g fill="currentColor">
-            <ellipse cx="12" cy="4.5" rx="2.2" ry="3.2" />
-            <ellipse cx="12" cy="19.5" rx="2.2" ry="3.2" />
-            <ellipse cx="4.5" cy="12" rx="3.2" ry="2.2" />
-            <ellipse cx="19.5" cy="12" rx="3.2" ry="2.2" />
-            <ellipse
-              cx="6.7"
-              cy="6.7"
-              rx="2.2"
-              ry="3.2"
-              transform="rotate(-45 6.7 6.7)"
-            />
-            <ellipse
-              cx="17.3"
-              cy="6.7"
-              rx="2.2"
-              ry="3.2"
-              transform="rotate(45 17.3 6.7)"
-            />
-            <ellipse
-              cx="6.7"
-              cy="17.3"
-              rx="2.2"
-              ry="3.2"
-              transform="rotate(45 6.7 17.3)"
-            />
-            <ellipse
-              cx="17.3"
-              cy="17.3"
-              rx="2.2"
-              ry="3.2"
-              transform="rotate(-45 17.3 17.3)"
-            />
-          </g>
-          <circle cx="12" cy="12" r="4.2" fill="currentColor" />
-        </symbol>
-
-        <symbol id="i-sunflower-leaf" viewBox="0 0 24 24">
+        <symbol id="sf" viewBox="-50 -50 100 100"></symbol>
+        <symbol id="dz" viewBox="-50 -50 100 100"></symbol>
+        <symbol id="leaf" viewBox="0 0 40 28">
+          <path d="M0 14C9 -2 28 -2 40 14 28 30 9 30 0 14Z" fill="#A8B58A" />
           <path
-            d="M12 22V10C12 6 14.5 3 20 2C20 8 17.5 12 12 13"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
+            d="M2 14H36"
+            stroke="#68794D"
+            stroke-width="1.3"
             stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M12 16C9 11 5 10 2 11C3 16 6.5 19 12 19"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            opacity=".6"
           />
         </symbol>
-        <symbol id="i-heart" viewBox="0 0 24 24">
+        <symbol id="heart" viewBox="0 0 24 24">
           <path
-            d="M12 21C5.2 15.8 2.6 12.3 2.6 8.8 2.6 6 4.7 4.2 7.1 4.2c2.1 0 3.8 1.2 4.9 3 1.1-1.8 2.8-3 4.9-3 2.4 0 4.5 1.8 4.5 4.6 0 3.5-2.6 7-9.4 12.2Z"
+            d="M12 21s-7.5-4.6-9.6-9.2C1 8.5 3 5 6.4 5c2 0 3.5 1.1 5.6 3.2C14.1 6.1 15.6 5 17.6 5 21 5 23 8.5 21.6 11.8 19.5 16.4 12 21 12 21z"
             fill="currentColor"
           />
         </symbol>
-        <symbol id="i-sparkle" viewBox="0 0 24 24">
+        <symbol id="star" viewBox="0 0 24 24">
           <path
-            d="M12 2C12.8 8 16 11.2 22 12C16 12.8 12.8 16 12 22C11.2 16 8 12.8 2 12C8 11.2 11.2 8 12 2Z"
+            d="M12 2l2.9 6.6 7.1.7-5.4 4.7 1.6 7L12 17.3 5.8 21l1.6-7L2 9.3l7.1-.7z"
             fill="currentColor"
           />
         </symbol>
-        <symbol id="i-flower" viewBox="0 0 40 40">
-          <g class="ln" stroke-width="1.6" fill="#F3D5D8">
-            <circle cx="20" cy="9" r="7.5" />
-            <circle cx="31" cy="17" r="7.5" />
-            <circle cx="27" cy="30" r="7.5" />
-            <circle cx="13" cy="30" r="7.5" />
-            <circle cx="9" cy="17" r="7.5" />
-          </g>
+        <symbol id="pin" viewBox="0 0 24 24">
+          <path
+            d="M12 2C7.6 2 4 5.5 4 9.9 4 15.8 12 22 12 22s8-6.2 8-12.1C20 5.5 16.4 2 12 2z"
+            fill="#E9A88A"
+            stroke="#76543A"
+            stroke-width="1.4"
+            stroke-linejoin="round"
+          />
           <circle
-            class="ln"
-            stroke-width="1.6"
-            cx="20"
-            cy="20"
-            r="5.5"
-            fill="#F5E9BB"
+            cx="12"
+            cy="10"
+            r="3.3"
+            fill="#FFF8E7"
+            stroke="#76543A"
+            stroke-width="1.2"
           />
         </symbol>
-        <symbol id="i-bow" viewBox="0 0 60 40">
-          <path
-            class="ln"
-            d="M30 20C20 3 4 6 6 20C8 35 22 34 30 20Z"
-            fill="#F3D5D8"
-          />
-          <path
-            class="ln"
-            d="M30 20C40 3 56 6 54 20C52 35 38 34 30 20Z"
-            fill="#F3D5D8"
-          />
-          <path class="ln" d="M27 25L19 38M33 25L41 38" fill="none" />
-          <ellipse class="ln" cx="30" cy="20" rx="5" ry="6.5" fill="#DDA6AD" />
+        <symbol id="sunface" viewBox="-60 -60 120 120">
+          <circle r="27" fill="#F6C945" stroke="#D9A441" stroke-width="3" />
         </symbol>
-        <symbol id="i-rings" viewBox="0 0 80 50">
-          <circle
-            class="ln"
-            cx="30"
-            cy="30"
-            r="15"
+        <!-- <symbol id="sunface" viewBox="-60 -60 120 120">
+          <circle r="27" fill="#F6C945" stroke="#D9A441" stroke-width="3" />
+          <circle cx="-12" cy="6" r="4.5" fill="#F5C6A5" opacity=".9" />
+          <circle cx="12" cy="6" r="4.5" fill="#F5C6A5" opacity=".9" />
+          <path
+            d="M-12 -3q3-4 6 0M6 -3q3-4 6 0M-7 8q7 7 14 0"
             fill="none"
-            stroke="#DDA6AD"
-            stroke-width="4.5"
-          />
-          <circle
-            class="ln"
-            cx="50"
-            cy="30"
-            r="15"
-            fill="none"
-            stroke="#E7CF7A"
-            stroke-width="4.5"
-          />
-          <path
-            class="ln"
-            d="M30 6L35 12L30 18L25 12Z"
-            fill="#E8DFF0"
-            stroke-width="1.8"
-          />
-        </symbol>
-        <symbol id="i-pin" viewBox="0 0 60 80">
-          <path
-            class="ln"
-            d="M30 76C30 76 6 48 6 30A24 24 0 0 1 54 30C54 48 30 76 30 76Z"
-            fill="#DDA6AD"
-          />
-          <path
-            d="M30 76C30 76 54 48 54 30C54 24 51 18 47 14C50 40 36 64 30 76Z"
-            fill="url(#hatch)"
-          />
-          <circle class="ln" cx="30" cy="30" r="13" fill="#FFF9F2" />
-          <use
-            href="#i-heart"
-            x="21"
-            y="21"
-            width="18"
-            height="18"
-            color="#86505B"
-          />
-        </symbol>
-        <!-- delicate floral branch -->
-        <!-- <symbol id="i-branch" viewBox="0 0 120 220">
-          <path
-            class="ln"
-            d="M70 214C58 170 84 130 62 86C54 68 58 40 74 14"
-            fill="none"
-          />
-          <g class="ln" stroke-width="1.8" fill="#BFD3B4">
-            <path d="M64 176C44 172 36 156 38 144C58 146 68 158 64 176Z" />
-            <path d="M72 150C92 146 102 132 100 120C80 122 70 134 72 150Z" />
-            <path d="M62 110C44 104 38 90 40 80C58 82 66 94 62 110Z" />
-            <path d="M62 80C80 76 88 62 86 52C68 54 60 66 62 80Z" />
-          </g>
-          <use href="#i-flower" x="22" y="112" width="28" height="28" />
-          <use href="#i-flower" x="76" y="176" width="26" height="26" />
-          <use href="#i-flower" x="64" y="2" width="30" height="30" />
-          <circle
-            class="ln"
-            stroke-width="1.6"
-            cx="92"
-            cy="70"
-            r="5"
-            fill="#F5E9BB"
-          />
-          <circle
-            class="ln"
-            stroke-width="1.6"
-            cx="40"
-            cy="52"
-            r="4"
-            fill="#E8DFF0"
+            stroke="#76543A"
+            stroke-width="2.2"
+            stroke-linecap="round"
           />
         </symbol> -->
-
-        <!-- mini story scenes -->
-        <symbol id="s-umbrella" viewBox="0 0 80 80">
-          <g class="ln" fill="#F3D5D8">
-            <path
-              d="M6 36A24 24 0 0 1 54 36Q46 30 38 36Q30 30 22 36Q14 30 6 36Z"
-            />
-          </g>
-          <path class="ln" d="M30 36V64Q30 70 24 68" fill="none" />
-          <g class="ln" fill="#E8DFF0">
-            <path
-              d="M40 46A18 18 0 0 1 76 46Q70 41 64 46Q58 41 52 46Q46 41 40 46Z"
-            />
-          </g>
-          <path class="ln" d="M58 46V68Q58 73 63 71" fill="none" />
-          <path
-            class="ln"
-            stroke-width="1.8"
-            d="M10 10v6M24 4v6M44 12v6M70 22v6M4 50v6"
-            fill="none"
-          />
-        </symbol>
-        <symbol id="s-cups" viewBox="0 0 80 80">
-          <use
-            href="#i-heart"
-            x="28"
-            y="4"
-            width="24"
-            height="24"
-            color="#DDA6AD"
-          />
-          <path
-            class="ln"
-            d="M8 40H36V52A10 10 0 0 1 26 62H18A10 10 0 0 1 8 52Z"
-            fill="#F5E9BB"
-          />
-          <path class="ln" d="M36 43H40A5 5 0 0 1 40 53H35" fill="none" />
-          <path
-            class="ln"
-            d="M44 40H72V52A10 10 0 0 1 62 62H54A10 10 0 0 1 44 52Z"
-            fill="#E8DFF0"
-          />
-          <path class="ln" d="M72 43H76A5 5 0 0 1 76 53H71" fill="none" />
-          <path class="ln" d="M4 68H76" fill="none" />
-        </symbol>
-        <symbol id="s-plane" viewBox="0 0 80 80">
-          <path class="ln" d="M10 42L72 14L52 66L39 46Z" fill="#FFF9F2" />
-          <path class="ln" d="M72 14L39 46L36 60L52 66" fill="#E8DFF0" />
-          <path
-            class="ln"
-            stroke-dasharray="3 5"
-            d="M4 68C14 56 20 64 28 54"
-            fill="none"
-          />
-        </symbol>
-        <symbol id="s-rings" viewBox="0 0 80 80">
-          <use href="#i-rings" x="0" y="16" width="80" height="50" />
-          <use
-            href="#i-sparkle"
-            x="58"
-            y="6"
-            width="16"
-            height="16"
-            color="#DDA6AD"
-          />
-        </symbol>
       </defs>
     </svg>
 
-    <div id="hearts" aria-hidden="true"></div>
-    <audio id="bgm" loop preload="none"></audio>
-    <button
-      id="music"
-      class="music"
-      type="button"
-      aria-label="Play background music"
-      aria-pressed="false"
-    >
-      <svg
-        class="note-ic ic"
-        viewBox="0 0 24 24"
-        style="width: 22px; height: 22px"
-        fill="currentColor"
-      >
-        <path
-          d="M9 18V6l11-2v12"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <circle cx="6.5" cy="18" r="3" />
-        <circle cx="17.5" cy="16" r="3" />
-      </svg>
-      <span class="eq"><i></i><i></i><i></i></span>
-    </button>
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <!-- Ambient layer: falling petals, butterflies, bees (filled by JS) -->
+    <div class="ambient" id="ambient" aria-hidden="true"></div>
+    <div id="cursor" aria-hidden="true">
+      <svg class="ic spin" style="width: 100%"><use href="#sf" /></svg>
+    </div>
 
     <!-- =====================================================================
-     SECTION 1 — OPENING ENVELOPE
+     SECTION 1 — OPENING SCREEN (envelope)
      ===================================================================== -->
-    <section id="intro" aria-label="Opening">
-      <!-- Bunga Pojok (Fixed di ujung layar) -->
-      <!-- <svg
-        class="intro-corner"
-        style="
-          left: 0;
-          bottom: 0;
-          width: clamp(90px, 26vw, 150px);
-          transform: rotate(-5deg);
-        "
-        viewBox="0 0 120 220"
-        aria-hidden="true"
-      >
-        <use href="#i-branch" />
-      </svg> -->
-      <img
-        src="gallery/flower.webp"
-        class="intro-corner"
-        alt=""
-        aria-hidden="true"
-        style="
-          left: 0;
-          bottom: 0;
-          width: clamp(90px, 26vw, 150px);
-          transform: rotate(-5deg);
-        "
-      />
-      <!-- <svg
-        class="intro-corner"
-        style="
-          right: 0;
-          top: 0;
-          width: clamp(90px, 26vw, 150px);
-          transform: scaleX(-1) rotate(165deg);
-        "
-        viewBox="0 0 120 220"
-        aria-hidden="true"
-      >
-        <use href="#i-branch" />
-      </svg> -->
-      <img
-        src="gallery/flower.webp"
-        class="intro-corner"
-        alt=""
-        aria-hidden="true"
-        style="
-          right: 0;
-          top: 0;
-          width: clamp(90px, 26vw, 150px);
-          transform: scaleX(-1) rotate(165deg);
-        "
-      />
-      <svg
-        class="twinkle"
-        style="left: 16%; top: 12%; width: 18px; height: 18px"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
-        <use href="#i-sparkle" />
-      </svg>
-      <svg
-        class="twinkle"
-        style="right: 18%; bottom: 20%; width: 14px; height: 14px; --dl: 1.2s"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
-        <use href="#i-sparkle" />
-      </svg>
 
-      <!-- SEMUA KONTEN DIKUMPULKAN DI DALAM 1 GRUP TENGAH -->
-      <div class="intro-top-group">
-        <h2
-          class="intro-title"
-          id="introTitle"
-          data-words="A little story, a lifetime of love."
-        ></h2>
+    <div id="intro" role="dialog" aria-label="Wedding invitation introduction">
+      <div class="sunbeams"></div>
+      <div class="cluster tl" data-cluster></div>
+      <div class="cluster tr" data-cluster></div>
+      <div class="cluster bl" data-cluster></div>
+      <div class="cluster br" data-cluster></div>
+      <div class="petal-layer" id="introPetals" aria-hidden="true"></div>
 
-        <div class="stage" id="stage">
-          <p class="intro-couple-names">
-            <span data-cfg="bride"></span>
-            <svg
-              class="ic"
-              viewBox="0 0 24 24"
-              aria-label="and"
-              style="
-                width: 1.1em;
-                height: 1.1em;
-                vertical-align: middle;
-                color: var(--rose);
-                margin: 0 0.35em;
-              "
-            >
-              <use href="#i-heart" />
-            </svg>
-            <span data-cfg="groom"></span>
+      <div class="intro-inner">
+        <p class="intro-line l1 hand words" id="introL1">
+          Somewhere under the sunshine, two hearts found each other...
+        </p>
+
+        <!-- The envelope wrapper was deleted from here -->
+
+        <p class="intro-line l2 script words" id="introL2">
+          And now, we warmly invite you to witness our next chapter.
+        </p>
+        <div class="intro-guest-box" style="margin: 15px 0">
+          <p style="font-size: 0.95rem; margin-bottom: 4px; opacity: 0.8">
+            Special Invitation for
           </p>
+          <h2
+            id="introGuestName"
+            style="
+              font-family: var(--f-hand);
+              font-size: 1.8rem;
+              color: var(--brown);
+            "
+          >
+            Beloved Guest
+          </h2>
         </div>
-
-        <div class="intro-bottom-wrap">
-          <div class="intro-guest-box">
-            <p class="intro-to">Special Invitation for</p>
-            <h3 id="guestName" class="intro-guest-name">Our Beloved Guest</h3>
-          </div>
-          <button id="openBtn" class="btn intro-btn" type="button">
-            Open Invitation
-          </button>
-        </div>
+        <button class="btn" id="openBtn" type="button">Open Invitation</button>
       </div>
-    </section>
-    <main id="site">
-      <!-- =====================================================================
-     SECTION 2 — WEDDING COVER
-     ===================================================================== -->
-      <section id="cover" class="sec bg-cream" aria-labelledby="coverNames">
-        <svg
-          class="twinkle"
-          style="left: 12%; top: 16%; width: 16px; height: 16px"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <use href="#i-sparkle" />
-        </svg>
-        <svg
-          class="twinkle"
-          style="right: 12%; top: 32%; width: 20px; height: 20px; --dl: 1s"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <use href="#i-sparkle" />
-        </svg>
-        <div class="wrap">
-          <p class="cover-top">THE WEDDING OF</p>
-          <div class="arch plx" data-speed=".05">
-            <!-- Replace with your own illustration: set CONFIG.couplePortraitSrc -->
-            <div class="arch-in" id="portrait">
-              <svg
-                class="draw"
-                viewBox="0 0 310 350"
-                role="img"
-                aria-label="Illustrated portrait of the couple"
-              >
-                <use href="#couple" />
-              </svg>
-            </div>
-            <img
-              src="gallery/flower.webp"
-              class="branch-l plx"
-              data-speed="-.03"
-              alt=""
-              aria-hidden="true"
-            />
+    </div>
+    <!-- Menu (simple + unobtrusive) -->
 
-            <img
-              src="gallery/flower.webp"
-              class="branch-r plx"
-              data-speed="-.03"
-              alt=""
-              aria-hidden="true"
-            />
-            <!-- <svg
-              class="branch-l plx"
-              data-speed="-.03"
-              viewBox="0 0 120 220"
-              aria-hidden="true"
-            >
-              <use href="#i-branch" />
-            </svg>
-            <svg
-              class="branch-r plx"
-              data-speed="-.03"
-              viewBox="0 0 120 220"
-              aria-hidden="true"
-            >
-              <use href="#i-branch" />
-            </svg> -->
-          </div>
-          <h1 id="coverNames">
-            <span class="nm rv-words" data-cfg="bride"></span>
-            <span class="amp" aria-hidden="true">&amp;</span>
-            <span class="nm rv-words" data-cfg="groom" data-base=".6s"></span>
+    <main id="main">
+      <!-- =====================================================================
+     SECTION 2 — WEDDING TITLE
+     ===================================================================== -->
+      <section class="sec title" id="title">
+        <div class="float-field" id="titleFloat" aria-hidden="true"></div>
+        <div class="cluster tl px" data-cluster data-speed="-.06"></div>
+        <div class="cluster tr px" data-cluster data-speed="-.06"></div>
+        <div class="cluster bl px" data-cluster data-speed=".05"></div>
+        <div class="cluster br px" data-cluster data-speed=".05"></div>
+
+        <div class="wrap">
+          <svg class="sun" viewBox="-60 -60 120 120" aria-hidden="true">
+            <g class="sun-rays"></g>
+            <use href="#sunface" x="-60" y="-60" width="120" height="120" />
+          </svg>
+          <p class="label invited words" data-words>The Wedding of</p>
+          <h1 class="names words" data-words data-bind="bride.short">
+            [BRIDE NAME]
           </h1>
+          <div class="amp reveal">&amp;</div>
           <p
-            class="date-line rv-words"
-            data-cfg="dateFull"
-            data-base="1.2s"
-          ></p>
-          <p class="scroll-hint rv">scroll gently, our story is next</p>
+            class="names words"
+            data-words
+            data-bind="groom.short"
+            style="--base: 0.5s"
+          >
+            [GROOM NAME]
+          </p>
+          <p class="tagline script words" data-words style="--base: 1s">
+            Two hearts, one beautiful forever.
+          </p>
+          <p class="scroll-hint reveal">scroll gently ↓</p>
         </div>
       </section>
 
       <!-- =====================================================================
-     SECTION 3 — OUR LOVE STORY
+     SECTION 3 — OUR LOVE STORY (scrapbook)
      ===================================================================== -->
-      <section
-        id="story"
-        class="sec bg-lav scallop"
-        style="--prev: var(--cream)"
-        aria-labelledby="storyH"
-      >
+      <section class="sec story checker" id="story">
+        <div
+          class="sticker"
+          style="top: 6%; left: 4%; width: 56px; rotate: -12deg"
+        >
+          <svg class="ic"><use href="#sf" /></svg>
+        </div>
+        <div
+          class="sticker"
+          style="bottom: 3%; right: 5%; width: 70px; rotate: 10deg"
+        >
+          <svg class="ic spin"><use href="#sf" /></svg>
+        </div>
+
+        <!-- <div class="sticky s1 reveal">Our sweetest chapter.</div> -->
         <div class="wrap">
-          <header class="sec-head">
-            <h2 id="storyH" class="script rv-words">Our little love story</h2>
-            <svg class="scribble rv" viewBox="0 0 220 16" aria-hidden="true">
-              <path pathLength="1" d="M4 10C34 2 62 16 96 8S160 4 216 9" />
-            </svg>
-          </header>
-          <p class="diary-note rv">
-            Dear friends and family, here are a few pages from our diary. Every
-            page is a small moment that led us to this one.
-          </p>
-          <ol class="timeline">
-            <li class="entry">
-              <figure
-                class="polaroid pop tape"
-                data-cap="awkward first encounter"
-                data-src="gallery/our-first-meet.webp"
-                style="--r: -4deg"
-                loading="lazy"
-              ></figure>
-              <div class="note rv">
-                <svg class="mini" viewBox="0 0 80 80" aria-hidden="true">
-                  <use href="#s-umbrella" />
-                </svg>
-                <h3>First meeting</h3>
-                <span class="when">DECEMBER 27, 2020</span>
-                <p>
-                  New to college and completely lost, I called out to him after
-                  seeing him pass by. Confused, he stopped a few meters away,
-                  only to completely walk away when I tried to approach. I was
-                  left halfway there and quite annoyed. We recreated this photo
-                  two years later wearing the exact same outfits.
-                </p>
-              </div>
-            </li>
-            <li class="entry">
-              <figure
-                class="polaroid pop tape"
-                data-cap="rushing through fries"
-                data-src="gallery/our-date.webp"
-                style="--r: 3deg"
-                loading="lazy"
-              ></figure>
-              <div class="note rv">
-                <svg class="mini" viewBox="0 0 80 80" aria-hidden="true">
-                  <use href="#s-cups" />
-                </svg>
-                <h3>First date</h3>
-                <span class="when">FEBRUARY 20, 2022</span>
-                <p>
-                  On my birthday, just 15 days after we started dating, we
-                  grabbed a bite at the mall. Running short on time with a
-                  massive portion of fries left, I kept quickly feeding them to
-                  him so we could finish up and head home.
-                </p>
-              </div>
-            </li>
-            <li class="entry">
-              <figure
-                class="polaroid pop tape"
-                data-cap="graduating together"
-                data-src="gallery/our-graduation.webp"
-                style="--r: -2deg"
-                loading="lazy"
-              ></figure>
-              <div class="note rv">
-                <svg class="mini" viewBox="0 0 80 80" aria-hidden="true">
-                  <use href="#s-plane" />
-                </svg>
-                <h3>Graduation day</h3>
-                <span class="when">JULY 3, 2024</span>
-                <p>
-                  After overcoming a whole lot of drama and hurdles, we finally
-                  succeeded in graduating together on the same day, just as we
-                  had always hoped.
-                </p>
-              </div>
-            </li>
-            <li class="entry">
-              <figure
-                class="polaroid pop tape"
-                data-cap="forever and always"
-                data-src="gallery/blue-bg.webp"
-                style="--r: 4deg"
-                loading="lazy"
-              ></figure>
-              <div class="note rv">
-                <svg class="mini" viewBox="0 0 80 80" aria-hidden="true">
-                  <use href="#s-rings" />
-                </svg>
-                <h3>Our Forever Story</h3>
-                <span class="when">2022 UNTIL FOREVER</span>
-                <p>
-                  We have been serious about each other right from the very
-                  beginning. Ever since we started dating in 2022, we have been
-                  building our future together step by step. Now, as we step
-                  into 2027, we are ready to take that next big step and look
-                  forward to spending a lifetime of mornings side by side.
-                </p>
-              </div>
-            </li>
-          </ol>
+          <span class="kicker reveal">How Our Story Bloomed</span>
+          <!-- <h2 class="h2 words" data-words>How Our Story Bloomed</h2> -->
+          <!-- <p class="lead words" data-words>
+            Every step we've taken together has brought us to this moment,
+            knowing our hearts belong to one another.
+          </p> -->
+          <div class="timeline" id="timeline"></div>
         </div>
       </section>
 
       <!-- =====================================================================
      SECTION 4 — WEDDING ANNOUNCEMENT
      ===================================================================== -->
-      <section
-        id="invite"
-        class="sec bg-cream scallop"
-        style="--prev: var(--lav-soft)"
-        aria-labelledby="inviteH"
-      >
+      <section class="sec scallop invite" id="invite">
         <div class="wrap">
-          <div class="card">
-            <!-- <svg class="corner c-l" viewBox="0 0 120 220" aria-hidden="true">
-              <use href="#i-branch" />
-            </svg>
-            <svg class="corner c-r" viewBox="0 0 120 220" aria-hidden="true">
-              <use href="#i-branch" />
-            </svg> -->
-            <img
-              src="gallery/flower.webp"
-              class="corner c-l"
-              alt=""
-              aria-hidden="true"
-            />
+          <div class="card paper reveal">
+            <div class="cluster tl sm" data-cluster></div>
+            <div class="cluster tr sm" data-cluster></div>
+            <div class="cluster bl sm" data-cluster></div>
+            <div class="cluster br sm" data-cluster></div>
 
-            <img
-              src="gallery/flower.webp"
-              class="corner c-r"
-              alt=""
-              aria-hidden="true"
-            />
-            <h2
-              id="inviteH"
-              class="script rv-words"
-              style="padding: 1.6rem 1.2rem 0"
-            >
-              Two hearts, one beautiful beginning.
-            </h2>
-            <p class="invite-lead rv">
-              Together with our beloved families, we joyfully invite you to
-              celebrate our wedding.
-            </p>
+            <div class="card-in">
+              <p class="greet big words" data-words style="margin-top: 6px">
+                Together with our beloved families, we joyfully invite you to
+                celebrate our wedding.
+              </p>
 
-            <p class="fullname" data-cfg="brideFull"></p>
-            <p class="parents" data-cfg="brideParents"></p>
-            <p class="and" aria-hidden="true">&amp;</p>
-            <p class="fullname" data-cfg="groomFull"></p>
-            <p class="parents" data-cfg="groomParents"></p>
+              <div class="orn">
+                <svg class="ic"><use href="#sf" /></svg>
+              </div>
 
-            <svg class="divider" viewBox="0 0 80 50" aria-hidden="true">
-              <use href="#i-rings" />
-            </svg>
+              <!-- Bride Info -->
+              <div class="inv-names" data-bind="bride.full">
+                [BRIDE FULL NAME]
+              </div>
+              <div class="greet small words" data-bind="brideParents">
+                [BRIDE PARENTS]
+              </div>
 
-            <p class="weekday" data-cfg="weekdayCaps"></p>
-            <p class="big-date" data-cfg="dateLong"></p>
-            <div class="times">
-              <div><b>Akad Nikah</b><span data-cfg="ceremonyTime"></span></div>
-              <div><b>Resepsi</b><span data-cfg="receptionTime"></span></div>
+              <div class="inv-amp">&amp;</div>
+
+              <!-- Groom Info -->
+              <div class="inv-names" data-bind="groom.full">
+                [GROOM FULL NAME]
+              </div>
+              <div class="greet small words" data-bind="groomParents">
+                [GROOM PARENTS]
+              </div>
+
+              <div class="date-hero">
+                <div class="dow" id="invDow">[Day of week]</div>
+                <div class="dnum" id="invDay">00</div>
+                <div class="dmon" id="invMonYear">[Month Year]</div>
+              </div>
+              <div class="details">
+                <div class="detail-row">
+                  <div class="detail-col">
+                    <span class="label">Akad Nikah</span>
+                    <b data-bind="ceremonyTime">[CEREMONY TIME]</b>
+                  </div>
+                  <div class="detail-col">
+                    <span class="label">Resepsi</span>
+                    <b data-bind="receptionTime">[RECEPTION TIME]</b>
+                  </div>
+                </div>
+
+                <div class="detail-row venue-row">
+                  <div class="detail-col wide">
+                    <!-- <span class="label">Venue</span> -->
+                    <b data-bind="venue.name">[VENUE NAME]</b>
+                    <span class="addr" data-bind="venue.address"
+                      >[FULL VENUE ADDRESS]</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="orn">
+                <svg class="ic"><use href="#heart" /></svg>
+              </div>
+              <p class="hand" style="font-size: 1.6rem; color: var(--olive)">
+                <span class="write">Love grows here.</span>
+              </p>
             </div>
-            <p class="venue-name" data-cfg="venue"></p>
-            <p
-              data-cfg="address"
-              style="max-width: 20rem; margin: 0.3rem auto 0"
-            ></p>
-            <svg
-              style="width: 54px; margin-top: 1.4rem"
-              viewBox="0 0 60 40"
-              aria-hidden="true"
-            >
-              <use href="#i-bow" />
-            </svg>
+            <div class="sticky s2">Forever &amp;<br />Always.</div>
           </div>
         </div>
       </section>
@@ -761,487 +324,518 @@
       <!-- =====================================================================
      SECTION 5 — COUNTDOWN
      ===================================================================== -->
-      <section
-        id="countdown"
-        class="sec bg-blush scallop"
-        style="--prev: var(--cream)"
-        aria-labelledby="cdH"
-      >
-        <svg
-          class="twinkle"
-          style="left: 10%; top: 18%; width: 18px; height: 18px; color: #fff"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
+      <section class="sec scallop count" id="count">
+        <div class="sticker" style="top: 8%; right: 6%; width: 52px">
+          <svg class="ic spin rev"><use href="#sf" /></svg>
+        </div>
+        <div
+          class="sticker"
+          style="bottom: 6%; left: 5%; width: 44px; rotate: -10deg"
         >
-          <use href="#i-sparkle" />
-        </svg>
-        <svg
-          class="twinkle"
-          style="
-            right: 12%;
-            bottom: 16%;
-            width: 22px;
-            height: 22px;
-            color: #fff;
-            --dl: 1.4s;
-          "
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <use href="#i-sparkle" />
-        </svg>
+          <svg class="ic"><use href="#dz" /></svg>
+        </div>
         <div class="wrap">
-          <header class="sec-head">
-            <h2 id="cdH" class="script rv-words">Until our forever begins</h2>
-          </header>
-          <div class="cd" role="timer" aria-label="Countdown to the wedding">
-            <div class="cd-tile">
-              <span class="num" id="cd-d">0</span><span class="lbl">days</span>
+          <!-- <span class="kicker reveal">tick tock, sunshine</span> -->
+          <h2 class="h2 words" data-words>Counting Down to Our Forever</h2>
+          <div class="cd-grid" id="cdGrid" role="timer" aria-live="off">
+            <div class="cd-card" style="--fd: 0s">
+              <svg class="ic spin"><use href="#sf" /></svg
+              ><span class="num" id="cdD">00</span
+              ><span class="label">Days</span>
             </div>
-            <div class="cd-tile">
-              <span class="num" id="cd-h">0</span><span class="lbl">hours</span>
+            <div class="cd-card" style="--fd: 0.5s">
+              <svg class="ic spin rev"><use href="#sf" /></svg
+              ><span class="num" id="cdH">00</span
+              ><span class="label">Hours</span>
             </div>
-            <div class="cd-tile">
-              <span class="num" id="cd-m">0</span
-              ><span class="lbl">minutes</span>
+            <div class="cd-card" style="--fd: 1s">
+              <svg class="ic spin"><use href="#sf" /></svg
+              ><span class="num" id="cdM">00</span
+              ><span class="label">Minutes</span>
             </div>
-            <div class="cd-tile">
-              <span class="num" id="cd-s">0</span
-              ><span class="lbl">seconds</span>
+            <div class="cd-card" style="--fd: 1.5s">
+              <svg class="ic spin rev"><use href="#sf" /></svg
+              ><span class="num" id="cdS">00</span
+              ><span class="label">Seconds</span>
             </div>
           </div>
-          <p class="cd-msg" id="cdMsg"></p>
-        </div>
-      </section>
-
-      <!-- =====================================================================
-     SECTION 6 — LOCATION
-     ===================================================================== -->
-      <section
-        id="location"
-        class="sec bg-cream scallop"
-        style="--prev: var(--blush)"
-        aria-labelledby="locH"
-      >
-        <div class="wrap">
-          <svg
-            class="pin"
-            viewBox="0 0 60 80"
-            role="img"
-            aria-label="Location pin"
-          >
-            <use href="#i-pin" />
-          </svg>
-          <div class="pin-shadow" aria-hidden="true"></div>
-          <h2 id="locH" class="script rv-words">Where we will be</h2>
-          <p class="venue-name" style="margin-top: 1rem" data-cfg="venue"></p>
-          <p
-            data-cfg="address"
-            style="max-width: 22rem; margin: 0.2rem auto 0"
-          ></p>
-          <div class="map-frame">
-            <iframe
-              id="mapFrame"
-              title="Map showing the wedding venue"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-          <a id="mapBtn" class="btn" target="_blank" rel="noopener"
-            >Find Our Location</a
-          >
-        </div>
-      </section>
-
-      <!-- =====================================================================
-     SECTION 7 — RSVP
-     ===================================================================== -->
-      <section
-        id="rsvp"
-        class="sec bg-butter scallop"
-        style="--prev: var(--cream)"
-        aria-labelledby="rsvpH"
-      >
-        <div class="wrap">
-          <header class="sec-head">
-            <h2 id="rsvpH" class="script rv-words">
-              Will you celebrate with us?
-            </h2>
-            <p class="rv" style="margin-top: 0.6rem">
-              Please reply before <strong data-cfg="rsvpBy"></strong>.
+          <div class="cd-done" id="cdDone" hidden>
+            <h3>The day has finally come</h3>
+            <p>
+              Thank you for being part of our journey. We are beyond excited to
+              celebrate this special milestone with you.
             </p>
-          </header>
-          <form id="rsvpForm" novalidate>
-            <div class="field">
-              <label for="gName">Your name</label>
-              <input
-                type="text"
-                id="gName"
-                name="name"
-                autocomplete="name"
-                readonly
-                style="
-                  background: rgba(221, 166, 173, 0.15);
-                  cursor: not-allowed;
-                "
-                required
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+     SECTION 6 — GALLERY
+     ===================================================================== -->
+
+      <!-- =====================================================================
+     SECTION 7 — LOCATION (postcard)
+     ===================================================================== -->
+      <section class="sec scallop location" id="location">
+        <div class="cluster tl sm" data-cluster></div>
+        <div class="cluster br sm" data-cluster></div>
+        <div class="wrap">
+          <span class="kicker reveal">Wish you were here</span>
+          <!-- <h2 class="h2 words" data-words>Celebrating Our Next Chapter</h2>  -->
+          <!-- <h2 class="h2 words" data-words>Wish you were here</h2> -->
+          <div class="postcard reveal">
+            <!-- <div class="stamp">
+              <div class="stamp-in">
+                <svg class="ic"><use href="#pin" /></svg
+                ><small>Made with love.</small><em>Venue</em>
+              </div>
+            </div> -->
+            <!-- <svg class="postmark" viewBox="0 0 100 100" aria-hidden="true">
+              <circle
+                cx="50"
+                cy="50"
+                r="44"
+                fill="none"
+                stroke="#76543A"
+                stroke-width="3"
               />
-            </div>
-            <fieldset class="field">
-              <legend>Can you come?</legend>
-              <div class="choices">
-                <label class="choice"
-                  ><input
-                    type="radio"
-                    name="attendance"
-                    value="Joyfully Accept"
-                    required
-                  /><span>Joyfully Accept</span></label
-                >
-                <label class="choice"
-                  ><input
-                    type="radio"
-                    name="attendance"
-                    value="Regretfully Decline"
-                  /><span>Regretfully Decline</span></label
-                >
+              <circle
+                cx="50"
+                cy="50"
+                r="34"
+                fill="none"
+                stroke="#76543A"
+                stroke-width="1.5"
+                stroke-dasharray="3 4"
+              />
+              <path
+                d="M8 40q42 -12 84 0M8 60q42 -12 84 0"
+                fill="none"
+                stroke="#76543A"
+                stroke-width="2"
+              />
+            </svg> -->
+            <div class="pc-in paper">
+              <div class="pc-msg">
+                <div class="hand">Where we will be</div>
+                <h3 data-bind="venue.name">[VENUE NAME]</h3>
+                <p data-bind="venue.address">[FULL VENUE ADDRESS]</p>
+                <a
+                  class="btn"
+                  id="mapBtn"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  >Let's Find the Way
+                </a>
               </div>
-            </fieldset>
-
-            <div
-              class="field"
-              id="guestFieldWrapper"
-              style="transition: all 0.3s ease"
-            >
-              <label for="gCount">Number of guests</label>
-              <div class="stepper">
-                <button type="button" id="gMinus" aria-label="One fewer guest">
-                  &minus;
-                </button>
-                <output id="gCount" aria-live="polite">1</output>
-                <button type="button" id="gPlus" aria-label="One more guest">
-                  +
-                </button>
+              <div class="pc-map" id="pcMap">
+                <!-- Hand-drawn map illustration. If you set CONFIG.venue.embedMap = true, a live Google Map replaces it. -->
+                <svg
+                  class="map"
+                  viewBox="0 0 320 210"
+                  role="img"
+                  aria-label="Hand-drawn map with a pin marking the venue"
+                >
+                  <rect width="320" height="210" fill="#FFF1CC" />
+                  <path
+                    d="M-10 150C50 120 90 175 150 140S260 90 330 120"
+                    fill="none"
+                    stroke="#FFFDF5"
+                    stroke-width="16"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M80 -10C70 50 120 80 110 140S150 200 140 230"
+                    fill="none"
+                    stroke="#FFFDF5"
+                    stroke-width="12"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M-10 150C50 120 90 175 150 140S260 90 330 120"
+                    fill="none"
+                    stroke="#D9A441"
+                    stroke-width="1.5"
+                    stroke-dasharray="6 6"
+                    opacity=".7"
+                  />
+                  <path
+                    d="M40 190C90 160 120 120 160 100"
+                    fill="none"
+                    stroke="#76543A"
+                    stroke-width="2.5"
+                    stroke-dasharray="2 7"
+                    stroke-linecap="round"
+                  />
+                  <g fill="#A8B58A">
+                    <circle cx="40" cy="40" r="16" />
+                    <circle cx="62" cy="52" r="11" />
+                    <circle cx="260" cy="170" r="18" />
+                    <circle cx="285" cy="150" r="11" />
+                    <circle cx="215" cy="50" r="13" />
+                  </g>
+                  <g fill="#68794D" opacity=".6">
+                    <circle cx="40" cy="40" r="7" />
+                    <circle cx="260" cy="170" r="8" />
+                  </g>
+                  <g class="pin">
+                    <use href="#pin" x="146" y="68" width="28" height="28" />
+                  </g>
+                  <ellipse
+                    cx="160"
+                    cy="102"
+                    rx="9"
+                    ry="3"
+                    fill="#76543A"
+                    opacity=".25"
+                  />
+                  <use href="#sf" x="196" y="112" width="30" height="30" />
+                  <use href="#sf" x="22" y="150" width="26" height="26" />
+                  <text
+                    x="160"
+                    y="196"
+                    text-anchor="middle"
+                    font-family="Caveat,cursive"
+                    font-size="17"
+                    font-weight="700"
+                    fill="#76543A"
+                  >
+                    X marks the spot
+                  </text>
+                </svg>
               </div>
             </div>
-            <div class="field">
-              <label for="gWish">Wishes and prayers</label
-              ><textarea
-                id="gWish"
-                name="wishes"
-                rows="3"
-                placeholder="Leave your sweet wishes for us..."
-                required
-              ></textarea>
-            </div>
-            <div class="form-actions">
-              <button class="btn" type="submit">Send Our RSVP</button>
-              <button class="btn ghost" type="button" id="waBtn" hidden>
-                Reply on WhatsApp
-              </button>
-            </div>
-            <div id="status" role="status" aria-live="polite"></div>
-          </form>
+          </div>
+        </div>
+      </section>
 
-          <!-- Kotak Daftar Ucapan (Guest Book / Live RSVP List) -->
-          <div id="rsvp-list-container" style="margin-top: 2.5rem">
+      <!-- =====================================================================
+     SECTION 8 — RSVP
+     ===================================================================== -->
+      <section class="sec scallop rsvp" id="rsvp">
+        <div class="cluster tr sm" data-cluster></div>
+        <div class="cluster bl sm" data-cluster></div>
+        <div class="sticky s3 reveal">Love grows here.</div>
+        <div class="wrap">
+          <span class="kicker reveal">Will you celebrate with us?</span>
+          <!-- <h2 class="h2 words" data-words>Will you celebrate with us?</h2> -->
+
+          <div class="rsvp-card reveal">
+            <span class="tape"></span>
+
+            <!-- Auto-hides once CONFIG.rsvp.endpoint is set. -->
+            <div class="dev-note" id="devNote">
+              <b>Heads up (couple only):</b> this form is a
+              <b>frontend placeholder</b>. Nothing is saved or sent anywhere
+              until you connect a backend such as Google Sheets via Google Apps
+              Script.
+            </div>
+            <form id="rsvpForm" novalidate>
+              <!-- Nama Tamu (Read Only & Otomatis dari URL ?to=...) -->
+              <div class="field">
+                <label for="gName">Your name</label>
+                <input
+                  class="input"
+                  id="gName"
+                  name="guestName"
+                  type="text"
+                  readonly
+                  style="
+                    width: 100%;
+                    background-color: rgba(0, 0, 0, 0.03);
+                    cursor: not-allowed;
+                  "
+                  placeholder="Guest name"
+                  required
+                />
+                <span class="err" id="errName" role="alert"></span>
+              </div>
+
+              <!-- Kehadiran -->
+              <fieldset class="field" style="width: 100%">
+                <legend>Will you be there?</legend>
+                <div
+                  class="choices"
+                  style="display: flex; gap: 10px; width: 100%"
+                >
+                  <label class="choice" style="flex: 1">
+                    <input
+                      type="radio"
+                      name="attendance"
+                      value="Joyfully Accept"
+                    />
+                    <span>Joyfully Accept</span>
+                  </label>
+                  <label class="choice" style="flex: 1">
+                    <input
+                      type="radio"
+                      name="attendance"
+                      value="Regretfully Decline"
+                    />
+                    <span>Regretfully Decline</span>
+                  </label>
+                </div>
+                <span class="err" id="errAtt" role="alert"></span>
+              </fieldset>
+
+              <!-- Jumlah Tamu (Full Lebar Container) -->
+              <div class="field" id="guestsField" style="width: 100%">
+                <label for="gCount">Number of guests</label>
+                <div
+                  class="stepper"
+                  style="display: flex; width: 100%; align-items: stretch"
+                >
+                  <button
+                    type="button"
+                    id="gMinus"
+                    aria-label="One fewer guest"
+                  >
+                    −
+                  </button>
+                  <input
+                    class="input"
+                    id="gCount"
+                    name="guests"
+                    type="number"
+                    inputmode="numeric"
+                    min="1"
+                    max="10"
+                    value="1"
+                    style="flex: 1; text-align: center"
+                  />
+                  <button type="button" id="gPlus" aria-label="One more guest">
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <!-- Catatan / Wishes (Wajib Diisi) -->
+              <div class="field" style="width: 100%">
+                <label for="gWishes"
+                  >Wishes &amp; prayers
+                  <style style="color: var(--burg, #8b3a3a)">
+                    *
+                  </style></label
+                >
+                <textarea
+                  class="input"
+                  id="gWishes"
+                  name="wishes"
+                  placeholder="Leave us a little note"
+                  style="width: 100%"
+                  required
+                ></textarea>
+                <span class="err" id="errWishes" role="alert"></span>
+              </div>
+
+              <!-- Live Preview Box -->
+
+              <div class="form-actions" style="width: 100%">
+                <button
+                  class="btn"
+                  id="rsvpBtn"
+                  type="submit"
+                  style="width: 100%"
+                >
+                  Send My RSVP
+                </button>
+              </div>
+              <span
+                class="err"
+                id="errSend"
+                role="alert"
+                style="
+                  text-align: center;
+                  margin-top: 10px;
+                  display: block;
+                  width: 100%;
+                "
+              ></span>
+            </form>
+
+            <div class="rsvp-done" id="rsvpDone" hidden tabindex="-1">
+              <div class="bloom">
+                <svg class="ic"><use href="#sf" /></svg>
+              </div>
+              <h3 id="doneTitle">Thank you!</h3>
+              <p id="doneText"></p>
+            </div>
+          </div>
+
+          <!-- KONTAINER DAFTAR RSVP / UCAPAN (UNTUK CEK KONEKSI SHEET) -->
+          <div class="rsvp-list-wrap" style="margin-top: 40px">
             <h3
-              class="script"
               style="
                 text-align: center;
-                font-size: 1.8rem;
-                color: var(--burg);
-                margin-bottom: 1rem;
+                margin-bottom: 16px;
+                font-family: var(--f-display);
+                color: var(--brown);
               "
             >
-              Wishes from Loved Ones
+              Wishes from Friends &amp; Family
             </h3>
-            <div id="rsvpEntries" class="rsvp-entries-box">
+            <div
+              id="rsvpEntries"
+              style="
+                max-height: 400px;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+              "
+            >
               <p
                 style="
                   text-align: center;
+                  color: var(--text-light);
                   font-style: italic;
-                  color: var(--text-light, #666);
                 "
               >
-                Loading wishes...
+                Connecting to Google Sheet...
               </p>
             </div>
           </div>
-
-          <!-- Setup notes: removed automatically once CONFIG.rsvpEndpoint is filled in -->
-          <details class="dev-note" id="devNote">
-            <summary>
-              For the couple: connect this form (hidden from guests once
-              connected)
-            </summary>
-            <p style="margin-top: 0.5rem">
-              <b>Nothing is saved yet.</b> Until you set
-              <code>CONFIG.rsvpEndpoint</code>, this form only shows a notice.
-              To collect replies in Google Sheets:
-            </p>
-            <ol style="margin: 0.5rem 0 0.5rem 1.2rem">
-              <li>Create a Google Sheet, then Extensions &gt; Apps Script.</li>
-              <li>Paste the code below and save.</li>
-              <li>
-                Deploy &gt; New deployment &gt; Web app. Execute as: Me. Who has
-                access: Anyone.
-              </li>
-              <li>
-                Copy the Web app URL into <code>CONFIG.rsvpEndpoint</code> at
-                the top of the script.
-              </li>
-            </ol>
-            <pre>
-function doPost(e) {
-  var sh = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var p = e.parameter;
-  sh.appendRow([new Date(), p.name, p.attendance, p.guests, p.wishes]);
-  return ContentService.createTextOutput('ok');
-}
-function doGet(e) {
-  var sh = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var rows = sh.getDataRange().getValues();
-  var data = [];
-  for (var i = 1; i < rows.length; i++) {
-    data.push({ date: rows[i][0], name: rows[i][1], attendance: rows[i][2], guests: rows[i][3], wishes: rows[i][4] });
-  }
-  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
-}</pre
-            >
-          </details>
         </div>
       </section>
-      <!-- =====================================================================
-      SECTION 8 — WEDDING GIFT / KADO
-      ===================================================================== -->
-      <section
-        id="gift"
-        class="sec bg-cream scallop"
-        style="--prev: var(--butter-soft)"
-        aria-labelledby="giftH"
-      >
-        <div
-          class="wrap"
-          style="max-width: 32rem; margin: 0 auto; text-align: center"
-        >
-          <header class="sec-head">
-            <h2 id="giftH" class="script rv-words">
-              A little note about gifts
-            </h2>
-            <svg class="scribble rv" viewBox="0 0 220 16" aria-hidden="true">
-              <path pathLength="1" d="M4 10C34 2 62 16 96 8S160 4 216 9" />
-            </svg>
-          </header>
 
-          <p class="invite-lead rv" style="margin-bottom: 2rem">
+      <!-- =====================================================================
+     VIRTUAL GIFT
+     ===================================================================== -->
+      <section class="sec checker gift" id="gift">
+        <div class="cluster tl sm" data-cluster></div>
+        <div class="cluster br sm" data-cluster></div>
+        <div class="wrap">
+          <span class="h2 kicker reveal">A little note about gifts</span>
+          <!-- <h2 class="h2 words" data-words>A little note about gifts</h2> -->
+          <p class="lead words" data-words>
             Your presence is already the greatest gift. If you would still like
             to give something as a token of love, here is how:
           </p>
 
-          <!-- Gift Container dengan Gaya Amplop/Card yang Lebih Manis -->
-          <div
-            class="gift-grid"
-            style="
-              display: flex;
-              flex-direction: column;
-              gap: 1.5rem;
-              text-align: left;
-            "
-          >
-            <!-- Bank Putri -->
-            <div
-              style="
-                background: var(--cream, #fff);
-                padding: 1.5rem;
-                border-radius: 20px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-                border: 1px solid rgba(0, 0, 0, 0.06);
-              "
-            >
-              <div
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  gap: 0.8rem;
-                  margin-top: 0.5rem;
-                "
-              >
-                <div>
-                  <p
-                    class="copy-text"
-                    style="
-                      font-size: 1.25rem;
-                      letter-spacing: 1.5px;
-                      font-weight: 700;
-                      margin-bottom: 0.2rem;
-                    "
-                  >
-                    310020447523
-                  </p>
-                  <p style="font-size: 0.9rem; opacity: 0.8">
-                    a.n. Putri Nabella
-                  </p>
-                </div>
-                <!-- Tombol disesuaikan persis dengan style button RSVP (.btn.ghost) -->
-                <button
-                  type="button"
-                  class="btn ghost copy-btn"
-                  data-clipboard="310020447523"
-                  style="
-                    width: 100%;
-                    padding: 0.6rem 1rem;
-                    font-size: 0.9rem;
-                    border-radius: 999px;
-                    cursor: pointer;
-                    text-align: center;
-                    justify-content: center;
-                  "
-                  onclick="copyToClipboard(this)"
-                >
-                  Copy Account Number
-                </button>
-              </div>
-            </div>
+          <!-- Grid Kartu Rekening (Langsung ditulis di HTML) -->
+          <div class="gift-grid multi" id="giftGrid">
+            <!-- Kartu 1: Bank Transfer -->
+            <article class="gift-card reveal">
+              <!-- <span class="label">Bank transfer</span> -->
+              <div class="bank">MANDIRI</div>
+              <span class="acc">310020447523</span>
+              <div class="holder">a.n. Putri Nabella</div>
+              <button class="btn" type="button" data-copy="310020447523">
+                Copy Account Number
+              </button>
+            </article>
 
-            <!-- Bank Yoga -->
-            <div
-              style="
-                background: var(--cream, #fff);
-                padding: 1.5rem;
-                border-radius: 20px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-                border: 1px solid rgba(0, 0, 0, 0.06);
-              "
-            >
-              <div
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  gap: 0.8rem;
-                  margin-top: 0.5rem;
-                "
-              >
-                <div>
-                  <p
-                    class="copy-text"
-                    style="
-                      font-size: 1.25rem;
-                      letter-spacing: 1.5px;
-                      font-weight: 700;
-                      margin-bottom: 0.2rem;
-                    "
-                  >
-                    7285928097
-                  </p>
-                  <p style="font-size: 0.9rem; opacity: 0.8">
-                    a.n. Muhammad Yoga Adha Pratama
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  class="btn ghost copy-btn"
-                  data-clipboard="7285928097"
-                  style="
-                    width: 100%;
-                    padding: 0.6rem 1rem;
-                    font-size: 0.9rem;
-                    border-radius: 999px;
-                    cursor: pointer;
-                    text-align: center;
-                    justify-content: center;
-                  "
-                  onclick="copyToClipboard(this)"
-                >
-                  Copy Account Number
-                </button>
-              </div>
-            </div>
+            <!-- Kartu 2: E-Wallet -->
+            <article class="gift-card reveal">
+              <!-- <span class="label">Bank transfer</span> -->
+              <div class="bank">BSI</div>
+              <span class="acc">7285928097</span>
+              <div class="holder">a.n. Muhammad Yoga Adha Pratama</div>
+              <button class="btn" type="button" data-copy="7285928097">
+                Copy Account Number
+              </button>
+            </article>
           </div>
 
-          <svg
-            style="width: 50px; margin: 2.5rem auto 0; display: block"
-            viewBox="0 0 60 40"
-            aria-hidden="true"
-          >
-            <use href="#i-bow" />
-          </svg>
+          <p class="gift-note hand reveal"></p>
         </div>
       </section>
 
       <!-- =====================================================================
-     SECTION 9 — CLOSING
+     SECTION 9 — CLOSING SCREEN
      ===================================================================== -->
-      <section
-        id="closing"
-        class="sec scallop"
-        style="--prev: var(--cream)"
-        aria-labelledby="closeH"
-      >
-        <svg
-          class="twinkle"
-          style="left: 14%; top: 10%; width: 18px; height: 18px; color: #fff"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <use href="#i-sparkle" />
-        </svg>
-        <svg
-          class="twinkle"
-          style="
-            right: 16%;
-            top: 20%;
-            width: 14px;
-            height: 14px;
-            color: #fff;
-            --dl: 1.5s;
-          "
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <use href="#i-sparkle" />
-        </svg>
+      <section class="sec closing" id="closing">
+        <div class="decor">
+          <div class="sunbeams"></div>
+          <div class="float-field" id="closeFloat" aria-hidden="true"></div>
+          <div class="cluster tl" data-cluster></div>
+          <div class="cluster tr" data-cluster></div>
+          <div class="cluster bl" data-cluster></div>
+          <div class="cluster br" data-cluster></div>
+        </div>
         <div class="wrap">
-          <h2
-            id="closeH"
-            class="close-line rv-words"
-            data-words="And so, forever begins."
-          ></h2>
-          <p class="close-names">
-            <span data-cfg="bride"></span> &amp; <span data-cfg="groom"></span>
+          <p class="end1 words" data-words>And so, the journey continues.</p>
+          <p class="end-names words" data-words style="--base: 0.6s">
+            <span data-bind="bride.short">[BRIDE NAME]</span> &amp;
+            <span data-bind="groom.short">[GROOM NAME]</span>
           </p>
-          <p class="close-date" data-cfg="dateLong"></p>
-          <div class="fin-note">
-            <p>the end, and the beginning</p>
-            <button type="button" class="btn ghost" id="replayBtn">
-              Read our story again
-            </button>
-          </div>
+          <p class="end-date" id="endDate">[WEDDING DATE]</p>
+          <p class="end2 words" data-words style="--base: 1.2s">
+            With love, patience, and a lifetime to share.
+          </p>
+          <button class="btn again" id="againBtn" type="button">
+            Back to the beginning
+          </button>
+          <p class="credit"><span class="write">Made with love.</span></p>
         </div>
       </section>
     </main>
 
-    <!-- LIGHTBOX -->
+    <button
+      class="music"
+      id="music"
+      type="button"
+      aria-label="Play music"
+      aria-pressed="false"
+    >
+      <span class="music-icon-wrap">
+        <svg id="icPlay" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7 4.5v15l13-7.5z" />
+        </svg>
+        <svg id="icPause" viewBox="0 0 24 24" fill="currentColor" hidden>
+          <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
+        </svg>
+      </span>
+      <div class="wave" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
+    </button>
+    <div class="toast" id="toast" role="status"></div>
+
+    <!-- Back-to-top sunflower -->
+    <button class="to-top" id="toTop" type="button" aria-label="Back to top">
+      <svg class="ic"><use href="#sf" /></svg><span class="arrow">↑</span>
+    </button>
+
+    <!-- Gallery lightbox -->
     <div
       id="lightbox"
       role="dialog"
       aria-modal="true"
       aria-label="Photo viewer"
     >
-      <button class="lb-btn lb-close" type="button" aria-label="Close photo">
-        &times;
+      <button
+        class="lb-btn lb-close"
+        id="lbClose"
+        type="button"
+        aria-label="Close photo"
+      >
+        ✕
       </button>
-      <button class="lb-btn lb-prev" type="button" aria-label="Previous photo">
-        &lsaquo;
+      <button
+        class="lb-btn lb-prev"
+        id="lbPrev"
+        type="button"
+        aria-label="Previous photo"
+      >
+        ‹
+      </button>
+      <button
+        class="lb-btn lb-next"
+        id="lbNext"
+        type="button"
+        aria-label="Next photo"
+      >
+        ›
       </button>
       <figure class="lb-fig">
-        <div class="lb-media" id="lbMedia"></div>
+        <img id="lbImg" alt="" />
         <figcaption id="lbCap"></figcaption>
+        <span class="lb-count" id="lbCount"></span>
       </figure>
-      <button class="lb-btn lb-next" type="button" aria-label="Next photo">
-        &rsaquo;
-      </button>
     </div>
-    <script src="script.js"></script>
+
+    <script src="script.js" defer></script>
   </body>
 </html>
