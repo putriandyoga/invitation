@@ -222,7 +222,7 @@
       <!-- =====================================================================
      SECTION 3 — OUR LOVE STORY (scrapbook)
      ===================================================================== -->
-      <section class="sec scallop story checker" id="story">
+      <section class="sec story checker" id="story">
         <div
           class="sticker"
           style="top: 6%; left: 4%; width: 56px; rotate: -12deg"
@@ -238,8 +238,8 @@
 
         <!-- <div class="sticky s1 reveal">Our sweetest chapter.</div> -->
         <div class="wrap">
-          <!-- <span class="kicker reveal">a little love diary</span> -->
-          <h2 class="h2 words" data-words>How Our Story Bloomed</h2>
+          <span class="kicker reveal">How Our Story Bloomed</span>
+          <!-- <h2 class="h2 words" data-words>How Our Story Bloomed</h2> -->
           <!-- <p class="lead words" data-words>
             Every step we've taken together has brought us to this moment,
             knowing our hearts belong to one another.
@@ -341,7 +341,7 @@
           <svg class="ic"><use href="#dz" /></svg>
         </div>
         <div class="wrap">
-          <span class="kicker reveal">tick tock, sunshine</span>
+          <!-- <span class="kicker reveal">tick tock, sunshine</span> -->
           <h2 class="h2 words" data-words>Counting Down to Our Forever</h2>
           <div class="cd-grid" id="cdGrid" role="timer" aria-live="off">
             <div class="cd-card" style="--fd: 0s">
@@ -386,9 +386,9 @@
         <div class="cluster tl sm" data-cluster></div>
         <div class="cluster br sm" data-cluster></div>
         <div class="wrap">
-          <span class="kicker reveal">wish you were here</span>
-          <h2 class="h2 words" data-words>Celebrating Our Next Chapter</h2>
-
+          <span class="kicker reveal">Wish you were here</span>
+          <!-- <h2 class="h2 words" data-words>Celebrating Our Next Chapter</h2>  -->
+          <!-- <h2 class="h2 words" data-words>Wish you were here</h2> -->
           <div class="postcard reveal">
             <!-- <div class="stamp">
               <div class="stamp-in">
@@ -524,8 +524,8 @@
         <div class="cluster bl sm" data-cluster></div>
         <div class="sticky s3 reveal">Love grows here.</div>
         <div class="wrap">
-          <span class="kicker reveal">kindly reply</span>
-          <h2 class="h2 words" data-words>Will you celebrate with us?</h2>
+          <span class="kicker reveal">Will you celebrate with us?</span>
+          <!-- <h2 class="h2 words" data-words>Will you celebrate with us?</h2> -->
 
           <div class="rsvp-card reveal">
             <span class="tape"></span>
@@ -706,26 +706,52 @@
       </section>
 
       <!-- =====================================================================
-     VIRTUAL GIFT (bank / e-wallet details come from CONFIG.gift)
+     VIRTUAL GIFT
      ===================================================================== -->
-      <section class="sec scallop gift" id="gift">
+      <section class="sec checker gift" id="gift">
         <div class="cluster tl sm" data-cluster></div>
         <div class="cluster br sm" data-cluster></div>
         <div class="wrap">
-          <span class="kicker reveal">virtual gift</span>
-          <h2 class="h2 words" data-words>A Little Sunshine, Sent With Love</h2>
-          <p class="lead words" data-words data-bind="gift.intro">
-            [GIFT MESSAGE]
+          <span class="h2 kicker reveal">A little note about gifts</span>
+          <!-- <h2 class="h2 words" data-words>A little note about gifts</h2> -->
+          <p class="lead words" data-words>
+            Your presence is already the greatest gift. If you would still like
+            to give something as a token of love, here is how:
           </p>
-          <div class="gift-grid" id="giftGrid"></div>
-          <p class="gift-note hand reveal" data-bind="gift.note"></p>
+
+          <!-- Grid Kartu Rekening (Langsung ditulis di HTML) -->
+          <div class="gift-grid multi" id="giftGrid">
+            <!-- Kartu 1: Bank Transfer -->
+            <article class="gift-card reveal">
+              <!-- <span class="label">Bank transfer</span> -->
+              <div class="bank">MANDIRI</div>
+              <span class="acc">310020447523</span>
+              <div class="holder">a.n. Putri Nabella</div>
+              <button class="btn" type="button" data-copy="310020447523">
+                Copy Account Number
+              </button>
+            </article>
+
+            <!-- Kartu 2: E-Wallet -->
+            <article class="gift-card reveal">
+              <!-- <span class="label">Bank transfer</span> -->
+              <div class="bank">BSI</div>
+              <span class="acc">7285928097</span>
+              <div class="holder">a.n. Muhammad Yoga Adha Pratama</div>
+              <button class="btn" type="button" data-copy="7285928097">
+                Copy Account Number
+              </button>
+            </article>
+          </div>
+
+          <p class="gift-note hand reveal"></p>
         </div>
       </section>
 
       <!-- =====================================================================
      SECTION 9 — CLOSING SCREEN
      ===================================================================== -->
-      <section class="sec scallop closing" id="closing">
+      <section class="sec closing" id="closing">
         <div class="decor">
           <div class="sunbeams"></div>
           <div class="float-field" id="closeFloat" aria-hidden="true"></div>

@@ -121,7 +121,7 @@ const CONFIG = {
 Code below: you normally don't need to edit it.
 ===================================================================== */
 (function () {
-  "use strict";
+  ("use strict");
 
   /* ---------- tiny helpers ---------- */
   const $ = (s, c = document) => c.querySelector(s);
@@ -1110,141 +1110,6 @@ Code below: you normally don't need to edit it.
     initGuestUrlAndSecurity();
   }
 
-  // Inisialisasi URL (?to=...)
-  // Jalankan class ini sedini mungkin, idealnya di <head>
-  // agar isi undangan tidak sempat terlihat sebelum pemeriksaan selesai.
-
-  // async function initGuestUrlAndSecurity() {
-  //   const params = new URLSearchParams(window.location.search);
-  //   const guestParam = (params.get("to") || "").trim();
-
-  //   // Elemen untuk menampilkan pesan akses ditolak
-  //   let accessDeniedShown = false;
-
-  //   function denyAccess(message) {
-  //     // Cegah tampilan dibuat berulang kali.
-  //     if (accessDeniedShown) return;
-
-  //     accessDeniedShown = true;
-
-  //     document.body.innerHTML = `
-  //   <main class="access-screen">
-  //     <section class="access-card" role="alert" aria-live="assertive">
-
-  //       <div class="access-ornament" aria-hidden="true">✿</div>
-
-  //       <p class="access-eyebrow">A Little Note for You</p>
-
-  //       <h1 class="access-title">
-  //         Invitation<br>
-  //         Access Restricted
-  //       </h1>
-
-  //       <div class="access-divider" aria-hidden="true">
-  //         <span>✦</span>
-  //       </div>
-
-  //       <p class="access-message" id="accessMessage"></p>
-
-  //       <p class="access-note">
-  //         Please contact the couple to receive your personal
-  //         invitation link. We would love to have you with us.
-  //       </p>
-
-  //       <div class="access-footer">With love</div>
-
-  //     </section>
-  //   </main>
-  // `;
-
-  //     document.getElementById("accessMessage").textContent =
-  //       message || "This invitation link is unavailable.";
-
-  //     document.title = "Invitation Access Restricted";
-  //   }
-
-  //   // Tidak ada parameter ?to= berarti langsung ditolak
-  //   if (!guestParam) {
-  //     denyAccess("This invitation link is invalid or incomplete.");
-  //     return false;
-  //   }
-
-  //   if (!CONFIG.rsvp || !CONFIG.rsvp.endpoint) {
-  //     denyAccess(
-  //       "The invitation could not be verified. Please try again later.",
-  //     );
-  //     return false;
-  //   }
-
-  //   // Buat ID perangkat yang disimpan di browser
-  //   let deviceId = localStorage.getItem("wedding_device_id");
-
-  //   if (!deviceId) {
-  //     deviceId =
-  //       window.crypto && typeof window.crypto.randomUUID === "function"
-  //         ? window.crypto.randomUUID()
-  //         : "device-" + Date.now() + "-" + Math.random().toString(36).slice(2);
-
-  //     localStorage.setItem("wedding_device_id", deviceId);
-  //   }
-
-  //   try {
-  //     const verifyUrl = new URL(CONFIG.rsvp.endpoint);
-
-  //     verifyUrl.searchParams.set("to", guestParam);
-  //     verifyUrl.searchParams.set("device_id", deviceId);
-
-  //     const response = await fetch(verifyUrl.toString(), {
-  //       method: "GET",
-  //       redirect: "follow",
-  //       cache: "no-store",
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Verification request failed");
-  //     }
-
-  //     const result = await response.json();
-
-  //     if (result.status !== "success" || result.access !== "granted") {
-  //       const messages = {
-  //         unregistered: "This guest name is not registered in our guest list.",
-  //         forwarded:
-  //           "This invitation has already been registered on another device.",
-  //         missing_parameters: "The invitation link is incomplete.",
-  //         noguestsheet: "The guest list could not be found.",
-  //       };
-
-  //       denyAccess(
-  //         messages[result.reason] ||
-  //           "You do not have permission to access this invitation.",
-  //       );
-
-  //       return false;
-  //     }
-
-  //     // Akses berhasil
-  //     const gNameInput = $("#gName");
-  //     const guestElement =
-  //       document.getElementById("targetGuestName") ||
-  //       document.getElementById("guestName");
-
-  //     if (guestElement) guestElement.textContent = guestParam;
-  //     if (gNameInput) gNameInput.value = guestParam;
-
-  //     await loadRsvpEntries();
-
-  //     return true;
-  //   } catch (error) {
-  //     console.error("Invitation verification failed:", error);
-
-  //     denyAccess(
-  //       "We could not verify your invitation. Please check your connection and try again.",
-  //     );
-
-  //     return false;
-  //   }
-  // }
   async function initGuestUrlAndSecurity() {
     const params = new URLSearchParams(window.location.search);
     const guestParam = (params.get("to") || "").trim();
@@ -1715,6 +1580,44 @@ Code below: you normally don't need to edit it.
     }
   }
 
+  /* ---------- Copy Btn ---------- */
+  async function copyText(t) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(t);
+        return true;
+      }
+    } catch (e) {}
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = t;
+      ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, t.length);
+      const ok = document.execCommand("copy");
+      ta.remove();
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Event listener untuk tombol copy di dalam giftGrid
+  document.getElementById("giftGrid").addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-copy]");
+    if (!b) return;
+    const ok = await copyText(b.dataset.copy);
+
+    if (ok) {
+      const old = b.textContent;
+      b.textContent = "Copied";
+      setTimeout(() => {
+        b.textContent = old;
+      }, 2200);
+    }
+  });
   /* ---------- boot ---------- */
 
   async function init() {

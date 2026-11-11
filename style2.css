@@ -32,6 +32,7 @@
   --peach: #efd2bd;
   --ink: #514638; /* deeper earthy brown for readable text */
   --paper: #fffdf9;
+  --blush: #fbeee3; /* soft peach tint */
   --f-serif: "Cormorant Garamond", Georgia, serif;
   --f-display: "Playfair Display", Georgia, serif;
   --f-hand: "Caveat", "Segoe Script", cursive;
@@ -184,9 +185,9 @@ body::after {
   text-align: center;
   font-family: var(--f-hand);
   font-weight: 700;
-  font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+  font-size: clamp(2rem, 5vw, 2.8rem);
   color: var(--olive);
-  margin-bottom: 6px;
+  /* margin-bottom: 6px; */
 }
 .lead {
   font-family: var(--f-serif);
@@ -1162,7 +1163,7 @@ body::after {
 /* ---------- 7. Invitation card ---------- */
 .invite {
   --bg: var(--butter);
-  --prev: var(--vanilla);
+  --prev: var(--butter);
 }
 .card {
   position: relative;
@@ -2068,6 +2069,84 @@ textarea.input {
   scrollbar-color: var(--brown, #76543a) rgba(168, 181, 138, 0.15);
 }
 
+/* ---------- 10. Gift ---------- */
+.gift {
+  --bg: var(--cream);
+  --prev: var(--blush);
+}
+.gift-grid {
+  display: grid;
+  gap: 24px;
+  max-width: 780px;
+  margin: 46px auto 0;
+}
+.gift-card {
+  position: relative;
+  padding: 30px 22px 26px;
+  text-align: center;
+  background: var(--paper);
+  border: 2px solid var(--brown);
+  border-radius: 16px;
+  box-shadow: 4px 6px 0 var(--sage);
+}
+.gift-card::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1.5px dashed rgba(168, 181, 138, 0.95);
+  border-radius: 11px;
+  pointer-events: none;
+}
+.gift-card > * {
+  position: relative;
+}
+.gift-card .bank {
+  margin-top: 4px;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: var(--brown);
+}
+.gift-card .acc {
+  display: block;
+  margin: 14px 0 4px;
+  font-weight: 700;
+  font-size: clamp(1.45rem, 6.4vw, 1.9rem);
+  letter-spacing: 0.06em;
+  color: var(--olive);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.gift-card .holder {
+  font-family: var(--f-serif);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.gift-card .qr {
+  display: block;
+  width: min(62%, 190px);
+  margin: 16px auto 0;
+  border: 2px solid var(--brown);
+  border-radius: 10px;
+  background: #fff;
+}
+.gift-card .btn {
+  margin-top: 18px;
+  min-height: 48px;
+  padding: 0.55em 1.4em;
+  font-size: 0.98rem;
+}
+.gift-note {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--olive);
+}
+.gift-note:empty {
+  display: none;
+}
+
 /* ---------- 11. Closing ---------- */
 .closing {
   min-height: 100svh;
@@ -2374,6 +2453,9 @@ textarea.input {
   .pc-in {
     grid-template-columns: 1fr 1fr;
     align-items: center;
+  }
+  .gift-grid.multi {
+    grid-template-columns: 1fr 1fr;
   }
 }
 @media (min-width: 860px) {
