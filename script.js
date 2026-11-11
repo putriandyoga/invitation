@@ -62,7 +62,7 @@ const CONFIG = {
       date: "December 27, 2020",
       text: "New to college and completely lost, I called out to him simply because he happened to walk past. Looking super confused, he stopped a few feet away, and then completely walked away the moment I tried to walk over. I was left standing halfway there and honestly pretty annoyed! We actually recreated this exact photo two years later wearing the same outfits.",
       shortText:
-        "Completely lost in college, I just called out because he happened to walk past, and he actually walked away! We recreated this photo two years later.",
+        "New to college and completely lost, I called out to him as he walked past. He stopped, then walked away just as I approached, leaving me halfway there and pretty annoyed! Two years later, we recreated this exact photo in the same outfits.",
       caption: "awkward first encounter",
       photo: "gallery/our-first-meet.webp",
     },
@@ -71,7 +71,7 @@ const CONFIG = {
       date: "February 20, 2022",
       text: "It was my birthday, just 15 days after we started dating, and we grabbed a quick bite at the mall. We were running out of time and still had a massive pile of fries left, so I kept feeding them to him as fast as I could so we could finally head home.",
       shortText:
-        "On my birthday, just 15 days after we started dating, we rushed through a mountain of fries, with me feeding him as fast as I could so we could head home.",
+        "On my birthday, just 15 days after we started dating, we grabbed a quick bite at the mall. With a mountain of fries still left and time running out, I kept feeding them to him as fast as I could so we could head home.",
       caption: "rushing through fries",
       photo: "gallery/our-date.webp",
     },
@@ -80,7 +80,7 @@ const CONFIG = {
       date: "July 3, 2024",
       text: "After dealing with so much drama and a bunch of hurdles along the way, we finally made it and graduated together on the exact same day, just like we always dreamed we would.",
       shortText:
-        "After getting through plenty of hurdles together, we finally managed to graduate side by side on the very same day.",
+        "After all the drama and hurdles we faced along the way, we finally made it and graduated together on the exact same day, just as we had always dreamed.",
       caption: "graduating together",
       photo: "gallery/our-graduation.webp",
     },
@@ -89,7 +89,7 @@ const CONFIG = {
       date: "2022 and always",
       text: "We knew we were serious about each other right from day one. Ever since we started dating in 2022, we have been building our future together step by step. Now, as we step into 2027, we are ready to take that next big step and look forward to waking up side by side for the rest of our lives.",
       shortText:
-        "Serious right from day one back in 2022, we are so ready to take our next big step together.",
+        "We knew we were serious about each other from day one. Since 2022, we have been building our future together, and now in 2027, we are ready to take the next big step and spend the rest of our lives side by side.",
       caption: "forever and always",
       photo: "gallery/blue-bg.webp",
     },
