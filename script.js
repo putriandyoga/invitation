@@ -49,7 +49,7 @@ const CONFIG = {
   /* --- Venue --- */
   venue: {
     name: "Kediaman Keluarga Mempelai Wanita",
-    address: "Jl. A. Yani KM.14.400, Gang 99",
+    address: "Jl. A. Yani KM.14.400, Gang 99 (Samping DHL Express) ",
     mapsLink: "https://maps.app.goo.gl/ThpTaCDKbWuzcJEy5", // paste a Google Maps share/directions link; leave "" to auto-search by address
     embedMap: true, // true = show a live Google Map instead of the drawn map (needs a real address)
   },
@@ -58,39 +58,39 @@ const CONFIG = {
 
   story: [
     {
-      title: "First Meeting",
+      title: "We Met",
       date: "December 27, 2020",
-      text: "New to college and completely lost, I called out to him simply because he happened to walk past. Looking super confused, he stopped a few feet away, and then completely walked away the moment I tried to walk over. I was left standing halfway there and honestly pretty annoyed! We actually recreated this exact photo two years later wearing the same outfits.",
+      text: "New to college and completely lost, I called out to him to ask for directions as he walked past. He walked away as I approached. Two years later, we returned to that spot in the same outfits and took a photo to remember it.",
       shortText:
-        "New to college and completely lost, I called out to him as he walked past. He stopped, then walked away just as I approached, leaving me halfway there and pretty annoyed! Two years later, we recreated this exact photo in the same outfits.",
-      caption: "awkward first encounter",
+        "Lost in my first year of college, I called to him for directions. He walked away as I approached. Two years later, we returned to that spot in the same outfits and took a photo to remember it.",
+      caption: "Our first encounter",
       photo: "gallery/our-first-meet.webp",
     },
     {
-      title: "First Date",
+      title: "Our First Date",
       date: "February 20, 2022",
-      text: "It was my birthday, just 15 days after we started dating, and we grabbed a quick bite at the mall. We were running out of time and still had a massive pile of fries left, so I kept feeding them to him as fast as I could so we could finally head home.",
+      text: "It was my birthday, 15 days after we started dating. We had a quick meal at the mall, but time was running out and there were still plenty of fries left, so I kept feeding them to him until we could finally head home.",
       shortText:
-        "On my birthday, just 15 days after we started dating, we grabbed a quick bite at the mall. With a mountain of fries still left and time running out, I kept feeding them to him as fast as I could so we could head home.",
-      caption: "rushing through fries",
+        "On my birthday, 15 days after we started dating, we had a quick meal at the mall. Time was running out and the fries weren't finished, so I fed them to him as fast as I could.",
+      caption: "Rushing through fries",
       photo: "gallery/our-date.webp",
     },
     {
-      title: "Graduation Day",
+      title: "We Graduated",
       date: "July 3, 2024",
-      text: "After dealing with so much drama and a bunch of hurdles along the way, we finally made it and graduated together on the exact same day, just like we always dreamed we would.",
+      text: "After a lot of ups and downs along the way, we both graduated on the same day, just as we had always hoped. It was a day we had been working toward for years, and we finally got to celebrate it together.",
       shortText:
-        "After all the drama and hurdles we faced along the way, we finally made it and graduated together on the exact same day, just as we had always dreamed.",
-      caption: "graduating together",
+        "After many ups and downs, we both graduated on the same day, just as we had hoped. We had worked toward it for years, and finally got to celebrate it together.",
+      caption: "Graduating together",
       photo: "gallery/our-graduation.webp",
     },
     {
-      title: "Our Love Story",
-      date: "2022 and always",
-      text: "We knew we were serious about each other right from day one. Ever since we started dating in 2022, we have been building our future together step by step. Now, as we step into 2027, we are ready to take that next big step and look forward to waking up side by side for the rest of our lives.",
+      title: "Our Wedding Day",
+      date: "January 17, 2027",
+      text: "We were serious about each other from the start, and since 2022 we have been building our future step by step. Now we are ready for the next one: starting married life together. We can't wait to celebrate it with our families and loved ones.",
       shortText:
-        "We knew we were serious about each other from day one. Since 2022, we have been building our future together, and now in 2027, we are ready to take the next big step and spend the rest of our lives side by side.",
-      caption: "forever and always",
+        "We were serious from the start, and since 2022 we have built our future step by step. Now we begin married life together, and we can't wait to celebrate it with our families and loved ones.",
+      caption: "The next chapter",
       photo: "gallery/blue-bg.webp",
     },
   ],
@@ -107,7 +107,7 @@ const CONFIG = {
   ],
 
   /* --- Music: use YOUR OWN licensed/royalty-free audio file. --- */
-  audio: { src: "music/goddess.mp3", title: "[SONG TITLE]" },
+  audio: { src: "music/best-part.mp3", title: "[SONG TITLE]" },
 
   /* --- RSVP --- */
   rsvp: {
@@ -691,7 +691,7 @@ Code below: you normally don't need to edit it.
   /* ---------- 8. Intro / envelope (Envelope removed safely) ---------- */
   let audio = null;
 
-  function setupIntro() {
+  function setupIntro(verifyPromise) {
     const intro = $("#intro"),
       btn = $("#openBtn");
     const l1 = $("#introL1"),
@@ -705,12 +705,28 @@ Code below: you normally don't need to edit it.
       if (l1) l1.classList.add("in");
       if (l2) l2.classList.add("in");
     });
+
+    const originalLabel = btn.textContent.trim();
+    btn.disabled = true;
+
+    let verified = false;
+    verifyPromise.then((ok) => {
+      verified = ok;
+    });
+
     const total = reduced ? 100 : (n1 * 0.13 + 0.9 + n2 * 0.13 + 0.8) * 1000;
-    setTimeout(() => btn.classList.add("show"), total);
+    setTimeout(async () => {
+      btn.classList.add("show");
+      if (!verified) btn.textContent = "Verifying...";
+      const ok = await verifyPromise;
+      if (!ok) return; // denyAccess() sudah mengganti halaman
+      btn.textContent = originalLabel;
+      btn.disabled = false;
+    }, total);
 
     let opened = false;
     btn.addEventListener("click", () => {
-      if (opened) return;
+      if (opened || btn.disabled) return;
       opened = true;
       btn.disabled = true;
       intro.classList.add("open");
@@ -1107,66 +1123,186 @@ Code below: you normally don't need to edit it.
       }
     });
 
-    initGuestUrlAndSecurity();
+    // initGuestUrlAndSecurity();
   }
 
-  async function initGuestUrlAndSecurity() {
-    const params = new URLSearchParams(window.location.search);
-    const guestParam = (params.get("to") || "").trim();
-    const introGuestElement = document.getElementById("introGuestName");
-    if (introGuestElement && guestParam) {
-      introGuestElement.textContent = decodeURIComponent(guestParam);
-    }
-    // Elemen untuk menampilkan pesan akses ditolak
-    let accessDeniedShown = false;
+  // async function initGuestUrlAndSecurity() {
+  //   const params = new URLSearchParams(window.location.search);
+  //   const guestParam = (params.get("to") || "").trim();
+  //   const introGuestElement = document.getElementById("introGuestName");
+  //   if (introGuestElement && guestParam) {
+  //     introGuestElement.textContent = decodeURIComponent(guestParam);
+  //   }
+  //   // Elemen untuk menampilkan pesan akses ditolak
+  //   let accessDeniedShown = false;
 
-    function denyAccess(message) {
-      // Cegah tampilan dibuat berulang kali.
-      if (accessDeniedShown) return;
+  //   function denyAccess(message) {
+  //     // Cegah tampilan dibuat berulang kali.
+  //     if (accessDeniedShown) return;
 
-      accessDeniedShown = true;
+  //     accessDeniedShown = true;
 
-      document.body.innerHTML = `
+  //     document.body.innerHTML = `
+  //   <main class="access-screen">
+  //     <section class="access-card" role="alert" aria-live="assertive">
+
+  //       <div class="access-ornament" aria-hidden="true">✿</div>
+
+  //       <h1 class="access-title">
+  //         Akses Undangan<br>
+  //         Dibatasi
+  //       </h1>
+
+  //       <div class="access-divider" aria-hidden="true">
+  //         <span>✦</span>
+  //       </div>
+
+  //       <p class="access-message" id="accessMessage"></p>
+
+  //       <p class="access-note">
+  //         Silakan hubungi calon pengantin untuk mendapatkan tautan
+  //         undangan pribadi Anda.
+  //       </p>
+
+  //       <div class="access-footer">With Love</div>
+
+  //     </section>
+  //   </main>
+  // `;
+
+  //     document.getElementById("accessMessage").textContent =
+  //       message || "Tautan undangan ini tidak dapat diakses.";
+
+  //     document.title = "Akses Undangan Dibatasi";
+  //   }
+
+  //   // Tidak ada parameter ?to= berarti langsung ditolak
+  //   if (!guestParam) {
+  //     denyAccess("Tautan undangan ini tidak valid atau tidak lengkap.");
+  //     return false;
+  //   }
+
+  //   if (!CONFIG.rsvp || !CONFIG.rsvp.endpoint) {
+  //     denyAccess(
+  //       "Undangan tidak dapat diverifikasi. Silakan coba beberapa saat lagi.",
+  //     );
+  //     return false;
+  //   }
+
+  //   // Buat ID perangkat yang disimpan di browser
+  //   let deviceId = localStorage.getItem("wedding_device_id");
+
+  //   if (!deviceId) {
+  //     deviceId =
+  //       window.crypto && typeof window.crypto.randomUUID === "function"
+  //         ? window.crypto.randomUUID()
+  //         : "device-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+
+  //     localStorage.setItem("wedding_device_id", deviceId);
+  //   }
+
+  //   try {
+  //     const verifyUrl = new URL(CONFIG.rsvp.endpoint);
+
+  //     verifyUrl.searchParams.set("to", guestParam);
+  //     verifyUrl.searchParams.set("device_id", deviceId);
+
+  //     const response = await fetch(verifyUrl.toString(), {
+  //       method: "GET",
+  //       redirect: "follow",
+  //       cache: "no-store",
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Verification request failed");
+  //     }
+
+  //     const result = await response.json();
+
+  //     if (result.status !== "success" || result.access !== "granted") {
+  //       const messages = {
+  //         unregistered: "Nama tamu ini tidak terdaftar di daftar tamu kami.",
+  //         forwarded:
+  //           "Undangan ini telah dibuka atau terdaftar di perangkat lain.",
+  //         missing_parameters: "Tautan undangan tidak lengkap.",
+  //         noguestsheet: "Daftar tamu tidak dapat ditemukan.",
+  //       };
+
+  //       denyAccess(
+  //         messages[result.reason] ||
+  //           "Anda tidak memiliki izin untuk mengakses undangan ini.",
+  //       );
+
+  //       return false;
+  //     }
+
+  //     // Akses berhasil
+  //     const gNameInput = $("#gName");
+  //     const guestElement =
+  //       document.getElementById("targetGuestName") ||
+  //       document.getElementById("guestName");
+
+  //     if (guestElement) guestElement.textContent = guestParam;
+  //     if (gNameInput) gNameInput.value = guestParam;
+
+  //     await loadRsvpEntries();
+
+  //     return true;
+  //   } catch (error) {
+  //     console.error("Invitation verification failed:", error);
+
+  //     denyAccess(
+  //       "Kami tidak dapat memverifikasi undangan Anda. Periksa koneksi internet Anda lalu coba lagi.",
+  //     );
+
+  //     return false;
+  //   }
+  // }
+  // Fungsi Memuat Daftar RSVP untuk Tes Koneksi Google Sheet
+
+  /* Nama tamu dari URL: sinkron, langsung tampil tanpa menunggu network */
+  function applyGuestNameFromUrl() {
+    const guestParam = (
+      new URLSearchParams(window.location.search).get("to") || ""
+    ).trim();
+    const introGuest = $("#introGuestName");
+    if (introGuest && guestParam) introGuest.textContent = guestParam;
+    const gNameInput = $("#gName");
+    if (gNameInput && guestParam) gNameInput.value = guestParam;
+    return guestParam;
+  }
+
+  let accessDeniedShown = false;
+  function denyAccess(message) {
+    if (accessDeniedShown) return;
+    accessDeniedShown = true;
+    if (audio) audio.pause();
+
+    document.body.className = "";
+    document.body.innerHTML = `
     <main class="access-screen">
       <section class="access-card" role="alert" aria-live="assertive">
-
         <div class="access-ornament" aria-hidden="true">✿</div>
-
-
-        <h1 class="access-title">
-          Akses Undangan<br>
-          Dibatasi
-        </h1>
-
-        <div class="access-divider" aria-hidden="true">
-          <span>✦</span>
-        </div>
-
+        <h1 class="access-title">Akses Undangan<br>Dibatasi</h1>
+        <div class="access-divider" aria-hidden="true"><span>✦</span></div>
         <p class="access-message" id="accessMessage"></p>
-
         <p class="access-note">
-          Silakan hubungi calon pengantin untuk mendapatkan tautan
-          undangan pribadi Anda.
+          Silakan hubungi calon pengantin untuk mendapatkan tautan undangan pribadi Anda.
         </p>
-
         <div class="access-footer">With Love</div>
-
       </section>
-    </main>
-  `;
+    </main>`;
+    document.getElementById("accessMessage").textContent =
+      message || "Tautan undangan ini tidak dapat diakses.";
+    document.title = "Akses Undangan Dibatasi";
+  }
 
-      document.getElementById("accessMessage").textContent =
-        message || "Tautan undangan ini tidak dapat diakses.";
-
-      document.title = "Akses Undangan Dibatasi";
-    }
-
-    // Tidak ada parameter ?to= berarti langsung ditolak
+  /* Verifikasi ke Apps Script: dijalankan paralel, mengembalikan true/false */
+  async function verifyGuest(guestParam) {
     if (!guestParam) {
       denyAccess("Tautan undangan ini tidak valid atau tidak lengkap.");
       return false;
     }
-
     if (!CONFIG.rsvp || !CONFIG.rsvp.endpoint) {
       denyAccess(
         "Undangan tidak dapat diverifikasi. Silakan coba beberapa saat lagi.",
@@ -1174,21 +1310,21 @@ Code below: you normally don't need to edit it.
       return false;
     }
 
-    // Buat ID perangkat yang disimpan di browser
     let deviceId = localStorage.getItem("wedding_device_id");
-
     if (!deviceId) {
       deviceId =
         window.crypto && typeof window.crypto.randomUUID === "function"
           ? window.crypto.randomUUID()
           : "device-" + Date.now() + "-" + Math.random().toString(36).slice(2);
-
       localStorage.setItem("wedding_device_id", deviceId);
     }
 
+    // Timeout supaya tidak menggantung selamanya
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 20000);
+
     try {
       const verifyUrl = new URL(CONFIG.rsvp.endpoint);
-
       verifyUrl.searchParams.set("to", guestParam);
       verifyUrl.searchParams.set("device_id", deviceId);
 
@@ -1196,12 +1332,9 @@ Code below: you normally don't need to edit it.
         method: "GET",
         redirect: "follow",
         cache: "no-store",
+        signal: ctrl.signal,
       });
-
-      if (!response.ok) {
-        throw new Error("Verification request failed");
-      }
-
+      if (!response.ok) throw new Error("Verification request failed");
       const result = await response.json();
 
       if (result.status !== "success" || result.access !== "granted") {
@@ -1212,38 +1345,25 @@ Code below: you normally don't need to edit it.
           missing_parameters: "Tautan undangan tidak lengkap.",
           noguestsheet: "Daftar tamu tidak dapat ditemukan.",
         };
-
         denyAccess(
           messages[result.reason] ||
             "Anda tidak memiliki izin untuk mengakses undangan ini.",
         );
-
         return false;
       }
 
-      // Akses berhasil
-      const gNameInput = $("#gName");
-      const guestElement =
-        document.getElementById("targetGuestName") ||
-        document.getElementById("guestName");
-
-      if (guestElement) guestElement.textContent = guestParam;
-      if (gNameInput) gNameInput.value = guestParam;
-
-      await loadRsvpEntries();
-
+      loadRsvpEntries(); // tanpa await, tidak memblokir apa pun
       return true;
     } catch (error) {
       console.error("Invitation verification failed:", error);
-
       denyAccess(
         "Kami tidak dapat memverifikasi undangan Anda. Periksa koneksi internet Anda lalu coba lagi.",
       );
-
       return false;
+    } finally {
+      clearTimeout(timer);
     }
   }
-  // Fungsi Memuat Daftar RSVP untuk Tes Koneksi Google Sheet
   async function loadRsvpEntries() {
     const container = document.getElementById("rsvpEntries");
     if (!container) return;
@@ -1619,34 +1739,28 @@ Code below: you normally don't need to edit it.
     }
   });
   /* ---------- boot ---------- */
-  async function init() {
-    // Tampilkan status menunggu selama pemeriksaan
+  function init() {
     buildSymbols();
     fillClusters();
     bindText();
+    const guestParam = applyGuestNameFromUrl();
 
-    // Periksa akses tamu terlebih dahulu
-    const accessGranted = await initGuestUrlAndSecurity();
+    // Mulai verifikasi SEKARANG, tapi jangan ditunggu
+    const verifyPromise = verifyGuest(guestParam);
 
-    // Jika tidak terdaftar, hentikan seluruh inisialisasi undangan
-    if (!accessGranted) return;
-
-    // Hanya dijalankan jika akses berhasil
     renderStory();
     renderGallery();
-
     splitWords();
     setupReveals();
     setupAmbient();
-    setupIntro();
     setupCountdown();
     setupLightbox();
-
-    // Inisialisasi form RSVP
     setupRSVP();
-
     setupMusic();
     setupUI();
+
+    // Intro langsung jalan; tombol menunggu verifikasi selesai
+    setupIntro(verifyPromise);
   }
 
   if (document.readyState === "loading") {

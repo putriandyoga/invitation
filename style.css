@@ -66,6 +66,28 @@ body.locked {
   overflow: hidden;
   height: 100svh;
 }
+/* ---------- Global lining + tabular figures ---------- */
+html {
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum", "tnum";
+}
+
+button,
+input,
+select,
+textarea {
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum", "tnum";
+}
+
+/* Pseudo-element dan teks yang diset font-family sendiri */
+*,
+*::before,
+*::after {
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum", "tnum";
+}
+
 img,
 svg {
   max-width: 100%;
@@ -2732,4 +2754,7 @@ textarea.input {
   .access-card {
     animation: none;
   }
+}
+.intro-line:not(.words) {
+  opacity: 0;
 }
