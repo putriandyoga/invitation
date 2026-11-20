@@ -158,26 +158,9 @@
           Somewhere under the sunshine, two hearts found each other...
         </p>
 
-        <!-- The envelope wrapper was deleted from here -->
-
         <p class="intro-line l2 script words" id="introL2">
           And now, we warmly invite you to witness our next chapter.
         </p>
-        <div class="intro-guest-box" style="margin: 15px 0">
-          <p style="font-size: 0.95rem; margin-bottom: 4px; opacity: 0.8">
-            Special Invitation for
-          </p>
-          <h2
-            id="introGuestName"
-            style="
-              font-family: var(--f-hand);
-              font-size: 1.8rem;
-              color: var(--brown);
-            "
-          >
-            Beloved Guest
-          </h2>
-        </div>
         <button class="btn" id="openBtn" type="button">Open Invitation</button>
       </div>
     </div>
@@ -537,7 +520,7 @@
               Script.
             </div>
             <form id="rsvpForm" novalidate>
-              <!-- Nama Tamu (Read Only & Otomatis dari URL ?to=...) -->
+              <!-- Guest name (typed by the guest) -->
               <div class="field">
                 <label for="gName">Your name</label>
                 <input
@@ -545,13 +528,9 @@
                   id="gName"
                   name="guestName"
                   type="text"
-                  readonly
-                  style="
-                    width: 100%;
-                    background-color: rgba(0, 0, 0, 0.03);
-                    cursor: not-allowed;
-                  "
-                  placeholder="Guest name"
+                  autocomplete="name"
+                  maxlength="80"
+                  placeholder="Type your name"
                   required
                 />
                 <span class="err" id="errName" role="alert"></span>
@@ -615,26 +594,18 @@
                 </div>
               </div>
 
-              <!-- Catatan / Wishes (Wajib Diisi) -->
+              <!-- Wishes (optional) -->
               <div class="field" style="width: 100%">
-                <label for="gWishes"
-                  >Wishes &amp; prayers
-                  <style style="color: var(--burg, #8b3a3a)">
-                    *
-                  </style></label
-                >
+                <label for="gWishes">Wishes &amp; prayers</label>
                 <textarea
                   class="input"
                   id="gWishes"
                   name="wishes"
+                  maxlength="500"
                   placeholder="Leave us a little note"
                   style="width: 100%"
-                  required
                 ></textarea>
-                <span class="err" id="errWishes" role="alert"></span>
               </div>
-
-              <!-- Live Preview Box -->
 
               <div class="form-actions" style="width: 100%">
                 <button
@@ -697,7 +668,7 @@
                   font-style: italic;
                 "
               >
-                Connecting to Google Sheet...
+                Loading wishes...
               </p>
             </div>
           </div>

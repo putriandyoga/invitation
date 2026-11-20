@@ -2,34 +2,17 @@
    ★ EASY EDIT AREA — change everything about YOUR wedding right here ★
    =====================================================================
 
-   HOW TO CONNECT THE RSVP FORM TO GOOGLE SHEETS (Google Apps Script)
-   -------------------------------------------------------------------
-   The RSVP form in this page is a FRONTEND PLACEHOLDER. Until you do the
-   steps below, nothing is saved anywhere (the page says so openly).
+   RSVP BACKEND: the RSVP form and the wishes list talk to a Google Apps
+   Script Web App. Its source lives in apps-script/Code.gs. Deploy it as a
+   Web app (Execute as: Me, Who has access: Anyone) and paste the Web app
+   URL into CONFIG.rsvp.endpoint below. Guests need no link parameters:
+   anyone can open the invitation and RSVP by typing their own name.
 
-   1. Create a Google Sheet. In row 1 add the headers:
-        Timestamp | Name | Attendance | Guests | Wishes
-   2. In the Sheet: Extensions → Apps Script. Replace the code with:
-
-        function doPost(e) {
-          var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-          var d = JSON.parse(e.postData.contents);
-          sheet.appendRow([d.timestamp, d.name, d.attendance, d.guests, d.wishes]);
-          return ContentService.createTextOutput(JSON.stringify({ ok: true }))
-                 .setMimeType(ContentService.MimeType.JSON);
-        }
-
-   3. Deploy → New deployment → type "Web app".
-        Execute as: Me      Who has access: Anyone
-      Authorise when asked, then copy the "Web app URL".
-   4. Paste that URL into CONFIG.rsvp.endpoint below. Done!
-   5. Test it yourself and check that a new row appears in the Sheet.
-
-   Notes: the browser sends the request in "no-cors" mode (required for Apps
-   Script), so the page cannot read the reply. It treats the RSVP as sent when
-   the network request succeeds. Always double-check your Sheet.
-   Any other backend (Formspree, Supabase, your own server…) also works: just
-   adapt the fetch() call inside sendRSVP().
+   - The wishes list is read with JSONP (a <script> tag), because Apps Script
+     responses cannot be read cross-origin with fetch().
+   - The form posts in "no-cors" mode (required for Apps Script), so the page
+     cannot read the reply and treats the RSVP as sent when the network request
+     succeeds. Always double-check your Sheet.
    ===================================================================== */
 const CONFIG = {
   /* --- Names (short = big title, full = invitation card) --- */
@@ -112,8 +95,10 @@ const CONFIG = {
   /* --- RSVP --- */
   rsvp: {
     endpoint:
-      "https://script.google.com/macros/s/AKfycbzMm6EN-FWbxHegq1m6-fQuUTno916eE_p249gBz5n509LiUFREDuvCHovml9AF4s5s/exec",
+      "https://script.google.com/macros/s/AKfycbzDIgOmtC486aFMch3oB_vDOTeET141J9Es5UucN4tdfifpOl8F19kgEhceGhulw69D/exec",
     maxGuests: 10,
+    listTimeoutMs: 12000, // JSONP timeout for loading the wishes list
+    postTimeoutMs: 20000, // network timeout for sending an RSVP
   },
 };
 
@@ -127,7 +112,6 @@ Code below: you normally don't need to edit it.
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
   const rand = (a, b) => a + Math.random() * (b - a);
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const esc = (s) =>
     String(s).replace(
       /[&<>"']/g,
@@ -361,34 +345,6 @@ Code below: you normally don't need to edit it.
   }
 
   /* ---------- 4. Story timeline ---------- */
-  // function renderStory() {
-  //   const timeline = $("#timeline");
-  //   if (!timeline) return;
-  //   const rots = [-3, 2.5, -2, 3];
-  //   timeline.innerHTML = CONFIG.story
-  //     .map(
-  //       (s, i) => `
-  //   <article class="tl-item${i % 2 ? " flip" : ""}">
-  //     <div class="badge"><svg class="ic spin"><use href="#sf"/></svg><span>${i + 1}</span></div>
-  //     <figure class="polaroid reveal" style="--rot:${rots[i % 4]}deg">
-  //       <span class="tape"></span>
-  //       <div class="ph"><img src="${esc(s.photo || placeholder(i, "Your photo here"))}" alt="${esc(s.photo ? s.caption : "Placeholder photo: " + s.title)}" loading="lazy"></div>
-  //       <figcaption class="cap">${esc(s.caption)}</figcaption>
-  //       <svg class="ic stk"><use href="#sf"/></svg>
-  //     </figure>
-  //     <div class="note reveal">
-  //       <div class="note-in">
-  //         <svg class="ic mini spin"><use href="#dz"/></svg>
-  //         <span class="date">${esc(s.date)}</span>
-  //         <h3>${esc(s.title)}</h3>
-  //         <p>${esc(s.text)}</p>
-  //         <svg class="ic heart"><use href="#heart"/></svg>
-  //       </div>
-  //     </div>
-  //   </article>`,
-  //     )
-  //     .join("");
-  // }
   function renderStory() {
     const timeline = $("#timeline");
     if (!timeline) return;
@@ -691,7 +647,7 @@ Code below: you normally don't need to edit it.
   /* ---------- 8. Intro / envelope (Envelope removed safely) ---------- */
   let audio = null;
 
-  function setupIntro(verifyPromise) {
+  function setupIntro() {
     const intro = $("#intro"),
       btn = $("#openBtn");
     const l1 = $("#introL1"),
@@ -706,27 +662,12 @@ Code below: you normally don't need to edit it.
       if (l2) l2.classList.add("in");
     });
 
-    const originalLabel = btn.textContent.trim();
-    btn.disabled = true;
-
-    let verified = false;
-    verifyPromise.then((ok) => {
-      verified = ok;
-    });
-
     const total = reduced ? 100 : (n1 * 0.13 + 0.9 + n2 * 0.13 + 0.8) * 1000;
-    setTimeout(async () => {
-      btn.classList.add("show");
-      if (!verified) btn.textContent = "Verifying...";
-      const ok = await verifyPromise;
-      if (!ok) return; // denyAccess() sudah mengganti halaman
-      btn.textContent = originalLabel;
-      btn.disabled = false;
-    }, total);
+    setTimeout(() => btn.classList.add("show"), total);
 
     let opened = false;
     btn.addEventListener("click", () => {
-      if (opened || btn.disabled) return;
+      if (opened) return;
       opened = true;
       btn.disabled = true;
       intro.classList.add("open");
@@ -796,633 +737,326 @@ Code below: you normally don't need to edit it.
   }
 
   /* ---------- 10. RSVP ---------- */
-  // function setupRSVP() {
-  //   const form = $("#rsvpForm"),
-  //     guests = $("#gCount"),
-  //     max = CONFIG.rsvp.maxGuests || 10;
-  //   if (!form || !guests) return;
-  //   guests.max = max;
-  //   const devNote = $("#devNote");
-  //   if (CONFIG.rsvp.endpoint && devNote) devNote.hidden = true;
+  const ATTEND_YES = "Joyfully Accept";
+  const ATTEND_NO = "Regretfully Decline";
+  const MAX_NAME = 80;
 
-  //   const clamp = (v) => Math.max(1, Math.min(max, v || 1));
-  //   const gMinus = $("#gMinus");
-  //   const gPlus = $("#gPlus");
-  //   if (gMinus)
-  //     gMinus.addEventListener("click", () => {
-  //       guests.value = clamp(+guests.value - 1);
-  //     });
-  //   if (gPlus)
-  //     gPlus.addEventListener("click", () => {
-  //       guests.value = clamp(+guests.value + 1);
-  //     });
-  //   guests.addEventListener("change", () => {
-  //     guests.value = clamp(+guests.value);
-  //   });
-  //   $$("input[name=attendance]", form).forEach((r) =>
-  //     r.addEventListener("change", () => {
-  //       const guestsField = $("#guestsField");
-  //       const errAtt = $("#errAtt");
-  //       if (guestsField)
-  //         guestsField.hidden = form.attendance.value === "decline";
-  //       if (errAtt) errAtt.textContent = "";
-  //     }),
-  //   );
-  //   const gName = $("#gName");
-  //   const errName = $("#errName");
-  //   if (gName && errName) {
-  //     gName.addEventListener("input", () => {
-  //       errName.textContent = "";
-  //     });
-  //   }
+  /* ---- Reusable JSONP loader ----------------------------------------
+     Apps Script web apps answer with a redirect to
+     script.googleusercontent.com and cannot send CORS headers, so
+     fetch() cannot read GET responses cross-origin. A <script> tag is
+     not subject to CORS, so the backend wraps its JSON in callback(...).
 
-  //   async function sendRSVP(payload) {
-  //     if (!CONFIG.rsvp.endpoint) {
-  //       await sleep(700);
-  //       return { demo: true };
-  //     }
-  //     await fetch(CONFIG.rsvp.endpoint, {
-  //       method: "POST",
-  //       mode: "no-cors",
-  //       headers: { "Content-Type": "text/plain;charset=utf-8" },
-  //       body: JSON.stringify(payload),
-  //     });
-  //     return { demo: false };
-  //   }
+     jsonp(url, { params, timeoutMs }) -> Promise<data>
+     - unique callback name per request
+     - rejects on script error or timeout
+     - always removes the <script> and the temporary global callback
+     - a late reply after timeout hits a harmless no-op, never a
+       duplicate callback                                              */
+  let jsonpSeq = 0;
+  function jsonp(url, opts) {
+    opts = opts || {};
+    const timeoutMs = opts.timeoutMs || 12000;
+    const params = opts.params || {};
 
-  //   form.addEventListener("submit", async (e) => {
-  //     e.preventDefault();
-  //     const errSend = $("#errSend");
-  //     if (errSend) errSend.textContent = "";
-  //     const name = form.guestName.value.trim(),
-  //       att = form.attendance.value;
-  //     let bad = false;
-  //     if (!name) {
-  //       if (errName) errName.textContent = "Please tell us your name ";
-  //       bad = true;
-  //     }
-  //     const errAtt = $("#errAtt");
-  //     if (!att) {
-  //       if (errAtt)
-  //         errAtt.textContent = "Please choose one of the options above.";
-  //       bad = true;
-  //     }
-  //     if (bad) {
-  //       (!name ? form.guestName : $("input[name=attendance]", form)).focus();
-  //       return;
-  //     }
+    return new Promise((resolve, reject) => {
+      const cbName = `__rsvpCb_${Date.now().toString(36)}_${++jsonpSeq}`;
+      const script = document.createElement("script");
+      let settled = false;
+      let timer = null;
 
-  //     const payload = {
-  //       timestamp: new Date().toISOString(),
-  //       name,
-  //       attendance: att,
-  //       guests: att === "accept" ? clamp(+guests.value) : 0,
-  //       wishes: form.wishes.value.trim(),
-  //     };
-  //     const btn = $("#rsvpBtn");
-  //     if (btn) {
-  //       btn.disabled = true;
-  //       btn.textContent = "Sending…";
-  //     }
-  //     try {
-  //       const res = await sendRSVP(payload);
-  //       const first = name.split(" ")[0];
-  //       const doneTitle = $("#doneTitle");
-  //       const doneText = $("#doneText");
-  //       const doneDemo = $("#doneDemo");
-  //       const rsvpDone = $("#rsvpDone");
+      const cleanup = (lateReplyPossible) => {
+        clearTimeout(timer);
+        script.onload = script.onerror = null;
+        if (script.parentNode) script.parentNode.removeChild(script);
+        if (lateReplyPossible) {
+          // Script may still answer after a timeout: swallow it, then free the name.
+          window[cbName] = function () {};
+          setTimeout(() => {
+            try {
+              delete window[cbName];
+            } catch (e) {
+              window[cbName] = undefined;
+            }
+          }, 60000);
+        } else {
+          try {
+            delete window[cbName];
+          } catch (e) {
+            window[cbName] = undefined;
+          }
+        }
+      };
 
-  //       if (doneTitle)
-  //         doneTitle.textContent =
-  //           att === "accept" ? `Yay, ${first}!` : `Thank you, ${first}`;
-  //       if (doneText) {
-  //         doneText.textContent =
-  //           att === "accept"
-  //             ? "We are so happy you will bloom with us. Your sunshine will make our day even brighter. "
-  //             : "We will miss you dearly, but we are grateful for your love and prayers. You will be in our hearts on our special day.";
-  //       }
-  //       if (doneDemo) doneDemo.hidden = !res.demo;
-  //       form.hidden = true;
-  //       if (rsvpDone) {
-  //         rsvpDone.hidden = false;
-  //         rsvpDone.focus({ preventScroll: true });
-  //         const r = rsvpDone.getBoundingClientRect();
-  //         burstPetals(
-  //           r.left + r.width / 2,
-  //           r.top + 60,
-  //           att === "accept" ? 40 : 16,
-  //         );
-  //       }
-  //     } catch (err) {
-  //       if (errSend)
-  //         errSend.textContent =
-  //           "Hmm, something went wrong while sending. Please check your connection and try again.";
-  //       if (btn) {
-  //         btn.disabled = false;
-  //         btn.textContent = "Send My RSVP ";
-  //       }
-  //     }
-  //   });
-  // }
-  /* ---------- 10. RSVP & GUEST VALIDATION ---------- */
+      const finish = (fn, value, late) => {
+        if (settled) return;
+        settled = true;
+        cleanup(late);
+        fn(value);
+      };
+
+      window[cbName] = (data) => finish(resolve, data, false);
+
+      script.onerror = () =>
+        finish(reject, new Error("JSONP script failed to load"), false);
+      // If the script loaded but never called back (e.g. error page), fail quickly.
+      script.onload = () =>
+        setTimeout(() => {
+          finish(reject, new Error("JSONP callback was not invoked"), false);
+        }, 0);
+
+      timer = setTimeout(
+        () => finish(reject, new Error("JSONP request timed out"), true),
+        timeoutMs,
+      );
+
+      const q = new URLSearchParams(params);
+      q.set("callback", cbName);
+      q.set("_", Date.now().toString(36)); // cache buster
+      script.async = true;
+      script.src = url + (url.indexOf("?") === -1 ? "?" : "&") + q.toString();
+      document.head.appendChild(script);
+    });
+  }
+
   function setupRSVP() {
     const form = $("#rsvpForm");
     const guestsInput = $("#gCount");
-    const max = CONFIG.rsvp.maxGuests || 10;
     if (!form || !guestsInput) return;
 
+    const max = CONFIG.rsvp.maxGuests || 10;
     guestsInput.max = max;
-    let guests = parseInt(guestsInput.value) || 1;
     const devNote = $("#devNote");
     if (CONFIG.rsvp.endpoint && devNote) devNote.hidden = true;
 
-    const clamp = (v) => Math.max(1, Math.min(max, v || 1));
+    const nameInput = $("#gName");
+    const wishesInput = $("#gWishes");
+    const guestsField = $("#guestsField");
+    const errName = $("#errName");
+    const errAtt = $("#errAtt");
+    const errSend = $("#errSend");
+    // Wishes are required. The error span is created here if index.html lacks one.
+    let errWishes = $("#errWishes");
+    if (!errWishes && wishesInput) {
+      errWishes = document.createElement("span");
+      errWishes.className = "err";
+      errWishes.id = "errWishes";
+      errWishes.setAttribute("role", "alert");
+      wishesInput.insertAdjacentElement("afterend", errWishes);
+    }
+    if (wishesInput) {
+      wishesInput.required = true;
+      wishesInput.addEventListener("input", () => {
+        errWishes.textContent = "";
+      });
+    }
+    const btn = $("#rsvpBtn");
+    const btnLabel = btn ? btn.textContent.trim() : "Send My RSVP";
+
+    const clamp = (v) => {
+      const n = parseInt(v, 10);
+      return Number.isFinite(n) ? Math.max(1, Math.min(max, n)) : 1;
+    };
+    const step = (d) => {
+      guestsInput.value = clamp(+guestsInput.value + d);
+    };
+
     const gMinus = $("#gMinus");
     const gPlus = $("#gPlus");
-    const previewText = $("#previewText");
-
-    // Fungsi Live Preview
-    function updatePreview() {
-      if (!previewText) return;
-      const gName = $("#gName");
-      const nameVal = gName ? gName.value.trim() || "Guest" : "Guest";
-      const attRadio = form.querySelector("input[name=attendance]:checked");
-      const attVal = attRadio ? attRadio.value : "undecided";
-      const wishesField = $("#gWishes");
-      const wishesVal = wishesField ? wishesField.value.trim() : "";
-
-      let statusDesc = "has not decided yet";
-      if (attVal.includes("Accept") || attVal === "accept") {
-        statusDesc = `will attend with ${guests} guest(s)`;
-      } else if (attVal.includes("Decline") || attVal === "decline") {
-        statusDesc = "regretfully cannot attend";
-      }
-
-      previewText.textContent = `${nameVal} ${statusDesc}. Note: "${wishesVal || "(no note yet)"}"`;
-    }
-
-    if (gMinus) {
-      gMinus.addEventListener("click", () => {
-        guests = clamp(guests - 1);
-        guestsInput.value = guests;
-        if ($("#gCountText")) $("#gCountText").textContent = guests;
-        updatePreview();
-      });
-    }
-    if (gPlus) {
-      gPlus.addEventListener("click", () => {
-        guests = clamp(guests + 1);
-        guestsInput.value = guests;
-        if ($("#gCountText")) $("#gCountText").textContent = guests;
-        updatePreview();
-      });
-    }
+    if (gMinus) gMinus.addEventListener("click", () => step(-1));
+    if (gPlus) gPlus.addEventListener("click", () => step(1));
     guestsInput.addEventListener("change", () => {
-      guests = clamp(+guestsInput.value);
-      guestsInput.value = guests;
-      updatePreview();
+      guestsInput.value = clamp(guestsInput.value);
     });
 
-    $$("input[name=attendance]", form).forEach((r) => {
-      r.addEventListener("change", (e) => {
-        const guestsField = $("#guestsField");
-        const errAtt = $("#errAtt");
-        const isDecline =
-          e.target.value === "decline" ||
-          e.target.value === "Regretfully Decline";
-
-        if (guestsField) guestsField.hidden = isDecline;
-        if (isDecline) guests = 0;
-        else guests = clamp(parseInt(guestsInput.value) || 1);
-
+    $$("input[name=attendance]", form).forEach((r) =>
+      r.addEventListener("change", () => {
+        if (guestsField)
+          guestsField.hidden = r.value === ATTEND_NO && r.checked;
         if (errAtt) errAtt.textContent = "";
-        updatePreview();
-      });
-    });
-
-    const gName = $("#gName") || form.guestName;
-    const errName = $("#errName");
-    if (gName && errName) {
-      gName.addEventListener("input", () => {
+      }),
+    );
+    if (nameInput && errName) {
+      nameInput.addEventListener("input", () => {
         errName.textContent = "";
-        updatePreview();
       });
     }
 
-    const wishesField = $("#gWishes");
-    const errWishes = $("#errWishes");
-    if (wishesField && errWishes) {
-      wishesField.addEventListener("input", () => {
-        errWishes.textContent = "";
-        updatePreview();
-      });
+    /* POST strategy: "no-cors" + text/plain is a CORS "simple request", so
+       no preflight is sent and Apps Script receives the body. The response is
+       opaque: we cannot read status or body. So a resolved fetch only means the
+       request left the browser; it is NOT confirmation that the row was saved.
+       A rejected fetch means a network failure. We never retry automatically,
+       because a retry could create a duplicate row. */
+    async function postRsvp(payload) {
+      if (!CONFIG.rsvp.endpoint) throw new Error("RSVP endpoint is not set");
+      const ctrl = new AbortController();
+      const t = setTimeout(
+        () => ctrl.abort(),
+        CONFIG.rsvp.postTimeoutMs || 20000,
+      );
+      try {
+        await fetch(CONFIG.rsvp.endpoint, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload),
+          signal: ctrl.signal,
+        });
+      } finally {
+        clearTimeout(t);
+      }
     }
 
-    // Handle Submit Form
+    let sending = false;
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const errSend = $("#errSend");
+      if (sending) return;
       if (errSend) errSend.textContent = "";
 
-      const name = gName ? gName.value.trim() : "";
-      const attRadio = form.querySelector("input[name=attendance]:checked");
-      const att = attRadio ? attRadio.value : "";
-      const wishes = wishesField ? wishesField.value.trim() : "";
+      const name = nameInput.value.replace(/\s+/g, " ").trim();
+      const checked = form.querySelector("input[name=attendance]:checked");
+      const att = checked ? checked.value : "";
+      const wishes = wishesInput ? wishesInput.value.trim() : "";
 
       let bad = false;
-      const errAtt = $("#errAtt");
-
       if (!name) {
-        if (errName) errName.textContent = "Please tell us your name ";
+        errName.textContent = "Please tell us your name.";
+        bad = true;
+      } else if (name.length > MAX_NAME) {
+        errName.textContent = `Please keep your name under ${MAX_NAME} characters.`;
         bad = true;
       }
       if (!att) {
-        if (errAtt)
-          errAtt.textContent = "Please choose one of the options above.";
+        errAtt.textContent = "Please choose one of the options above.";
         bad = true;
       }
       if (!wishes) {
-        if (errWishes)
-          errWishes.textContent = "Please leave us a little note or prayer ";
+        errWishes.textContent = "Please leave us a wish or a prayer.";
         bad = true;
       }
-
       if (bad) {
-        if (!name && gName) gName.focus();
-        else if (!att && attRadio) attRadio.focus();
-        else if (!wishes && wishesField) wishesField.focus();
+        (!name || name.length > MAX_NAME
+          ? nameInput
+          : !att
+            ? $("input[name=attendance]", form)
+            : wishesInput
+        ).focus();
         return;
       }
 
+      const attending = att === ATTEND_YES;
       const payload = {
-        timestamp: new Date().toISOString(),
         name,
         attendance: att,
-        guests:
-          att === "accept" || att === "Joyfully Accept" ? clamp(guests) : 0,
-        wishes: wishes,
+        guests: attending ? clamp(guestsInput.value) : 0,
+        wishes,
       };
 
-      const btn = $("#rsvpBtn");
+      sending = true;
       if (btn) {
         btn.disabled = true;
         btn.textContent = "Sending…";
       }
 
+      let sent = false;
       try {
-        if (!CONFIG.rsvp.endpoint) {
-          await sleep(700);
-        } else {
-          await fetch(CONFIG.rsvp.endpoint, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload),
-          });
-        }
+        await postRsvp(payload);
+        sent = true;
 
         const first = name.split(" ")[0];
-        const doneTitle = $("#doneTitle");
-        const doneText = $("#doneText");
-        const doneDemo = $("#doneDemo");
-        const rsvpDone = $("#rsvpDone");
-        const isAccept = att === "accept" || att === "Joyfully Accept";
-
-        if (doneTitle) {
-          doneTitle.textContent = isAccept
-            ? `Yay, ${first}!`
-            : `Thank you, ${first}`;
-        }
-        if (doneText) {
-          doneText.textContent = isAccept
-            ? "Thank you for confirming your attendance. We look forward to celebrating this special day with you."
-            : "Thank you for letting us know. We truly appreciate your love, prayers, and warm wishes.";
-        }
-        if (doneDemo) doneDemo.hidden = !!CONFIG.rsvp.endpoint;
+        $("#doneTitle").textContent = attending
+          ? `Yay, ${first}!`
+          : `Thank you, ${first}`;
+        $("#doneText").textContent = attending
+          ? "Thank you for confirming your attendance. We look forward to celebrating this special day with you."
+          : "Thank you for letting us know. We truly appreciate your love, prayers, and warm wishes.";
 
         form.hidden = true;
-        if (rsvpDone) {
-          rsvpDone.hidden = false;
-          rsvpDone.focus({ preventScroll: true });
-          const r = rsvpDone.getBoundingClientRect();
-          if (typeof burstPetals === "function") {
-            burstPetals(r.left + r.width / 2, r.top + 60, isAccept ? 40 : 16);
-          }
-        }
+        const rsvpDone = $("#rsvpDone");
+        rsvpDone.hidden = false;
+        rsvpDone.focus({ preventScroll: true });
+        const r = rsvpDone.getBoundingClientRect();
+        burstPetals(r.left + r.width / 2, r.top + 60, attending ? 40 : 16);
 
-        await loadRsvpEntries();
+        // Give Apps Script a moment to write the row, then refresh the list.
+        setTimeout(loadRsvpEntries, 2500);
       } catch (err) {
+        console.error("RSVP failed:", err);
         if (errSend) {
           errSend.textContent =
-            "Hmm, something went wrong while sending. Please check connection.";
+            "We couldn't send your RSVP. Please check your connection and try again.";
         }
-        if (btn) {
+      } finally {
+        sending = false;
+        // Keep the button locked once sent so a second click cannot duplicate the row.
+        if (btn && !sent) {
           btn.disabled = false;
-          btn.textContent = "Send My RSVP ";
+          btn.textContent = btnLabel;
         }
       }
     });
-
-    // initGuestUrlAndSecurity();
   }
 
-  // async function initGuestUrlAndSecurity() {
-  //   const params = new URLSearchParams(window.location.search);
-  //   const guestParam = (params.get("to") || "").trim();
-  //   const introGuestElement = document.getElementById("introGuestName");
-  //   if (introGuestElement && guestParam) {
-  //     introGuestElement.textContent = decodeURIComponent(guestParam);
-  //   }
-  //   // Elemen untuk menampilkan pesan akses ditolak
-  //   let accessDeniedShown = false;
+  /* ---------- RSVP wishes list (JSONP) ---------- */
+  let rsvpLoading = null; // in-flight request, prevents duplicate loads
+  function loadRsvpEntries() {
+    const container = $("#rsvpEntries");
+    if (!container) return Promise.resolve();
+    if (rsvpLoading) return rsvpLoading;
 
-  //   function denyAccess(message) {
-  //     // Cegah tampilan dibuat berulang kali.
-  //     if (accessDeniedShown) return;
-
-  //     accessDeniedShown = true;
-
-  //     document.body.innerHTML = `
-  //   <main class="access-screen">
-  //     <section class="access-card" role="alert" aria-live="assertive">
-
-  //       <div class="access-ornament" aria-hidden="true">✿</div>
-
-  //       <h1 class="access-title">
-  //         Akses Undangan<br>
-  //         Dibatasi
-  //       </h1>
-
-  //       <div class="access-divider" aria-hidden="true">
-  //         <span>✦</span>
-  //       </div>
-
-  //       <p class="access-message" id="accessMessage"></p>
-
-  //       <p class="access-note">
-  //         Silakan hubungi calon pengantin untuk mendapatkan tautan
-  //         undangan pribadi Anda.
-  //       </p>
-
-  //       <div class="access-footer">With Love</div>
-
-  //     </section>
-  //   </main>
-  // `;
-
-  //     document.getElementById("accessMessage").textContent =
-  //       message || "Tautan undangan ini tidak dapat diakses.";
-
-  //     document.title = "Akses Undangan Dibatasi";
-  //   }
-
-  //   // Tidak ada parameter ?to= berarti langsung ditolak
-  //   if (!guestParam) {
-  //     denyAccess("Tautan undangan ini tidak valid atau tidak lengkap.");
-  //     return false;
-  //   }
-
-  //   if (!CONFIG.rsvp || !CONFIG.rsvp.endpoint) {
-  //     denyAccess(
-  //       "Undangan tidak dapat diverifikasi. Silakan coba beberapa saat lagi.",
-  //     );
-  //     return false;
-  //   }
-
-  //   // Buat ID perangkat yang disimpan di browser
-  //   let deviceId = localStorage.getItem("wedding_device_id");
-
-  //   if (!deviceId) {
-  //     deviceId =
-  //       window.crypto && typeof window.crypto.randomUUID === "function"
-  //         ? window.crypto.randomUUID()
-  //         : "device-" + Date.now() + "-" + Math.random().toString(36).slice(2);
-
-  //     localStorage.setItem("wedding_device_id", deviceId);
-  //   }
-
-  //   try {
-  //     const verifyUrl = new URL(CONFIG.rsvp.endpoint);
-
-  //     verifyUrl.searchParams.set("to", guestParam);
-  //     verifyUrl.searchParams.set("device_id", deviceId);
-
-  //     const response = await fetch(verifyUrl.toString(), {
-  //       method: "GET",
-  //       redirect: "follow",
-  //       cache: "no-store",
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Verification request failed");
-  //     }
-
-  //     const result = await response.json();
-
-  //     if (result.status !== "success" || result.access !== "granted") {
-  //       const messages = {
-  //         unregistered: "Nama tamu ini tidak terdaftar di daftar tamu kami.",
-  //         forwarded:
-  //           "Undangan ini telah dibuka atau terdaftar di perangkat lain.",
-  //         missing_parameters: "Tautan undangan tidak lengkap.",
-  //         noguestsheet: "Daftar tamu tidak dapat ditemukan.",
-  //       };
-
-  //       denyAccess(
-  //         messages[result.reason] ||
-  //           "Anda tidak memiliki izin untuk mengakses undangan ini.",
-  //       );
-
-  //       return false;
-  //     }
-
-  //     // Akses berhasil
-  //     const gNameInput = $("#gName");
-  //     const guestElement =
-  //       document.getElementById("targetGuestName") ||
-  //       document.getElementById("guestName");
-
-  //     if (guestElement) guestElement.textContent = guestParam;
-  //     if (gNameInput) gNameInput.value = guestParam;
-
-  //     await loadRsvpEntries();
-
-  //     return true;
-  //   } catch (error) {
-  //     console.error("Invitation verification failed:", error);
-
-  //     denyAccess(
-  //       "Kami tidak dapat memverifikasi undangan Anda. Periksa koneksi internet Anda lalu coba lagi.",
-  //     );
-
-  //     return false;
-  //   }
-  // }
-  // Fungsi Memuat Daftar RSVP untuk Tes Koneksi Google Sheet
-
-  /* Nama tamu dari URL: sinkron, langsung tampil tanpa menunggu network */
-  function applyGuestNameFromUrl() {
-    const guestParam = (
-      new URLSearchParams(window.location.search).get("to") || ""
-    ).trim();
-    const introGuest = $("#introGuestName");
-    if (introGuest && guestParam) introGuest.textContent = guestParam;
-    const gNameInput = $("#gName");
-    if (gNameInput && guestParam) gNameInput.value = guestParam;
-    return guestParam;
-  }
-
-  let accessDeniedShown = false;
-  function denyAccess(message) {
-    if (accessDeniedShown) return;
-    accessDeniedShown = true;
-    if (audio) audio.pause();
-
-    document.body.className = "";
-    document.body.innerHTML = `
-    <main class="access-screen">
-      <section class="access-card" role="alert" aria-live="assertive">
-        <div class="access-ornament" aria-hidden="true">✿</div>
-        <h1 class="access-title">Akses Undangan<br>Dibatasi</h1>
-        <div class="access-divider" aria-hidden="true"><span>✦</span></div>
-        <p class="access-message" id="accessMessage"></p>
-        <p class="access-note">
-          Silakan hubungi calon pengantin untuk mendapatkan tautan undangan pribadi Anda.
-        </p>
-        <div class="access-footer">With Love</div>
-      </section>
-    </main>`;
-    document.getElementById("accessMessage").textContent =
-      message || "Tautan undangan ini tidak dapat diakses.";
-    document.title = "Akses Undangan Dibatasi";
-  }
-
-  /* Verifikasi ke Apps Script: dijalankan paralel, mengembalikan true/false */
-  async function verifyGuest(guestParam) {
-    if (!guestParam) {
-      denyAccess("Tautan undangan ini tidak valid atau tidak lengkap.");
-      return false;
-    }
-    if (!CONFIG.rsvp || !CONFIG.rsvp.endpoint) {
-      denyAccess(
-        "Undangan tidak dapat diverifikasi. Silakan coba beberapa saat lagi.",
-      );
-      return false;
-    }
-
-    let deviceId = localStorage.getItem("wedding_device_id");
-    if (!deviceId) {
-      deviceId =
-        window.crypto && typeof window.crypto.randomUUID === "function"
-          ? window.crypto.randomUUID()
-          : "device-" + Date.now() + "-" + Math.random().toString(36).slice(2);
-      localStorage.setItem("wedding_device_id", deviceId);
-    }
-
-    // Timeout supaya tidak menggantung selamanya
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 20000);
-
-    try {
-      const verifyUrl = new URL(CONFIG.rsvp.endpoint);
-      verifyUrl.searchParams.set("to", guestParam);
-      verifyUrl.searchParams.set("device_id", deviceId);
-
-      const response = await fetch(verifyUrl.toString(), {
-        method: "GET",
-        redirect: "follow",
-        cache: "no-store",
-        signal: ctrl.signal,
-      });
-      if (!response.ok) throw new Error("Verification request failed");
-      const result = await response.json();
-
-      if (result.status !== "success" || result.access !== "granted") {
-        const messages = {
-          unregistered: "Nama tamu ini tidak terdaftar di daftar tamu kami.",
-          forwarded:
-            "Undangan ini telah dibuka atau terdaftar di perangkat lain.",
-          missing_parameters: "Tautan undangan tidak lengkap.",
-          noguestsheet: "Daftar tamu tidak dapat ditemukan.",
-        };
-        denyAccess(
-          messages[result.reason] ||
-            "Anda tidak memiliki izin untuk mengakses undangan ini.",
-        );
-        return false;
-      }
-
-      loadRsvpEntries(); // tanpa await, tidak memblokir apa pun
-      return true;
-    } catch (error) {
-      console.error("Invitation verification failed:", error);
-      denyAccess(
-        "Kami tidak dapat memverifikasi undangan Anda. Periksa koneksi internet Anda lalu coba lagi.",
-      );
-      return false;
-    } finally {
-      clearTimeout(timer);
-    }
-  }
-  async function loadRsvpEntries() {
-    const container = document.getElementById("rsvpEntries");
-    if (!container) return;
+    const note = (msg) => {
+      container.innerHTML = `<p style="text-align:center;font-style:italic">${esc(msg)}</p>`;
+    };
 
     if (!CONFIG.rsvp || !CONFIG.rsvp.endpoint) {
-      container.innerHTML =
-        "<p style='text-align: center; color: #8b3a3a; font-style: italic;'>CONFIG.rsvp.endpoint belum diatur di file konfigurasi.</p>";
-      return;
+      note("Wishes will appear here.");
+      return Promise.resolve();
     }
 
-    try {
-      const response = await fetch(CONFIG.rsvp.endpoint + "?action=rsvp");
-      const result = await response.json();
+    note("Loading wishes...");
 
-      if (result && result.length > 0) {
-        container.innerHTML = "";
-        result
-          .slice()
+    rsvpLoading = jsonp(CONFIG.rsvp.endpoint, {
+      params: { action: "rsvp" },
+      timeoutMs: CONFIG.rsvp.listTimeoutMs || 12000,
+    })
+      .then((result) => {
+        if (!Array.isArray(result)) throw new Error("Unexpected response");
+
+        const items = result
+          .filter((item) => item && String(item.name || "").trim())
           .reverse()
-          .slice(0, 30)
-          .forEach((item) => {
-            if (!item.name) return;
+          .slice(0, 30);
+        if (!items.length) {
+          note("Be the first to leave us a wish!");
+          return;
+        }
 
-            const card = document.createElement("div");
-            card.className = "rsvp-card-item"; // Menggunakan kelas gaya baru
-
-            const isAccept =
-              item.attendance === "accept" ||
-              item.attendance === "Joyfully Accept";
-            const badgeClass = isAccept ? "badge-accept" : "badge-decline";
-            const badgeText = isAccept ? "Attending" : "Declined";
-
-            card.innerHTML = `
+        container.innerHTML = items
+          .map((item) => {
+            const accepted = item.attendance === ATTEND_YES;
+            const wish = String(item.wishes || "").trim();
+            return `<div class="rsvp-card-item">
             <div class="rsvp-card-header">
-              <span class="rsvp-card-name">${escapeHtml(item.name)}</span>
-              <span class="rsvp-card-badge ${badgeClass}">${badgeText}</span>
+              <span class="rsvp-card-name">${esc(String(item.name).trim())}</span>
+              <span class="rsvp-card-badge ${accepted ? "badge-accept" : "badge-decline"}">${accepted ? "Attending" : "Declined"}</span>
             </div>
-            ${item.wishes ? `<p class="rsvp-card-wish">"${escapeHtml(item.wishes)}"</p>` : ""}
-          `;
-            container.appendChild(card);
-          });
-      } else {
-        container.innerHTML =
-          "<p style='text-align: center; color: var(--text-light); font-style: italic;'>Belum ada data RSVP di Google Sheet.</p>";
-      }
-    } catch (err) {
-      console.error("Gagal terhubung ke Google Sheet:", err);
-      container.innerHTML =
-        "<p style='text-align: center; color: #a94442; font-style: italic;'>Gagal memuat data. Periksa kembali URL Endpoint Apps Script / CORS.</p>";
-    }
+            ${wish ? `<p class="rsvp-card-wish">"${esc(wish)}"</p>` : ""}
+          </div>`;
+          })
+          .join("");
+      })
+      .catch((err) => {
+        console.error("Could not load RSVP list:", err);
+        note("Wishes could not be loaded right now.");
+      })
+      .finally(() => {
+        rsvpLoading = null;
+      });
+
+    return rsvpLoading;
   }
 
-  function escapeHtml(str) {
-    if (!str) return "";
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-  }
   /* ---------- 11. MUSIC PLAYER & VISIBILITY CONTROL ---------- */
 
   function startMusic(fromIntro) {
@@ -1525,68 +1159,6 @@ Code below: you normally don't need to edit it.
       audio.pause();
     }
   });
-  /* ---------- 11. Music player (Compact round button widget) ---------- */
-  // function startMusic(fromIntro) {
-  //   if (!CONFIG.audio.src) return false;
-  //   if (!audio) {
-  //     audio = new Audio(CONFIG.audio.src);
-  //     audio.loop = true;
-  //     audio.volume = 0.6;
-  //     audio.addEventListener("error", () => {
-  //       toast("Could not load the audio file. Please check CONFIG.audio.src.");
-  //       setPlaying(false);
-  //     });
-  //   }
-  //   audio
-  //     .play()
-  //     .then(() => setPlaying(true))
-  //     .catch(() => {
-  //       setPlaying(false);
-  //       if (!fromIntro)
-  //         toast("Your browser blocked the audio. Tap play again.");
-  //     });
-  //   return true;
-  // }
-
-  // function setPlaying(on) {
-  //   const btn = $("#music");
-  //   if (!btn) return;
-  //   btn.classList.toggle("playing", on);
-  //   const icPlay = $("#icPlay");
-  //   const icPause = $("#icPause");
-  //   if (icPlay) icPlay.hidden = on;
-  //   if (icPause) icPause.hidden = !on;
-  //   btn.setAttribute("aria-pressed", on);
-  //   btn.setAttribute("aria-label", on ? "Pause music" : "Play music");
-  // }
-
-  // let toastTimer;
-  // function toast(msg) {
-  //   const t = $("#toast");
-  //   if (!t) return;
-  //   t.textContent = msg;
-  //   t.classList.add("show");
-  //   clearTimeout(toastTimer);
-  //   toastTimer = setTimeout(() => t.classList.remove("show"), 3800);
-  // }
-
-  // function setupMusic() {
-  //   const musicBtn = $("#music");
-  //   if (!musicBtn) return;
-  //   musicBtn.addEventListener("click", () => {
-  //     if (!CONFIG.audio.src) {
-  //       toast("Add your own audio file in CONFIG.audio.src to enable music 🎵");
-  //       return;
-  //     }
-  //     if (audio && !audio.paused) {
-  //       audio.pause();
-  //       setPlaying(false);
-  //     } else {
-  //       startMusic(false);
-  //     }
-  //   });
-  // }
-
   /* ---------- 12. Menu, back-to-top, parallax, cursor, closing ---------- */
   function setupUI() {
     const mb = $("#menuBtn"),
@@ -1725,29 +1297,26 @@ Code below: you normally don't need to edit it.
   }
 
   // Event listener untuk tombol copy di dalam giftGrid
-  document.getElementById("giftGrid").addEventListener("click", async (e) => {
-    const b = e.target.closest("[data-copy]");
-    if (!b) return;
-    const ok = await copyText(b.dataset.copy);
+  const giftGridEl = document.getElementById("giftGrid");
+  if (giftGridEl)
+    giftGridEl.addEventListener("click", async (e) => {
+      const b = e.target.closest("[data-copy]");
+      if (!b) return;
+      const ok = await copyText(b.dataset.copy);
 
-    if (ok) {
-      const old = b.textContent;
-      b.textContent = "Copied";
-      setTimeout(() => {
-        b.textContent = old;
-      }, 2200);
-    }
-  });
+      if (ok) {
+        const old = b.textContent;
+        b.textContent = "Copied";
+        setTimeout(() => {
+          b.textContent = old;
+        }, 2200);
+      }
+    });
   /* ---------- boot ---------- */
   function init() {
     buildSymbols();
     fillClusters();
     bindText();
-    const guestParam = applyGuestNameFromUrl();
-
-    // Mulai verifikasi SEKARANG, tapi jangan ditunggu
-    const verifyPromise = verifyGuest(guestParam);
-
     renderStory();
     renderGallery();
     splitWords();
@@ -1758,9 +1327,8 @@ Code below: you normally don't need to edit it.
     setupRSVP();
     setupMusic();
     setupUI();
-
-    // Intro langsung jalan; tombol menunggu verifikasi selesai
-    setupIntro(verifyPromise);
+    setupIntro();
+    loadRsvpEntries();
   }
 
   if (document.readyState === "loading") {
