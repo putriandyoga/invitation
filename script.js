@@ -32,7 +32,7 @@ const CONFIG = {
   /* --- Venue --- */
   venue: {
     name: "Kediaman Keluarga Mempelai Wanita",
-    address: "Jl. A. Yani KM.14.400, Gang 99 (Samping DHL Express) ",
+    address: "Jl. A. Yani KM.14.400, Gang 99",
     mapsLink: "https://maps.app.goo.gl/ThpTaCDKbWuzcJEy5", // paste a Google Maps share/directions link; leave "" to auto-search by address
     embedMap: true, // true = show a live Google Map instead of the drawn map (needs a real address)
   },
