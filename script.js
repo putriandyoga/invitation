@@ -1312,6 +1312,37 @@ Code below: you normally don't need to edit it.
         }, 2200);
       }
     });
+  /* ---------- Public Visit Tracker ---------- */
+  function trackPublicInvitation() {
+    if (!CONFIG.rsvp || !CONFIG.rsvp.endpoint) return;
+
+    const storageKey = "putriyoga_public_device_id";
+    let deviceId = localStorage.getItem(storageKey);
+    if (!deviceId) {
+      deviceId =
+        "dev_" +
+        Math.random().toString(36).slice(2, 10) +
+        "_" +
+        Date.now().toString(36);
+      localStorage.setItem(storageKey, deviceId);
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const toParam = params.get("to") || "";
+    const refParam = params.get("ref") || "";
+
+    jsonp(CONFIG.rsvp.endpoint, {
+      params: {
+        action: "track",
+        device_id: deviceId,
+        to: toParam,
+        ref: refParam,
+      },
+      timeoutMs: 10000,
+    }).catch(() => {
+      // Abaikan error jaringan agar tampilan undangan tetap lancar
+    });
+  }
   /* ---------- boot ---------- */
   function init() {
     buildSymbols();
@@ -1329,6 +1360,7 @@ Code below: you normally don't need to edit it.
     setupUI();
     setupIntro();
     loadRsvpEntries();
+    trackPublicInvitation();
   }
 
   if (document.readyState === "loading") {
